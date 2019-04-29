@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
 
                         } else
                             throw new JSONException("更新数据失败");
-                            log.setText("更新数据失败");
+                            log.setText("更新数据成功");
 
                     } catch (JSONException e) {
                         e.printStackTrace();
