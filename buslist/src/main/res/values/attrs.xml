@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- 滚动选择器PickerView部分 -->
+    <declare-styleable name="PickerView">
+        <attr name="textColor" format="color"/>
+        <attr name="SelectedtextColor" format="color"/>
+        <attr name="SelectedBackgroundColor" format="color"/>
+        <attr name="maxtextSize" format="dimension"/>
+        <attr name="mintextSize" format="dimension"/>
+        <attr name="TextSpacing" format="dimension"/>
+        <attr name="maxshow" format="integer"></attr>
+        <attr name="textStart" format="string"/>
+        <attr name="textEnd" format="string"/>
+    </declare-styleable>
+
+
+</resources>

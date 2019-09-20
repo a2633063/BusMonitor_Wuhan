@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import com.zyc.MyFunction;
 import com.zyc.WebService;
+import com.zyc.buslist.BusList;
+import com.zyc.buslist.BusStation;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -134,14 +136,20 @@ public class MainActivity extends AppCompatActivity {
         }
     };
     //endregion
+    private List<BusStation> mDataList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        handler.sendEmptyMessageDelayed(100, 0);
-        writeFileInit();
+//        handler.sendEmptyMessageDelayed(100, 0);
+//        writeFileInit();
 
         log = findViewById(R.id.log);
+
+
+//        BusList busList =findViewById(R.id.busList);
+//        busList.setmDataList(mDataList);
+//        busList.notifyDataSetChanged();
     }
 }

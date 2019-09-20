@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="48dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <View
+        android:id="@+id/line_left"
+        android:layout_width="0dp"
+        android:layout_height="10dp"
+        android:background="#f2f2f2"
+        app:layout_constraintBottom_toBottomOf="@id/tv_dot"
+        app:layout_constraintEnd_toStartOf="@id/line_right"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_dot" />
+    <View
+        android:id="@+id/line_right"
+        android:layout_width="0dp"
+        android:layout_height="10dp"
+        android:layout_marginStart="12dp"
+        android:background="#f2f2f2"
+        app:layout_constraintBottom_toBottomOf="@id/tv_dot"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_dot" />
+
+    <TextView
+        android:id="@+id/tv_arrive"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/ic_directions_bus_black_24dp"
+        android:text="" />
+
+    <TextView
+        android:id="@+id/tv_pass"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tv_arrive"
+        app:layout_constraintTop_toTopOf="parent"
+        android:gravity="center"
+        android:background="@drawable/ic_directions_bus_black_24dp"
+        android:text=""/>
+
+    <TextView
+        android:id="@+id/tv_dot"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_dot_unselected_24dp"
+        android:gravity="center"
+        android:text="15"
+        android:textSize="10dp"
+        app:layout_constraintStart_toStartOf="@id/tv_arrive"
+        app:layout_constraintEnd_toEndOf="@id/tv_arrive"
+        app:layout_constraintTop_toBottomOf="@id/tv_arrive" />
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:ems="1"
+        android:gravity="center"
+        android:maxEms="1"
+        android:maxLines="10"
+        android:text="责成各设置的"
+        app:layout_constraintEnd_toEndOf="@id/tv_dot"
+        app:layout_constraintStart_toStartOf="@id/tv_dot"
+        app:layout_constraintTop_toBottomOf="@id/tv_dot" />
+
+
+</android.support.constraint.ConstraintLayout>
