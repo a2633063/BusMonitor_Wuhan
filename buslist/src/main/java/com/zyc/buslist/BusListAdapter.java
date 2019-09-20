@@ -143,22 +143,16 @@ public class BusListAdapter extends RecyclerView.Adapter<BusListAdapter.ViewHold
         //endregion
 
         //region 设置车图标显示
-        int arriveVisibility = View.INVISIBLE;
-        int passVisibility = View.INVISIBLE;
-//        String arriveString="";
-        String passString = "";
-        @DrawableRes int arriveResid = R.drawable.ic_bus_unselected_24dp;
-        @DrawableRes int passResid = R.drawable.ic_bus_unselected_24dp;
 
         holder.tvArrive.setVisibility(busStation.getArrive() == 0 ? View.INVISIBLE : View.VISIBLE);
         holder.tvPass.setVisibility(busStation.getPass() == 0 ? View.INVISIBLE : View.VISIBLE);
 
         if (busStation.getArrive() > 1) {
             holder.tvArrive.setText(String.valueOf(busStation.getArrive()));
-            holder.tvArrive.setBackgroundResource(position > mCurrentSelected ? R.drawable.ic_bus_num_unseclected_24dp : R.drawable.ic_bus_num_seclected_24dp);
+            holder.tvArrive.setBackgroundResource(position > mCurrentSelected ? R.drawable.ic_bus_unselected_24dp : R.drawable.ic_bus_station_selected_24dp);
         } else {
             holder.tvArrive.setText("");
-            holder.tvArrive.setBackgroundResource(position > mCurrentSelected ? R.drawable.ic_bus_unselected_24dp : R.drawable.ic_bus_selected_24dp);
+            holder.tvArrive.setBackgroundResource(position > mCurrentSelected ? R.drawable.ic_bus_unselected_24dp : R.drawable.ic_bus_station_selected_24dp);
         }
 
         if (busStation.getPass() > 1) {
