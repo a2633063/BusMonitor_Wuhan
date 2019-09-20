@@ -1,6 +1,7 @@
 package com.zyc.busmonitor;
 
 
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,6 +11,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.LinearInterpolator;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -30,6 +33,7 @@ public class BusFragment extends Fragment {
     public final static String Tag = "BusFragment";
 
     //region Description
+    ImageView ivRefresh;
     BusList busList;
     TextView tvBus;
     TextView tvStationStartEnd;
@@ -40,6 +44,7 @@ public class BusFragment extends Fragment {
     LinearLayout llRefresh;
     LinearLayout llDirection;
     //endregion
+    private ObjectAnimator objectAnimator;
 
 
     private List<BusStation> mDataList = new ArrayList<>();
@@ -62,6 +67,7 @@ public class BusFragment extends Fragment {
                 //region 获取公交数据
                 case 1:
                     /* 开启一个新线程，在新线程里执行耗时的方法 */
+                    objectAnimator.start();
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -79,6 +85,7 @@ public class BusFragment extends Fragment {
 
                 //region 返回数据
                 case 2:
+                    objectAnimator.cancel();
                     String result = (String) msg.obj;
                     Log.d(Tag, "result:" + result);
                     try {
@@ -122,6 +129,7 @@ public class BusFragment extends Fragment {
                         //region 更新车辆所有实时信息
                         int firstBus = 9999;
                         int secondBus = 9999;
+                        int seclectBus = busList.getSelected();
                         JSONArray jsonBuses = jsonData.getJSONArray("buses");
                         for (int i = 0; i < jsonBuses.length(); i++) {
                             String str = jsonBuses.getString(i);
@@ -143,8 +151,6 @@ public class BusFragment extends Fragment {
 
                             //region 到站剩余站更新
                             //region 计算到站站数
-                            int seclectBus = busList.getSelected();
-
                             if (busStation == seclectBus + 1) {
                                 if (isStation == 1) {//到站
                                     firstBus = 0;
@@ -154,35 +160,36 @@ public class BusFragment extends Fragment {
                             } else if (busStation < seclectBus + 1) {
                                 int temp = seclectBus + 1 - busStation;
                                 if (temp < firstBus) {
-                                    firstBus = temp;
                                     seclectBus = firstBus;
+                                    firstBus = temp;
                                 } else if (temp < seclectBus) seclectBus = temp;
-                            }
-                            //endregion
-                            //region 第1辆车到站提示
-                            if (firstBus == 0) {
-                                tv_first_bus.setText("到站");
-                            } else if (firstBus == 1) {
-                                tv_first_bus.setText("将至");
-                            } else if(firstBus>busList.getChildCount()){
-                                tv_first_bus.setText("无");
-                            }else{
-                                tv_first_bus.setText(firstBus+"站");
-                            }
-                            //endregion
-                            //region 第2辆车到站提示
-                            if (seclectBus == 0) {
-                                tv_second_bus.setText("到站");
-                            } else if (seclectBus == 1) {
-                                tv_second_bus.setText("将至");
-                            } else if(seclectBus>busList.getChildCount()){
-                                tv_second_bus.setText("无");
-                            }else{
-                                tv_second_bus.setText(seclectBus+"站");
                             }
                             //endregion
                             //endregion
                         }
+                        //region 第1辆车到站提示
+                        if (firstBus == 0) {
+                            tv_first_bus.setText("到站");
+                        } else if (firstBus == 1) {
+                            tv_first_bus.setText("将至");
+                        } else if(firstBus>busList.getCount()){
+                            tv_first_bus.setText("无");
+                        }else{
+                            tv_first_bus.setText(firstBus+"站");
+                        }
+                        //endregion
+                        //region 第2辆车到站提示
+                        if (seclectBus == 0) {
+                            tv_second_bus.setText("到站");
+                        } else if (seclectBus == 1) {
+                            tv_second_bus.setText("将至");
+                        } else if(seclectBus>busList.getCount()){
+                            tv_second_bus.setText("无");
+                        }else{
+                            tv_second_bus.setText(seclectBus+"站");
+                        }
+                        //endregion
+
                         //endregion
 
                         busList.notifyDataSetChanged();
@@ -275,6 +282,7 @@ public class BusFragment extends Fragment {
         b = new BusStation("豹澥公交停车场");
         mDataList.add(b);
 
+        ivRefresh=view.findViewById(R.id.iv_refresh);
         tvBus = view.findViewById(R.id.tv_bus);
         tvStationStartEnd = view.findViewById(R.id.tv_station);
         tvStationTime = view.findViewById(R.id.tv_station_time);
@@ -286,6 +294,13 @@ public class BusFragment extends Fragment {
 
         llRefresh.setOnClickListener(llClickListener);
                 llDirection.setOnClickListener(llClickListener);
+
+
+        objectAnimator = ObjectAnimator.ofFloat(ivRefresh, "rotation", 0f, 360f);//添加旋转动画，旋转中心默认为控件中点
+        objectAnimator.setDuration(3600);//设置动画时间
+        objectAnimator.setInterpolator(new LinearInterpolator());//动画时间线性渐变
+        objectAnimator.setRepeatCount(ObjectAnimator.INFINITE);
+        objectAnimator.setRepeatMode(ObjectAnimator.RESTART);
 
         tvBus.setText(bus);
         tvStationStartEnd.setText("");
@@ -301,12 +316,13 @@ public class BusFragment extends Fragment {
         return view;
     }
 
+    //region 点击事件
     View.OnClickListener llClickListener =new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             switch(v.getId()){
                 case R.id.ll_direction:
-                    direction=direction==0?1:0;
+                    direction=(direction==0?1:0);
 //                    break;
                 case R.id.ll_refresh:
                     handler.sendEmptyMessage(1);
@@ -314,6 +330,7 @@ public class BusFragment extends Fragment {
             }
         }
     };
+    //endregion
 
 
 }
