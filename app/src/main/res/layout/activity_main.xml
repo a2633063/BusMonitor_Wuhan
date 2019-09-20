@@ -10,7 +10,14 @@
     <FrameLayout
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_margin="16dp"
+        android:padding="5dp"
+        android:translationZ="3dp"
+        android:elevation="3dp"
+        android:outlineProvider="bounds"
+        android:background="#ffffff"
+        android:layout_height="300dp">
+
     </FrameLayout>
 
     <TextView

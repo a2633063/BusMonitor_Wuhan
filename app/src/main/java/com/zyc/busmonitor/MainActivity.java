@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
         log = findViewById(R.id.log);
 
         BusFragment prefFragment = null;
-        prefFragment = new BusFragment();
+        prefFragment = new BusFragment("907",1);
         //加载PrefFragment
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();

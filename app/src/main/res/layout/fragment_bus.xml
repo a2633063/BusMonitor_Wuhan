@@ -1,50 +1,176 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".BusFragment">
 
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_bus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="电907"
+            android:textSize="25dp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_station"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="环岛路栗庙社区 → 楚平路康福路  (35站)"
+            android:textSize="10dp"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_station_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="6:00-20:30  票价 1.0~2.0元"
+            android:textSize="10dp"
+            app:layout_constraintEnd_toEndOf="@id/tv_station"
+            app:layout_constraintTop_toBottomOf="@id/tv_station" />
+
+
+        <TextView
+            android:id="@+id/tv_first_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="第一辆"
+            android:textSize="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tv_second_text"
+            app:layout_constraintStart_toEndOf="@id/tv_bus" />
+
+        <TextView
+            android:id="@+id/tv_second_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="第二辆"
+            android:textSize="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tv_station"
+            app:layout_constraintStart_toEndOf="@id/tv_first_text" />
+
+
+        <TextView
+            android:id="@+id/tv_first_bus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="12站"
+            android:textSize="17dp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/tv_first_text"
+            app:layout_constraintEnd_toEndOf="@id/tv_first_text"
+            app:layout_constraintStart_toStartOf="@id/tv_first_text" />
+
+        <TextView
+            android:id="@+id/tv_second_bus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="无"
+            android:textSize="17dp"
+            app:layout_constraintBottom_toTopOf="@id/tv_second_text"
+            app:layout_constraintEnd_toEndOf="@id/tv_second_text"
+            app:layout_constraintStart_toStartOf="@id/tv_second_text" />
+    </android.support.constraint.ConstraintLayout>
+
     <com.zyc.buslist.BusList
         android:id="@+id/busList"
         android:layout_width="match_parent"
-        android:layout_height="200dp" />
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_weight="1" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginTop="5dp"
+        android:background="#f6f6f6" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#f3f3f3"
+        android:background="#ffffff"
         android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="收藏" />
+        <LinearLayout style="@style/BusFragmentBottomLinearLayout">
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="提醒" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="收藏" />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="换向" />
+        </LinearLayout>
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@android:color/holo_red_light"
-            android:gravity="center"
-            android:text="刷新"
-            android:textColor="@android:color/white" />
+        <View
+            android:layout_width="1dp"
+            android:layout_height="15dp"
+            android:layout_gravity="center_vertical"
+            android:background="#eeeeee" />
+
+        <LinearLayout style="@style/BusFragmentBottomLinearLayout">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="提醒" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="15dp"
+            android:layout_gravity="center_vertical"
+            android:background="#eeeeee" />
+
+        <LinearLayout
+            android:id="@+id/ll_direction"
+            style="@style/BusFragmentBottomLinearLayout">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="换向" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="15dp"
+            android:layout_gravity="center_vertical"
+            android:background="#eeeeee" />
+
+
+        <LinearLayout
+            android:id="@+id/ll_refresh"
+            style="@style/BusFragmentBottomLinearLayout"
+            android:background="@android:color/holo_red_light">
+
+            <ImageView
+                android:id="@+id/iv_refresh"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_refresh_black_24dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="刷新"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
 
     </LinearLayout>
+
 
 </LinearLayout>
