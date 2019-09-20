@@ -1,17 +1,17 @@
 package com.zyc.busmonitor;
 
 import android.annotation.SuppressLint;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
 import com.zyc.MyFunction;
 import com.zyc.WebService;
-import com.zyc.buslist.BusList;
-import com.zyc.buslist.BusStation;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,9 +20,6 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-
-import static com.zyc.MyFunction.writeFileInit;
 
 public class MainActivity extends AppCompatActivity {
     public final static String Tag = "MainActivity";
@@ -136,7 +133,6 @@ public class MainActivity extends AppCompatActivity {
         }
     };
     //endregion
-    private List<BusStation> mDataList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,61 +143,14 @@ public class MainActivity extends AppCompatActivity {
 
         log = findViewById(R.id.log);
 
-        mDataList.clear();
-        BusStation b;
-        b = new BusStation("高新六路光谷一路");
-        mDataList.add(b);
-        b = new BusStation("高新六路流芳大道");
-        mDataList.add(b);
-        b = new BusStation("高新六路汪田村");
-        mDataList.add(b);
-        b = new BusStation("高新六路康一路");
-        mDataList.add(b);
-        b = new BusStation("高新六路佛祖岭一路");
-        mDataList.add(b);
-        b = new BusStation("高新六路光谷三路");
-        mDataList.add(b);
-        b = new BusStation("光谷三路高新四路");
-        mDataList.add(b);
-        b = new BusStation("光谷三路大吕村");
-        mDataList.add(b);
-        b = new BusStation("高新二路大吕路");
-        mDataList.add(b);
-        b = new BusStation("高新二路光谷四路");
-        mDataList.add(b);
-        b = new BusStation("高新二路驿山南路");
-        mDataList.add(b);
-        b = new BusStation("高新二路光谷六路");
-        mDataList.add(b);
-        b = new BusStation("高新二路高科园路");
-        b.setPass(1);
-        mDataList.add(b);
-        b = new BusStation("高新二路高科园二路");
-        mDataList.add(b);
-        b = new BusStation("高新二路光谷七路");
-        mDataList.add(b);
-        b = new BusStation("高新二路生物园路");
-        mDataList.add(b);
-        b = new BusStation("光谷八路蔡吴村");
-        b.setArrive(1);
-        mDataList.add(b);
-        b = new BusStation("桥北路教师小区");
-        b.setPass(2);
-        mDataList.add(b);
-        b = new BusStation("桥北路三眼桥");
-        mDataList.add(b);
-        b = new BusStation("豹澥公交停车场");
-        mDataList.add(b);
-        BusList busList =findViewById(R.id.busList);
-        busList.setDataList(mDataList);
-        busList.notifyDataSetChanged();
+        BusFragment prefFragment = null;
+        prefFragment = new BusFragment();
+        //加载PrefFragment
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+//        prefFragment = new ButtonSettingFragment(deviceNum);
+        transaction.add(R.id.frameLayout, prefFragment);
+        transaction.commit();
 
-        b = new BusStation("豹澥公交停车场");
-        busList.addBusStation(b);
-        b = new BusStation("豹澥公交停车场");
-        busList.addBusStation(b);
-        b = new BusStation("豹澥公交停车场");
-        busList.addBusStation(b);
-        busList.notifyDataSetChanged();
     }
 }

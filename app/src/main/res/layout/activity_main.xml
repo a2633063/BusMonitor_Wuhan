@@ -7,11 +7,11 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <com.zyc.buslist.BusList
-        android:id="@+id/busList"
+    <FrameLayout
+        android:id="@+id/frameLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
+        android:layout_height="match_parent">
+    </FrameLayout>
 
     <TextView
         android:id="@+id/log"

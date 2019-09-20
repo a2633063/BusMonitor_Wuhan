@@ -1,20 +1,30 @@
 package com.zyc.buslist;
 
 
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.support.annotation.DrawableRes;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class BusListAdapter extends RecyclerView.Adapter<BusListAdapter.ViewHolder> {
 
     private List<BusStation> mList;
     private int mCurrentSelected = 0;
+
+    //记录不同字数时的字体大小
+    Map<Integer, Float> textSizeHashMap = new HashMap<Integer, Float>();
 
     //region 单击回调事件
     //点击 RecyclerView 某条的监听
@@ -77,9 +87,27 @@ public class BusListAdapter extends RecyclerView.Adapter<BusListAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         BusStation busStation = mList.get(position);
+
+        //region 显示站名,并自动跳转字体大小
         holder.name.setText(busStation.getName());
+        final TextView v = holder.name;
+        if (textSizeHashMap.get(v.getText().length()) != null)
+            v.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSizeHashMap.get(v.getText().length()));
+        else v.setTextSize(TypedValue.COMPLEX_UNIT_PX, 40);
+
+        holder.name.post(new Runnable() {
+            public void run() {
+                if (v.getTop() + v.getHeight() > ((android.support.constraint.ConstraintLayout) v.getParent()).getHeight()) {
+                    v.setTextSize(TypedValue.COMPLEX_UNIT_PX, v.getTextSize() - 1);
+                    v.post(this);
+                } else if (!textSizeHashMap.containsKey(v.getText().length())) {
+                    textSizeHashMap.put(v.getText().length(), v.getTextSize());
+                }
+            }
+        });
+        //endregion
 
         //region 首位不显示线条
         if (position == 0) {
@@ -127,20 +155,21 @@ public class BusListAdapter extends RecyclerView.Adapter<BusListAdapter.ViewHold
 
         if (busStation.getArrive() > 1) {
             holder.tvArrive.setText(String.valueOf(busStation.getArrive()));
-            holder.tvArrive.setBackgroundResource(position > mCurrentSelected?R.drawable.ic_bus_num_unseclected_24dp:R.drawable.ic_bus_num_seclected_24dp);
+            holder.tvArrive.setBackgroundResource(position > mCurrentSelected ? R.drawable.ic_bus_num_unseclected_24dp : R.drawable.ic_bus_num_seclected_24dp);
         } else {
             holder.tvArrive.setText("");
-            holder.tvArrive.setBackgroundResource(position > mCurrentSelected?R.drawable.ic_bus_unselected_24dp:R.drawable.ic_bus_selected_24dp);
+            holder.tvArrive.setBackgroundResource(position > mCurrentSelected ? R.drawable.ic_bus_unselected_24dp : R.drawable.ic_bus_selected_24dp);
         }
 
         if (busStation.getPass() > 1) {
             holder.tvPass.setText(String.valueOf(busStation.getPass()));
-            holder.tvPass.setBackgroundResource(position >= mCurrentSelected?R.drawable.ic_bus_num_unseclected_24dp:R.drawable.ic_bus_num_seclected_24dp);
+            holder.tvPass.setBackgroundResource(position >= mCurrentSelected ? R.drawable.ic_bus_num_unseclected_24dp : R.drawable.ic_bus_num_seclected_24dp);
         } else {
             holder.tvPass.setText("");
-            holder.tvPass.setBackgroundResource(position >= mCurrentSelected?R.drawable.ic_bus_unselected_24dp:R.drawable.ic_bus_selected_24dp);
+            holder.tvPass.setBackgroundResource(position >= mCurrentSelected ? R.drawable.ic_bus_unselected_24dp : R.drawable.ic_bus_selected_24dp);
         }
         //endregion
+
     }
 
     @Override
@@ -148,7 +177,7 @@ public class BusListAdapter extends RecyclerView.Adapter<BusListAdapter.ViewHold
         return mList.size();
     }
 
-    public void clear(){
+    public void clear() {
         mList.clear();
     }
 
