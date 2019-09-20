@@ -32,7 +32,7 @@
         android:layout_height="24dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:background="@drawable/ic_directions_bus_black_24dp"
+        android:background="@drawable/ic_bus_selected_24dp"
         android:text="" />
 
     <TextView
@@ -43,15 +43,18 @@
         app:layout_constraintStart_toEndOf="@id/tv_arrive"
         app:layout_constraintTop_toTopOf="parent"
         android:gravity="center"
-        android:background="@drawable/ic_directions_bus_black_24dp"
+        android:textColor="#ffffff"
+        android:textSize="8dp"
+        android:background="@drawable/ic_bus_selected_24dp"
         android:text=""/>
 
     <TextView
         android:id="@+id/tv_dot"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:background="@drawable/ic_dot_unselected_24dp"
         android:gravity="center"
+        android:textColor="@android:color/white"
         android:text="15"
         android:textSize="10dp"
         app:layout_constraintStart_toStartOf="@id/tv_arrive"

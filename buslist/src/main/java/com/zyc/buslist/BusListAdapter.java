@@ -1,5 +1,7 @@
 package com.zyc.buslist;
 
+
+import android.support.annotation.DrawableRes;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +16,27 @@ public class BusListAdapter extends RecyclerView.Adapter<BusListAdapter.ViewHold
     private List<BusStation> mList;
     private int mCurrentSelected = 0;
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    //region 单击回调事件
+    //点击 RecyclerView 某条的监听
+    public interface OnItemClickListener {
+        /**
+         * 当RecyclerView某个被点击的时候回调
+         *
+         * @param view     点击item的视图
+         * @param position 在adapter中的位置
+         * @param data     点击得到的数据
+         */
+        void onItemClick(View view, int position, String data);
+    }
+
+    private OnItemClickListener onItemClickListener;
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+
+    //endregion
+    class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvArrive;
         TextView tvPass;
         TextView name;
@@ -30,6 +52,15 @@ public class BusListAdapter extends RecyclerView.Adapter<BusListAdapter.ViewHold
             dot = view.findViewById(R.id.tv_dot);
             lineRight = view.findViewById(R.id.line_right);
             lineleft = view.findViewById(R.id.line_left);
+
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (onItemClickListener != null) {
+                        onItemClickListener.onItemClick(v, getLayoutPosition(), mList.get(getLayoutPosition()).getName());
+                    }
+                }
+            });
         }
     }
 
@@ -84,17 +115,30 @@ public class BusListAdapter extends RecyclerView.Adapter<BusListAdapter.ViewHold
         //endregion
 
         //region 设置车图标显示
-        if (busStation.getArrive() == 0) {
-            holder.tvArrive.setVisibility(View.INVISIBLE);
-        } else
-            holder.tvArrive.setVisibility(View.VISIBLE);
+        int arriveVisibility = View.INVISIBLE;
+        int passVisibility = View.INVISIBLE;
+//        String arriveString="";
+        String passString = "";
+        @DrawableRes int arriveResid = R.drawable.ic_bus_unselected_24dp;
+        @DrawableRes int passResid = R.drawable.ic_bus_unselected_24dp;
 
-        if (busStation.getPass() == 0) {
-            holder.tvPass.setVisibility(View.INVISIBLE);
+        holder.tvArrive.setVisibility(busStation.getArrive() == 0 ? View.INVISIBLE : View.VISIBLE);
+        holder.tvPass.setVisibility(busStation.getPass() == 0 ? View.INVISIBLE : View.VISIBLE);
+
+        if (busStation.getArrive() > 1) {
+            holder.tvArrive.setText(String.valueOf(busStation.getArrive()));
+            holder.tvArrive.setBackgroundResource(position > mCurrentSelected?R.drawable.ic_bus_num_unseclected_24dp:R.drawable.ic_bus_num_seclected_24dp);
         } else {
-            holder.tvPass.setVisibility(View.VISIBLE);
-            if(busStation.getPass()>1)holder.tvPass.setText(String.valueOf(busStation.getPass()));
-            else holder.tvPass.setText("");
+            holder.tvArrive.setText("");
+            holder.tvArrive.setBackgroundResource(position > mCurrentSelected?R.drawable.ic_bus_unselected_24dp:R.drawable.ic_bus_selected_24dp);
+        }
+
+        if (busStation.getPass() > 1) {
+            holder.tvPass.setText(String.valueOf(busStation.getPass()));
+            holder.tvPass.setBackgroundResource(position >= mCurrentSelected?R.drawable.ic_bus_num_unseclected_24dp:R.drawable.ic_bus_num_seclected_24dp);
+        } else {
+            holder.tvPass.setText("");
+            holder.tvPass.setBackgroundResource(position >= mCurrentSelected?R.drawable.ic_bus_unselected_24dp:R.drawable.ic_bus_selected_24dp);
         }
         //endregion
     }
@@ -104,6 +148,13 @@ public class BusListAdapter extends RecyclerView.Adapter<BusListAdapter.ViewHold
         return mList.size();
     }
 
+    public void clear(){
+        mList.clear();
+    }
+
+    public BusStation getItem(int position) {
+        return mList.get(position);
+    }
 
     public void setSelected(int s) {
         mCurrentSelected = s;

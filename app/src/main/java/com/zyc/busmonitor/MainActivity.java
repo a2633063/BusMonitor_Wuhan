@@ -147,9 +147,61 @@ public class MainActivity extends AppCompatActivity {
 
         log = findViewById(R.id.log);
 
+        mDataList.clear();
+        BusStation b;
+        b = new BusStation("高新六路光谷一路");
+        mDataList.add(b);
+        b = new BusStation("高新六路流芳大道");
+        mDataList.add(b);
+        b = new BusStation("高新六路汪田村");
+        mDataList.add(b);
+        b = new BusStation("高新六路康一路");
+        mDataList.add(b);
+        b = new BusStation("高新六路佛祖岭一路");
+        mDataList.add(b);
+        b = new BusStation("高新六路光谷三路");
+        mDataList.add(b);
+        b = new BusStation("光谷三路高新四路");
+        mDataList.add(b);
+        b = new BusStation("光谷三路大吕村");
+        mDataList.add(b);
+        b = new BusStation("高新二路大吕路");
+        mDataList.add(b);
+        b = new BusStation("高新二路光谷四路");
+        mDataList.add(b);
+        b = new BusStation("高新二路驿山南路");
+        mDataList.add(b);
+        b = new BusStation("高新二路光谷六路");
+        mDataList.add(b);
+        b = new BusStation("高新二路高科园路");
+        b.setPass(1);
+        mDataList.add(b);
+        b = new BusStation("高新二路高科园二路");
+        mDataList.add(b);
+        b = new BusStation("高新二路光谷七路");
+        mDataList.add(b);
+        b = new BusStation("高新二路生物园路");
+        mDataList.add(b);
+        b = new BusStation("光谷八路蔡吴村");
+        b.setArrive(1);
+        mDataList.add(b);
+        b = new BusStation("桥北路教师小区");
+        b.setPass(2);
+        mDataList.add(b);
+        b = new BusStation("桥北路三眼桥");
+        mDataList.add(b);
+        b = new BusStation("豹澥公交停车场");
+        mDataList.add(b);
+        BusList busList =findViewById(R.id.busList);
+        busList.setDataList(mDataList);
+        busList.notifyDataSetChanged();
 
-//        BusList busList =findViewById(R.id.busList);
-//        busList.setmDataList(mDataList);
-//        busList.notifyDataSetChanged();
+        b = new BusStation("豹澥公交停车场");
+        busList.addBusStation(b);
+        b = new BusStation("豹澥公交停车场");
+        busList.addBusStation(b);
+        b = new BusStation("豹澥公交停车场");
+        busList.addBusStation(b);
+        busList.notifyDataSetChanged();
     }
 }
