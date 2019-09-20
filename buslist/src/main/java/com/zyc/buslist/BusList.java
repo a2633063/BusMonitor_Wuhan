@@ -29,52 +29,6 @@ public class BusList extends LinearLayout {
         // 加载布局
         LayoutInflater.from(context).inflate(R.layout.view_bus_list, this);
 
-//        mDataList.clear();
-//        BusStation b;
-//        b = new BusStation("高新六路光谷一路");
-//        mDataList.add(b);
-//        b = new BusStation("高新六路流芳大道");
-//        mDataList.add(b);
-//        b = new BusStation("高新六路汪田村");
-//        mDataList.add(b);
-//        b = new BusStation("高新六路康一路");
-//        mDataList.add(b);
-//        b = new BusStation("高新六路佛祖岭一路");
-//        mDataList.add(b);
-//        b = new BusStation("高新六路光谷三路");
-//        mDataList.add(b);
-//        b = new BusStation("光谷三路高新四路");
-//        mDataList.add(b);
-//        b = new BusStation("光谷三路大吕村");
-//        mDataList.add(b);
-//        b = new BusStation("高新二路大吕路");
-//        mDataList.add(b);
-//        b = new BusStation("高新二路光谷四路");
-//        mDataList.add(b);
-//        b = new BusStation("高新二路驿山南路");
-//        mDataList.add(b);
-//        b = new BusStation("高新二路光谷六路");
-//        mDataList.add(b);
-//        b = new BusStation("高新二路高科园路");
-//        b.setPass(1);
-//        mDataList.add(b);
-//        b = new BusStation("高新二路高科园二路");
-//        mDataList.add(b);
-//        b = new BusStation("高新二路光谷七路");
-//        mDataList.add(b);
-//        b = new BusStation("高新二路生物园路");
-//        mDataList.add(b);
-//        b = new BusStation("光谷八路蔡吴村");
-//        b.setArrive(1);
-//        mDataList.add(b);
-//        b = new BusStation("桥北路教师小区");
-//        b.setPass(2);
-//        mDataList.add(b);
-//        b = new BusStation("桥北路三眼桥");
-//        mDataList.add(b);
-//        b = new BusStation("豹澥公交停车场");
-//        mDataList.add(b);
-
 
         // 获取控件
         recyclerView = findViewById(R.id.recyclerView);
@@ -89,7 +43,6 @@ public class BusList extends LinearLayout {
         adapter.setSelected(5);
         //完成adapter设置
         recyclerView.setAdapter(adapter);
-
 
 
         adapter.setOnItemClickListener(new BusListAdapter.OnItemClickListener() {
@@ -128,30 +81,44 @@ public class BusList extends LinearLayout {
     }
     //endregion
 
-    public List<BusStation> getList(){
+    public List<BusStation> getList() {
         return mDataList;
     }
+
+    public void setSelected(int p) {
+        adapter.setSelected(p);
+    }
+
+    public int getSelected() {
+        return adapter.getSelected();
+    }
+
     public void clearArrive() {
         for (int i = 0; i < mDataList.size(); i++) {
             mDataList.get(i).setArrive(0);
         }
     }
-    public void clearPass(){
+
+    public void clearPass() {
         for (int i = 0; i < mDataList.size(); i++) {
             mDataList.get(i).setPass(0);
         }
     }
-    public void clear(){
+
+    public void clear() {
         mDataList.clear();
     }
+
     public BusStation getItem(int position) {
         return mDataList.get(position);
     }
-    public void addBusStation(BusStation busStation){
+
+    public void addBusStation(BusStation busStation) {
         mDataList.add(busStation);
     }
-    public void addBusStation(int index,BusStation busStation){
-        mDataList.add(index,busStation);
+
+    public void addBusStation(int index, BusStation busStation) {
+        mDataList.add(index, busStation);
     }
 
     public void setDataList(@NonNull List<BusStation> mDataList) {
