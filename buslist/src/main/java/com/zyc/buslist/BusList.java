@@ -8,6 +8,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BusList extends LinearLayout {
+    public final static String Tag = "BusList";
 
     RecyclerView recyclerView;
     BusListAdapter adapter;
@@ -91,6 +93,7 @@ public class BusList extends LinearLayout {
 
     public void setSelected(int p) {
         adapter.setSelected(p);
+
     }
 
     public int getSelected() {
@@ -133,5 +136,26 @@ public class BusList extends LinearLayout {
 
     public void notifyDataSetChanged() {
         adapter.notifyDataSetChanged();
+    }
+
+    public void setOpposite() {
+        setSelected(getCount()-getSelected()-1);
+//        int movingDistance=   recyclerView.computeHorizontalScrollOffset();//当前移动距离
+//        int maxDistance=   recyclerView.computeHorizontalScrollRange();//总距离
+//        int recycleViewWidth=   recyclerView.computeHorizontalScrollExtent();//控件宽度
+//        Log.d(Tag,"当前移动距离:"+movingDistance);
+//        Log.d(Tag,"总距离:"+maxDistance);
+//        Log.d(Tag,"控件宽度:"+recycleViewWidth);//
+
+//        recyclerView.scrollToPosition(0);
+        recyclerView.scrollToPosition(getSelected());
+//        View selectedItem = recyclerView.getChildAt(getSelected());
+//        int firstItemBottom =selectedItem.getLeft();
+//
+////        RecyclerView.LayoutManager layoutManager =  rec-dLeft(recyclerView.getChildAt(getSelected()));
+//        Log.d(Tag,"左侧距离:"+firstItemBottom);
+
+
+//        notifyDataSetChanged();
     }
 }
