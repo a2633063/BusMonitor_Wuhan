@@ -1,6 +1,7 @@
 package com.zyc.busmonitor;
 
 
+import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -45,6 +46,7 @@ public class BusFragment extends Fragment {
     LinearLayout llDirection;
     //endregion
     private ObjectAnimator objectAnimator;
+    private boolean isRefresh = false;
 
 
     private List<BusStation> mDataList = new ArrayList<>();
@@ -66,8 +68,9 @@ public class BusFragment extends Fragment {
             switch (msg.what) {
                 //region 获取公交数据
                 case 1:
+                    if (!objectAnimator.isStarted()) objectAnimator.start();
+                    isRefresh = true;
                     /* 开启一个新线程，在新线程里执行耗时的方法 */
-                    objectAnimator.start();
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -85,7 +88,7 @@ public class BusFragment extends Fragment {
 
                 //region 返回数据
                 case 2:
-                    objectAnimator.cancel();
+                    isRefresh = false;
                     String result = (String) msg.obj;
                     Log.d(Tag, "result:" + result);
                     try {
@@ -282,10 +285,51 @@ public class BusFragment extends Fragment {
 
 
         objectAnimator = ObjectAnimator.ofFloat(ivRefresh, "rotation", 0f, 360f);//添加旋转动画，旋转中心默认为控件中点
-        objectAnimator.setDuration(3600);//设置动画时间
+        objectAnimator.setDuration(800);//设置动画时间
         objectAnimator.setInterpolator(new LinearInterpolator());//动画时间线性渐变
-        objectAnimator.setRepeatCount(ObjectAnimator.INFINITE);
+        objectAnimator.setRepeatCount(1);
         objectAnimator.setRepeatMode(ObjectAnimator.RESTART);
+        objectAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+                Log.d(Tag, "onAnimationStart"
+                        + "start:" + objectAnimator.isStarted()
+                        + "  pause:" + objectAnimator.isPaused()
+                        + "  running:" + objectAnimator.isRunning());
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+
+                Log.d(Tag, "onAnimationEnd"
+                        + "start:" + objectAnimator.isStarted()
+                        + "  pause:" + objectAnimator.isPaused()
+                        + "  running:" + objectAnimator.isRunning());
+                if (isRefresh) {
+                    objectAnimator.start();
+                }
+                ;
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+                Log.d(Tag, "onAnimationCancel"
+                        + "start:" + objectAnimator.isStarted()
+                        + "  pause:" + objectAnimator.isPaused()
+                        + "  running:" + objectAnimator.isRunning());
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+                Log.d(Tag, "onAnimationRepeat"
+                        + "start:" + objectAnimator.isStarted()
+                        + "  pause:" + objectAnimator.isPaused()
+                        + "  running:" + objectAnimator.isRunning());
+            }
+        });
+
 
         tvBus.setText(bus);
         tvStationStartEnd.setText("");
