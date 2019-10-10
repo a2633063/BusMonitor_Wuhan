@@ -316,6 +316,7 @@ public class BusMonitorItem extends LinearLayout {
             @Override
             public void onItemClick(View view, int position, String data) {
                 refresh();
+                if (isAutoRefresh) setAutoRefresh(AutoRefresh);
             }
         });
         //endregion
@@ -337,6 +338,7 @@ public class BusMonitorItem extends LinearLayout {
 //                    break;
 
                 refresh();
+                if (isAutoRefresh) setAutoRefresh(AutoRefresh);
             } else if (id == R.id.ll_refresh) {
                 refresh();
                 if (isAutoRefresh) setAutoRefresh(AutoRefresh);
