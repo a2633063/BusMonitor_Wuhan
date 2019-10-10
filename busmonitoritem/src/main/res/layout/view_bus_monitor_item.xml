@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="环岛路栗庙社区 → 楚平路康福路  (35站)"
+            android:text="起始站 → 终点路  --站"
             android:textSize="10dp"
 
             app:layout_constraintEnd_toEndOf="parent"
@@ -37,7 +37,7 @@
             android:id="@+id/tv_station_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="6:00-20:30  票价 1.0~2.0元"
+            android:text="XX:XX-XX:XX  票价 XXX元"
             android:textSize="10dp"
             app:layout_constraintEnd_toEndOf="@id/tv_station"
             app:layout_constraintTop_toBottomOf="@id/tv_station" />
@@ -68,7 +68,7 @@
             android:id="@+id/tv_first_bus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="12站"
+            android:text="无"
             android:textSize="17dp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@id/tv_first_text"
@@ -92,6 +92,7 @@
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
         android:layout_weight="1" />
+
     <TextView
         android:id="@+id/tv_err"
         android:layout_width="match_parent"
@@ -99,9 +100,10 @@
         android:layout_marginTop="8dp"
         android:layout_weight="1"
         android:gravity="center"
-        android:visibility="gone"
         android:text="数据为空"
-        android:textSize="45dp"/>
+        android:textSize="45dp"
+        android:visibility="gone" />
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
@@ -114,15 +116,25 @@
         android:layout_height="wrap_content"
         android:background="#ffffff"
         android:orientation="horizontal">
-        <LinearLayout style="@style/BusFragmentBottomLinearLayout">
+
+        <LinearLayout
+            android:id="@+id/ll_auto_refresh"
+            style="@style/BusFragmentBottomLinearLayout">
+
             <ImageView
+                android:id="@+id/iv_auto_refresh"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_auto_refresh_black_24dp" />
+                app:srcCompat="@drawable/ic_auto_refresh_24dp" />
+
             <TextView
+                android:id="@+id/tv_auto_refresh"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="自动" />
+                android:gravity="center"
+                android:minEms="2"
+                android:text="自动"
+                android:textColor="@color/bottom_text_color" />
 
         </LinearLayout>
 
@@ -131,15 +143,21 @@
             android:layout_height="15dp"
             android:layout_gravity="center_vertical"
             android:background="#eeeeee" />
+
         <LinearLayout style="@style/BusFragmentBottomLinearLayout">
+
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_swap_vert_black_24dp" />
+                app:srcCompat="@drawable/ic_collect_24dp" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="收藏" />
+                android:gravity="center"
+                android:minEms="2"
+                android:text="收藏"
+                android:textColor="@color/bottom_text_color" />
 
         </LinearLayout>
 
@@ -150,14 +168,19 @@
             android:background="#eeeeee" />
 
         <LinearLayout style="@style/BusFragmentBottomLinearLayout">
+
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_swap_vert_black_24dp" />
+                app:srcCompat="@drawable/ic_alert_24dp" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="提醒" />
+                android:gravity="center"
+                android:minEms="2"
+                android:text="提醒"
+                android:textColor="@color/bottom_text_color" />
         </LinearLayout>
 
         <View
@@ -169,6 +192,7 @@
         <LinearLayout
             android:id="@+id/ll_direction"
             style="@style/BusFragmentBottomLinearLayout">
+
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -177,7 +201,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="换向" />
+                android:gravity="center"
+                android:minEms="2"
+                android:text="换向"
+                android:textColor="@color/bottom_text_color" />
         </LinearLayout>
 
         <View

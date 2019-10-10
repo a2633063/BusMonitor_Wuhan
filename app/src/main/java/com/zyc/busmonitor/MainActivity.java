@@ -54,12 +54,8 @@ public class MainActivity extends AppCompatActivity {
         log = findViewById(R.id.log);
 
         List<String> mData=new ArrayList<>();
-        mData.add("901");
         mData.add("907");
-        mData.add("1001");
-        mData.add("777");
-        mData.add("234");
-        mData.add("307");
+        mData.add("2");
 
         //region RecyclerView初始化
         RecyclerView rv=  findViewById(R.id.recyclerView);
@@ -68,8 +64,9 @@ public class MainActivity extends AppCompatActivity {
         adapter=new MainRecyclerAdapter(mData);
         rv.setLayoutManager(layoutManager);
         rv.setAdapter(adapter);
-        ItemTouchHelper helper=new ItemTouchHelper(new MainRecyclerItemTouchHelper(adapter));
-        helper.attachToRecyclerView(rv);
+
+//        ItemTouchHelper helper=new ItemTouchHelper(new MainRecyclerItemTouchHelper(adapter));
+//        helper.attachToRecyclerView(rv);
 
 
         //region 设置RecyclerView Item边距

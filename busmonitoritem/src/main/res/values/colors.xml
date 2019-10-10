@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="bottom_text_color">#444c59</color>
+    <color name="bottom_text_select_color">#ff871d</color>
+
+
+    <color name="bottom_icon_color">#cccccc</color>
+    <color name="bottom_icon_select_color">#fdd572</color>
+</resources>

@@ -5,6 +5,7 @@ import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
@@ -32,7 +33,6 @@ public class BusMonitorItem extends LinearLayout {
     public final static String Tag = "BusFragment";
 
     //region 控件
-    ImageView ivRefresh;
     BusList busList;
     TextView tvBus;
     TextView tvStationStartEnd;
@@ -41,11 +41,19 @@ public class BusMonitorItem extends LinearLayout {
     TextView tvSecondBus;
     TextView tvErr;
 
+    LinearLayout llAutoRefresh;
     LinearLayout llRefresh;
     LinearLayout llDirection;
+
+    ImageView ivRefresh;
+    ImageView ivAutoRefresh;
+
+    TextView tvAutoRefresh;
     //endregion
     private ObjectAnimator objectAnimator;
     private boolean isRefresh = false;
+    private boolean isAutoRefresh = false;
+    private int AutoRefresh = 15;
 
 
     private List<BusStation> mDataList = new ArrayList<>();
@@ -138,7 +146,8 @@ public class BusMonitorItem extends LinearLayout {
                             String str = jsonBuses.getString(i);
                             Log.d(Tag, str);
                             String[] arr = str.split("\\|");
-                            if (arr.length != 6) break;//throw new JSONException("数据错误");   //能够获取到车站信息但无法获取到位置时 显示车站但不显示实时位置 需要验证
+                            if (arr.length != 6)
+                                break;//throw new JSONException("数据错误");   //能够获取到车站信息但无法获取到位置时 显示车站但不显示实时位置 需要验证
                             int id = Integer.valueOf(arr[0]);
                             int busStation = Integer.valueOf(arr[2]);
                             int isStation = Integer.valueOf(arr[3]);
@@ -240,7 +249,6 @@ public class BusMonitorItem extends LinearLayout {
         //region 控件初始化
         tvErr = findViewById(R.id.tv_err);
 
-        ivRefresh = findViewById(R.id.iv_refresh);
         tvBus = findViewById(R.id.tv_bus);
         tvStationStartEnd = findViewById(R.id.tv_station);
         tvStationTime = findViewById(R.id.tv_station_time);
@@ -248,9 +256,16 @@ public class BusMonitorItem extends LinearLayout {
         tvSecondBus = findViewById(R.id.tv_second_bus);
 
         //region 底部按钮
+        tvAutoRefresh = findViewById(R.id.tv_auto_refresh);
+
+        ivRefresh = findViewById(R.id.iv_refresh);
+        ivAutoRefresh = findViewById(R.id.iv_auto_refresh);
+
+        llAutoRefresh = findViewById(R.id.ll_auto_refresh);
         llRefresh = findViewById(R.id.ll_refresh);
         llDirection = findViewById(R.id.ll_direction);
 
+        llAutoRefresh.setOnClickListener(llClickListener);
         llRefresh.setOnClickListener(llClickListener);
         llDirection.setOnClickListener(llClickListener);
         //endregion
@@ -305,10 +320,7 @@ public class BusMonitorItem extends LinearLayout {
 
 
         tvBus.setText(bus);
-        tvStationStartEnd.setText("");
-        tvStationTime.setText("");
-        tvFirstBus.setText("无");
-        tvSecondBus.setText("无");
+        init();
 
         busList = findViewById(R.id.busList);
         busList.setDataList(mDataList);
@@ -317,7 +329,7 @@ public class BusMonitorItem extends LinearLayout {
         busList.setOnItemClickListener(new BusList.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position, String data) {
-                handler.sendEmptyMessage(1);
+                refresh();
             }
         });
         //endregion
@@ -338,20 +350,61 @@ public class BusMonitorItem extends LinearLayout {
                 busList.setOpposite();
 //                    break;
 
-                handler.sendEmptyMessage(1);
+                refresh();
             } else if (id == R.id.ll_refresh) {
-                handler.sendEmptyMessage(1);
+                refresh();
+                if(isAutoRefresh) setAutoRefresh(AutoRefresh);
+            } else if (id == R.id.ll_auto_refresh) {
+                setAutoRefresh(isAutoRefresh ? 0 : AutoRefresh);
             }
         }
     };
     //endregion
 
-    void init(){
+    void init() {
         tvBus.setText(bus);
-        tvStationStartEnd.setText("");
-        tvStationTime.setText("");
+        tvStationStartEnd.setText("起始站 → 终点路  --站");
+        tvStationTime.setText("XX:XX-XX:XX  票价 XXX元");
         tvFirstBus.setText("无");
         tvSecondBus.setText("无");
+        refresh();
+    }
+
+    public void refresh() {
         handler.sendEmptyMessage(1);
     }
+
+    CountDownTimer timer;
+
+    public void setAutoRefresh(int time) {
+
+        if (time == 0) {
+            isAutoRefresh = false;
+            tvAutoRefresh.setText("自动");
+            if (timer != null)
+                timer.cancel();
+        } else {
+            isAutoRefresh = true;
+            AutoRefresh = time;
+            if(timer!=null) timer.cancel();
+            timer = new CountDownTimer(AutoRefresh * 1000 + 300, 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    tvAutoRefresh.setText(millisUntilFinished / 1000 + "s");
+                }
+
+                @Override
+                public void onFinish() {
+                    timer.cancel();
+                    refresh();
+                    timer.start();
+                }
+            };
+            timer.start();
+        }
+        ivAutoRefresh.setImageResource(isAutoRefresh ? R.drawable.ic_auto_refresh_select_24dp : R.drawable.ic_auto_refresh_24dp);
+        tvAutoRefresh.setTextColor(getResources().getColor(isAutoRefresh ? R.color.bottom_text_select_color : R.color.bottom_text_color));
+
+    }
+
 }
