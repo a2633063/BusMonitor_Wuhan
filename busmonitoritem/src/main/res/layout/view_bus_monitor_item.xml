@@ -92,24 +92,50 @@
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
         android:layout_weight="1" />
-
+    <TextView
+        android:id="@+id/tv_err"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:visibility="gone"
+        android:text="数据为空"
+        android:textSize="45dp"/>
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_gravity="center_vertical"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="1dp"
         android:background="#f6f6f6" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#ffffff"
-        android:layout_gravity="bottom"
-        android:gravity="bottom"
         android:orientation="horizontal">
-
         <LinearLayout style="@style/BusFragmentBottomLinearLayout">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_auto_refresh_black_24dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="自动" />
 
+        </LinearLayout>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="15dp"
+            android:layout_gravity="center_vertical"
+            android:background="#eeeeee" />
+        <LinearLayout style="@style/BusFragmentBottomLinearLayout">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_swap_vert_black_24dp" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -124,7 +150,10 @@
             android:background="#eeeeee" />
 
         <LinearLayout style="@style/BusFragmentBottomLinearLayout">
-
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_swap_vert_black_24dp" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -140,6 +169,10 @@
         <LinearLayout
             android:id="@+id/ll_direction"
             style="@style/BusFragmentBottomLinearLayout">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_swap_vert_black_24dp" />
 
             <TextView
                 android:layout_width="wrap_content"

@@ -37,8 +37,9 @@ public class BusMonitorItem extends LinearLayout {
     TextView tvBus;
     TextView tvStationStartEnd;
     TextView tvStationTime;
-    TextView tv_first_bus;
-    TextView tv_second_bus;
+    TextView tvFirstBus;
+    TextView tvSecondBus;
+    TextView tvErr;
 
     LinearLayout llRefresh;
     LinearLayout llDirection;
@@ -85,6 +86,8 @@ public class BusMonitorItem extends LinearLayout {
                     String result = (String) msg.obj;
                     Log.d(Tag, "result:" + result);
                     try {
+                        tvErr.setVisibility(GONE);
+                        busList.setVisibility(VISIBLE);
                         //region 登录返回空数据
                         if (result == null) {
                             throw new JSONException("无数据返回");
@@ -129,13 +132,13 @@ public class BusMonitorItem extends LinearLayout {
                         //region 更新车辆所有实时信息
                         int firstBus = 9999;
                         int secondBus = 9999;
-                        int seclectBus = busList.getSelected();
+                        int selectBus = busList.getSelected();
                         JSONArray jsonBuses = jsonData.getJSONArray("buses");
                         for (int i = 0; i < jsonBuses.length(); i++) {
                             String str = jsonBuses.getString(i);
                             Log.d(Tag, str);
                             String[] arr = str.split("\\|");
-                            if (arr.length != 6) throw new JSONException("数据错误");
+                            if (arr.length != 6) break;//throw new JSONException("数据错误");   //能够获取到车站信息但无法获取到位置时 显示车站但不显示实时位置 需要验证
                             int id = Integer.valueOf(arr[0]);
                             int busStation = Integer.valueOf(arr[2]);
                             int isStation = Integer.valueOf(arr[3]);
@@ -151,42 +154,42 @@ public class BusMonitorItem extends LinearLayout {
 
                             //region 到站剩余站更新
                             //region 计算到站站数
-                            if (busStation == seclectBus + 1) {
+                            if (busStation == selectBus + 1) {
                                 if (isStation == 1) {//到站
                                     firstBus = 0;
                                 } else {
                                     firstBus = 1;
                                 }
-                            } else if (busStation < seclectBus + 1) {
-                                int temp = seclectBus + 1 - busStation;
+                            } else if (busStation < selectBus + 1) {
+                                int temp = selectBus + 1 - busStation;
                                 if (temp < firstBus) {
                                     secondBus = firstBus;
                                     firstBus = temp;
-                                } else if (temp < seclectBus) secondBus = temp;
+                                } else if (temp < selectBus) secondBus = temp;
                             }
                             //endregion
                             //endregion
                         }
                         //region 第1辆车到站提示
                         if (firstBus == 0) {
-                            tv_first_bus.setText("到站");
+                            tvFirstBus.setText("到站");
                         } else if (firstBus == 1) {
-                            tv_first_bus.setText("将至");
+                            tvFirstBus.setText("将至");
                         } else if (firstBus > busList.getCount()) {
-                            tv_first_bus.setText("无");
+                            tvFirstBus.setText("无");
                         } else {
-                            tv_first_bus.setText(firstBus + "站");
+                            tvFirstBus.setText(firstBus + "站");
                         }
                         //endregion
                         //region 第2辆车到站提示
                         if (secondBus == 0) {
-                            tv_second_bus.setText("到站");
+                            tvSecondBus.setText("到站");
                         } else if (secondBus == 1) {
-                            tv_second_bus.setText("将至");
+                            tvSecondBus.setText("将至");
                         } else if (secondBus > busList.getCount()) {
-                            tv_second_bus.setText("无");
+                            tvSecondBus.setText("无");
                         } else {
-                            tv_second_bus.setText(secondBus + "站");
+                            tvSecondBus.setText(secondBus + "站");
                         }
                         //endregion
 
@@ -197,7 +200,8 @@ public class BusMonitorItem extends LinearLayout {
 
                     } catch (JSONException e) {
                         e.printStackTrace();
-
+                        tvErr.setVisibility(VISIBLE);
+                        busList.setVisibility(GONE);
                     }
 
                     break;
@@ -234,12 +238,14 @@ public class BusMonitorItem extends LinearLayout {
         LayoutInflater.from(context).inflate(R.layout.view_bus_monitor_item, this);
 
         //region 控件初始化
+        tvErr = findViewById(R.id.tv_err);
+
         ivRefresh = findViewById(R.id.iv_refresh);
         tvBus = findViewById(R.id.tv_bus);
         tvStationStartEnd = findViewById(R.id.tv_station);
         tvStationTime = findViewById(R.id.tv_station_time);
-        tv_first_bus = findViewById(R.id.tv_first_bus);
-        tv_second_bus = findViewById(R.id.tv_second_bus);
+        tvFirstBus = findViewById(R.id.tv_first_bus);
+        tvSecondBus = findViewById(R.id.tv_second_bus);
 
         //region 底部按钮
         llRefresh = findViewById(R.id.ll_refresh);
@@ -301,8 +307,8 @@ public class BusMonitorItem extends LinearLayout {
         tvBus.setText(bus);
         tvStationStartEnd.setText("");
         tvStationTime.setText("");
-        tv_first_bus.setText("无");
-        tv_second_bus.setText("无");
+        tvFirstBus.setText("无");
+        tvSecondBus.setText("无");
 
         busList = findViewById(R.id.busList);
         busList.setDataList(mDataList);
@@ -316,6 +322,8 @@ public class BusMonitorItem extends LinearLayout {
         });
         //endregion
 
+        tvErr.setVisibility(VISIBLE);
+        busList.setVisibility(GONE);
 
     }
 
@@ -342,8 +350,8 @@ public class BusMonitorItem extends LinearLayout {
         tvBus.setText(bus);
         tvStationStartEnd.setText("");
         tvStationTime.setText("");
-        tv_first_bus.setText("无");
-        tv_second_bus.setText("无");
+        tvFirstBus.setText("无");
+        tvSecondBus.setText("无");
         handler.sendEmptyMessage(1);
     }
 }
