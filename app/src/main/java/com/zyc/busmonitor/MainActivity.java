@@ -1,7 +1,6 @@
 package com.zyc.busmonitor;
 
 import android.annotation.SuppressLint;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -9,23 +8,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
-import android.view.View;
 import android.widget.TextView;
-
-import com.zyc.MyFunction;
 
 import com.zyc.busmonitor.mainrecycler.MainRecyclerAdapter;
 import com.zyc.busmonitor.mainrecycler.MainRecyclerItemTouchHelper;
 import com.zyc.busmonitor.mainrecycler.SpacesRecyclerViewItemDecoration;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -65,18 +54,13 @@ public class MainActivity extends AppCompatActivity {
         rv.setLayoutManager(layoutManager);
         rv.setAdapter(adapter);
 
-//        ItemTouchHelper helper=new ItemTouchHelper(new MainRecyclerItemTouchHelper(adapter));
-//        helper.attachToRecyclerView(rv);
+        //设置长按拖动排序
+        ItemTouchHelper helper=new ItemTouchHelper(new MainRecyclerItemTouchHelper(adapter));
+        helper.attachToRecyclerView(rv);
 
+        // 设置RecyclerView Item边距
+        rv.addItemDecoration(new SpacesRecyclerViewItemDecoration(10,10,10,20));
 
-        //region 设置RecyclerView Item边距
-        HashMap<String, Integer> spacesVelue = new HashMap<>();
-        spacesVelue.put(SpacesRecyclerViewItemDecoration.TOP_SPACE, 10);
-        spacesVelue.put(SpacesRecyclerViewItemDecoration.BOTTOM_SPACE, 20);
-        spacesVelue.put(SpacesRecyclerViewItemDecoration.LEFT_SPACE, 10);
-        spacesVelue.put(SpacesRecyclerViewItemDecoration.RIGHT_SPACE, 10);
-        rv.addItemDecoration(new SpacesRecyclerViewItemDecoration(spacesVelue));
-        //endregion
         //endregion
 
     }
