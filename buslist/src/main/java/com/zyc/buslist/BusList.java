@@ -41,7 +41,6 @@ public class BusList extends LinearLayout {
         recyclerView.setLayoutManager(layoutManager);
         //创建IconAdapter的实例同时将iconList传入其构造函数
         adapter = new BusListAdapter(mDataList);
-        adapter.setSelected(12);
         //完成adapter设置
         recyclerView.setAdapter(adapter);
 
@@ -92,7 +91,6 @@ public class BusList extends LinearLayout {
 
     public void setSelected(int p) {
         adapter.setSelected(p);
-
     }
 
     public int getSelected() {

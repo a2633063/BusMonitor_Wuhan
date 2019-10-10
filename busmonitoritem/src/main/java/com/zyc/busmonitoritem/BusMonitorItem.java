@@ -31,7 +31,7 @@ import java.util.List;
 public class BusMonitorItem extends LinearLayout {
     public final static String Tag = "BusFragment";
 
-    //region Description
+    //region 控件
     ImageView ivRefresh;
     BusList busList;
     TextView tvBus;
@@ -307,7 +307,7 @@ public class BusMonitorItem extends LinearLayout {
         busList = findViewById(R.id.busList);
         busList.setDataList(mDataList);
         busList.notifyDataSetChanged();
-        busList.setSelected(9999);
+        busList.setSelected(-1);
         busList.setOnItemClickListener(new BusList.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position, String data) {

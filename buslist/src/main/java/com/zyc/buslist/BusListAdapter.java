@@ -21,7 +21,7 @@ import java.util.Map;
 public class BusListAdapter extends RecyclerView.Adapter<BusListAdapter.ViewHolder> {
 
     private List<BusStation> mList;
-    private int mCurrentSelected = 0;
+    private int mCurrentSelected = -1;
 
     //记录不同字数时的字体大小
     Map<Integer, Float> textSizeHashMap = new HashMap<Integer, Float>();
@@ -89,6 +89,8 @@ public class BusListAdapter extends RecyclerView.Adapter<BusListAdapter.ViewHold
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         BusStation busStation = mList.get(position);
+
+        if (mCurrentSelected < 0) mCurrentSelected = getItemCount();
 
         //region 显示站名,并自动跳转字体大小
         holder.name.setText(busStation.getName());
