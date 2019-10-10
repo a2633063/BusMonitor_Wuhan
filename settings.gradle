@@ -1,1 +1,1 @@
-include ':app', ':buslist'
+include ':app', ':buslist', ':busmonitoritem'

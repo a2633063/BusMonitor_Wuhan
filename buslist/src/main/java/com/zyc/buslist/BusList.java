@@ -31,7 +31,6 @@ public class BusList extends LinearLayout {
         // 加载布局
         LayoutInflater.from(context).inflate(R.layout.view_bus_list, this);
 
-
         // 获取控件
         recyclerView = findViewById(R.id.recyclerView);
         //创建一个layoutManager，这里使用LinearLayoutManager指定为线性，也就可以有ListView这样的效果

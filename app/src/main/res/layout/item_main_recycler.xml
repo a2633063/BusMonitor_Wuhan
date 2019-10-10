@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:translationZ="3dp"
+    android:elevation="3dp"
+    android:outlineProvider="bounds"
+    android:background="#ffffff"
+    android:layout_width="match_parent"
+    android:layout_height="300dp"
+    android:padding="8dp">
+
+    <com.zyc.busmonitoritem.BusMonitorItem
+        android:id="@+id/BusMonitorItem"
+        android:layout_width="match_parent"
+        android:layout_height="300dp" />
+</LinearLayout>

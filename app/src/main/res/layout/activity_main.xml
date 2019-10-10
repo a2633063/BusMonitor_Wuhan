@@ -7,19 +7,6 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <FrameLayout
-        android:id="@+id/frameLayout"
-        android:layout_width="match_parent"
-        android:layout_margin="16dp"
-        android:padding="5dp"
-        android:translationZ="3dp"
-        android:elevation="3dp"
-        android:outlineProvider="bounds"
-        android:background="#ffffff"
-        android:layout_height="300dp">
-
-    </FrameLayout>
-
     <TextView
         android:id="@+id/log"
         android:layout_width="match_parent"
@@ -30,6 +17,17 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+<!--    <com.zyc.busmonitoritem.BusMonitorItem-->
+<!--        android:id="@+id/BusMonitorItem"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="300dp"-->
+<!--        android:visibility="gone"/>-->
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:padding="8dp"
+
+        android:layout_height="match_parent"/>
 
 </LinearLayout>
