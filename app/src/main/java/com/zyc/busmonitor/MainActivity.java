@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.zyc.busmonitor.mainrecycler.MainRecyclerAdapter;
 import com.zyc.busmonitor.mainrecycler.MainRecyclerItemTouchHelper;
 import com.zyc.busmonitor.mainrecycler.SpacesRecyclerViewItemDecoration;
+import com.zyc.busmonitoritem.BusLine;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,7 +21,6 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     public final static String Tag = "MainActivity";
-    ArrayList<Integer> listInt = new ArrayList<>();
     TextView log;
 
     MainRecyclerAdapter adapter;
@@ -42,9 +42,9 @@ public class MainActivity extends AppCompatActivity {
 
         log = findViewById(R.id.log);
 
-        List<String> mData=new ArrayList<>();
-        mData.add("907");
-        mData.add("2");
+        List<BusLine> mData=new ArrayList<>();
+        mData.add(new BusLine("907","907",1));
+        mData.add(new BusLine("2","907",0));
 
         //region RecyclerView初始化
         RecyclerView rv=  findViewById(R.id.recyclerView);

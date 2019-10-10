@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.zyc.busmonitor.R;
+import com.zyc.busmonitoritem.BusLine;
 import com.zyc.busmonitoritem.BusMonitorItem;
 
 import java.util.List;
@@ -14,13 +15,13 @@ import java.util.List;
 
 public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapter.ViewHolder> {
 
-    private List<String> mData;
+    private List<BusLine> mData;
 
-    public List<String> getDataList() {
+    public List<BusLine> getDataList() {
         return mData;
     }
 
-    public MainRecyclerAdapter(List<String> mData) {
+    public MainRecyclerAdapter(List<BusLine> mData) {
         this.mData = mData;
     }
 

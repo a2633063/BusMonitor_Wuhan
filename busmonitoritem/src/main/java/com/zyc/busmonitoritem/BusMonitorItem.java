@@ -56,10 +56,9 @@ public class BusMonitorItem extends LinearLayout {
     private int AutoRefresh = 15;
 
 
+    private BusLine bus = null;
     private List<BusStation> mDataList = new ArrayList<>();
 
-    private String bus = null;
-    private int direction = 0;
 
     //region Handler
     @SuppressLint("HandlerLeak")
@@ -76,7 +75,7 @@ public class BusMonitorItem extends LinearLayout {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            String url = String.format(getResources().getString(R.string.url_bus), bus, direction);
+                            String url = String.format(getResources().getString(R.string.url_bus), bus.getLineNo(), bus.getDirection());
                             Log.d(Tag, "URL:" + url);
                             Message msg = new Message();
                             msg.what = 2;
@@ -221,19 +220,8 @@ public class BusMonitorItem extends LinearLayout {
     };
     //endregion
 
-    public void setBus(String b) {
+    public void setBus(BusLine b) {
         bus = b;
-        init();
-    }
-
-    public void setBus(int d) {
-        direction = d;
-        init();
-    }
-
-    public void setBus(String b, int d) {
-        bus = b;
-        direction = d;
         init();
     }
 
@@ -318,8 +306,6 @@ public class BusMonitorItem extends LinearLayout {
         });
         //endregion
 
-
-        tvBus.setText(bus);
         init();
 
         busList = findViewById(R.id.busList);
@@ -345,7 +331,7 @@ public class BusMonitorItem extends LinearLayout {
         public void onClick(View v) {
             int id = v.getId();
             if (id == R.id.ll_direction) {
-                direction = (direction == 0 ? 1 : 0);
+                bus.setDirection(bus.getDirection() == 0 ? 1 : 0);
 //                    busList.setSelected(busList.getCount()-busList.getSelected()-1);
                 busList.setOpposite();
 //                    break;
@@ -353,7 +339,7 @@ public class BusMonitorItem extends LinearLayout {
                 refresh();
             } else if (id == R.id.ll_refresh) {
                 refresh();
-                if(isAutoRefresh) setAutoRefresh(AutoRefresh);
+                if (isAutoRefresh) setAutoRefresh(AutoRefresh);
             } else if (id == R.id.ll_auto_refresh) {
                 setAutoRefresh(isAutoRefresh ? 0 : AutoRefresh);
             }
@@ -362,7 +348,8 @@ public class BusMonitorItem extends LinearLayout {
     //endregion
 
     void init() {
-        tvBus.setText(bus);
+        if (bus != null)
+            tvBus.setText(bus.getLineName());
         tvStationStartEnd.setText("起始站 → 终点路  --站");
         tvStationTime.setText("XX:XX-XX:XX  票价 XXX元");
         tvFirstBus.setText("无");
@@ -386,7 +373,7 @@ public class BusMonitorItem extends LinearLayout {
         } else {
             isAutoRefresh = true;
             AutoRefresh = time;
-            if(timer!=null) timer.cancel();
+            if (timer != null) timer.cancel();
             timer = new CountDownTimer(AutoRefresh * 1000 + 300, 1000) {
                 @Override
                 public void onTick(long millisUntilFinished) {
