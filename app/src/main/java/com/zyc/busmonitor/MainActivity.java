@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.zyc.busmonitor.mainrecycler.MainRecyclerAdapter;
 import com.zyc.busmonitor.mainrecycler.MainRecyclerItemTouchHelper;
 import com.zyc.busmonitor.mainrecycler.SideRecyclerAdapter;
+import com.zyc.busmonitor.mainrecycler.SideRecyclerItemTouchHelper;
 import com.zyc.busmonitor.mainrecycler.SpacesRecyclerViewItemDecoration;
 import com.zyc.busmonitoritem.BusLine;
 
@@ -69,29 +70,18 @@ public class MainActivity extends AppCompatActivity {
 
 
         List<BusLine> mData = new ArrayList<>();
-        mData.add(new BusLine("907", "907", 1));
-        mData.add(new BusLine("234", "234", 0));
-        mData.add(new BusLine("234", "234", 0));
-        mData.add(new BusLine("234", "234", 0));
-        mData.add(new BusLine("234", "234", 0));
+        mData.add(new BusLine("907", "907",  1));
+        mData.add(new BusLine("333", "333",  0));
+        mData.add(new BusLine("234", "234",  0));
+        mData.add(new BusLine("777", "777",  0));
+        mData.add(new BusLine("785", "785",  0));
+        mData.add(new BusLine("789", "789",  0));
+        mData.add(new BusLine("901", "901",  0));
+        mData.add(new BusLine("902", "902",  0));
+        mData.add(new BusLine("903", "903",  0));
+        mData.add(new BusLine("785", "785",  0));
         mData.add(new BusLine("2", "2", 0));
 
-        //region 侧边RecyclerView初始化
-        RecyclerView sideRecyclerView = findViewById(R.id.side_recyclerView);
-        LinearLayoutManager sideLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-//      GridLayoutManager layoutManager=new GridLayoutManager(this,3,GridLayoutManager.VERTICAL,false);
-        sideAdapter = new SideRecyclerAdapter(mData);
-        sideRecyclerView.setLayoutManager(sideLayoutManager);
-        sideRecyclerView.setAdapter(sideAdapter);
-
-        //设置长按拖动排序
-        ItemTouchHelper sideHelper = new ItemTouchHelper(new MainRecyclerItemTouchHelper(adapter));
-        sideHelper.attachToRecyclerView(sideRecyclerView);
-
-//        // 设置RecyclerView Item边距
-//        sideRecyclerView.addItemDecoration(new SpacesRecyclerViewItemDecoration(10, 10, 10, 20));
-
-        //endregion
 
         //region RecyclerView初始化
         RecyclerView rv = findViewById(R.id.recyclerView);
@@ -107,6 +97,22 @@ public class MainActivity extends AppCompatActivity {
 
         // 设置RecyclerView Item边距
         rv.addItemDecoration(new SpacesRecyclerViewItemDecoration(10, 10, 10, 20));
+
+        //endregion
+        //region 侧边RecyclerView初始化
+        RecyclerView sideRecyclerView = findViewById(R.id.side_recyclerView);
+        LinearLayoutManager sideLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+//      GridLayoutManager layoutManager=new GridLayoutManager(this,3,GridLayoutManager.VERTICAL,false);
+        sideAdapter = new SideRecyclerAdapter(mData,adapter);
+        sideRecyclerView.setLayoutManager(sideLayoutManager);
+        sideRecyclerView.setAdapter(sideAdapter);
+
+        //设置长按拖动排序
+        ItemTouchHelper sideHelper = new ItemTouchHelper(new SideRecyclerItemTouchHelper(sideAdapter,adapter));
+        sideHelper.attachToRecyclerView(sideRecyclerView);
+
+        // 设置RecyclerView Item边距
+        sideRecyclerView.addItemDecoration(new SpacesRecyclerViewItemDecoration(10, 10, 10, 20));
 
         //endregion
 
@@ -140,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_device_settings) {
 
-
+adapter.notifyDataSetChanged();
             return true;
         }
         return super.onOptionsItemSelected(item);

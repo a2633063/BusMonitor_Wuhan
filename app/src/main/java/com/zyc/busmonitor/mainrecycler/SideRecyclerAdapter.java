@@ -16,13 +16,15 @@ import java.util.List;
 public class SideRecyclerAdapter extends RecyclerView.Adapter<SideRecyclerAdapter.ViewHolder> {
 
     private List<BusLine> mData;
+    MainRecyclerAdapter adapter;
 
     public List<BusLine> getDataList() {
         return mData;
     }
 
-    public SideRecyclerAdapter(List<BusLine> mData) {
+    public SideRecyclerAdapter(List<BusLine> mData,MainRecyclerAdapter adapter) {
         this.mData = mData;
+        this.adapter = adapter;
     }
 
     @Override
@@ -58,6 +60,7 @@ public class SideRecyclerAdapter extends RecyclerView.Adapter<SideRecyclerAdapte
         //移除数据
         mData.remove(position);
         notifyItemRemoved(position);
+        adapter.notifyItemRemoved(position);
     }
 
 }
