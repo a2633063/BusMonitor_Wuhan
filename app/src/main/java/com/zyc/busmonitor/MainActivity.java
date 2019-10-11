@@ -17,6 +17,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.zyc.busmonitor.addbus.AddBusActivity;
@@ -70,6 +71,36 @@ public class MainActivity extends AppCompatActivity {
 
         NavigationView navigationView = findViewById(R.id.nav_view);
 
+        //endregion
+
+        //region 设置/关于/退出按钮
+        //region 设置按钮
+//        findViewById(R.id.tv_setting).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+////                startActivity(new Intent(MainActivity.this, SettingActivity.class));
+//                drawerLayout.closeDrawer(GravityCompat.START);//关闭侧边栏
+//
+//            }
+//        });
+        //endregion
+        //region 退出按钮
+        findViewById(R.id.tv_exit).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        //endregion
+        //region 关于按钮
+//        findViewById(R.id.tv_info).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                drawerLayout.closeDrawer(GravityCompat.START);//关闭侧边栏
+////                popupwindowInfo();
+//            }
+//        });
+        //endregion
         //endregion
 
         mData.add(new BusLine("907", "907", 1));
