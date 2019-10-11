@@ -143,6 +143,8 @@ public class BusMonitorItem extends LinearLayout {
                         try {
 
                             int selectBus = busList.getSelected();
+
+                            Log.d(Tag, "selectBus:" + selectBus);
                             JSONArray jsonBuses = jsonData.getJSONArray("buses");
                             for (int i = 0; i < jsonBuses.length(); i++) {
                                 String str = jsonBuses.getString(i);
@@ -151,29 +153,36 @@ public class BusMonitorItem extends LinearLayout {
                                 if (arr.length != 6)
                                     break;//throw new JSONException("数据错误");   //能够获取到车站信息但无法获取到位置时 显示车站但不显示实时位置 需要验证
 //                                int id = Integer.valueOf(arr[0]);
-                                String id=arr[0];
+                                String id = arr[0];
                                 int busStation = Integer.valueOf(arr[2]);
                                 int isStation = Integer.valueOf(arr[3]);
                                 Log.d(Tag, "车辆" + id + "站点:" + busStation + "是否到站:" + isStation);
 
+                                busStation = busStation - 1;
+                                Log.d(Tag, "站点:" + busList.getItem(busStation).getName());
                                 //region 更新车辆到站信息
                                 if (isStation == 1) {//到站
-                                    busList.getItem(busStation - 1).setArrive(busList.getItem(busStation - 1).getArrive() + 1);
-                                } else {
-                                    busList.getItem(busStation - 2).setPass(busList.getItem(busStation - 2).getPass() + 1);
+                                    busList.getItem(busStation).setArrive(busList.getItem(busStation).getArrive() + 1);
+                                } else {//未到站
+                                    busStation = busStation - 1;
+                                    busList.getItem(busStation).setPass(busList.getItem(busStation).getPass() + 1);
                                 }
                                 //endregion
-
+                                Log.d(Tag, "busStation:" + busStation);
                                 //region 到站剩余站更新
                                 //region 计算到站站数
-                                if (busStation == selectBus + 1) {
+                                if (busStation == selectBus) {
                                     if (isStation == 1) {//到站
                                         firstBus = 0;
-                                    } else {
-                                        firstBus = 1;
                                     }
-                                } else if (busStation < selectBus + 1) {
-                                    int temp = selectBus + 1 - busStation;
+                                } else if (busStation == selectBus - 1) {
+                                    if (isStation == 0) {//wei到站
+                                        firstBus = 1;
+                                    } else if (firstBus > 1) {
+                                        firstBus = 2;
+                                    }
+                                } else if (busStation < selectBus) {
+                                    int temp = selectBus - busStation;
                                     if (temp < firstBus) {
                                         secondBus = firstBus;
                                         firstBus = temp;
