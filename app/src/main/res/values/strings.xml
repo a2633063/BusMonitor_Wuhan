@@ -1,5 +1,12 @@
 <resources>
     <string name="app_name">公交监测</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Zip_Zhang</string>
+    <string name="nav_header_subtitle">https://github.com/a2633063</string>
+    <string name="nav_header_desc">Navigation header</string>
+
+
     <string name="url_bus">http://bus.wuhancloud.cn:9087/website/web/420100/line/027-%1$s-%2$d.do</string>
     <string name="url_search_bus">http://bus.wuhancloud.cn:9087/website//web/420100/search.do?keyword=%1$s&amp;type=line</string>
 </resources>
