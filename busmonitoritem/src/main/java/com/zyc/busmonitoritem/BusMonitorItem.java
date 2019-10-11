@@ -18,7 +18,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.zyc.WebService;
 import com.zyc.buslist.BusList;
 import com.zyc.buslist.BusStation;
 
@@ -137,47 +136,63 @@ public class BusMonitorItem extends LinearLayout {
                         //endregion
 
                         //region 更新车辆所有实时信息
-                        int firstBus = 9999;
-                        int secondBus = 9999;
-                        int selectBus = busList.getSelected();
-                        JSONArray jsonBuses = jsonData.getJSONArray("buses");
-                        for (int i = 0; i < jsonBuses.length(); i++) {
-                            String str = jsonBuses.getString(i);
-                            Log.d(Tag, str);
-                            String[] arr = str.split("\\|");
-                            if (arr.length != 6)
-                                break;//throw new JSONException("数据错误");   //能够获取到车站信息但无法获取到位置时 显示车站但不显示实时位置 需要验证
-                            int id = Integer.valueOf(arr[0]);
-                            int busStation = Integer.valueOf(arr[2]);
-                            int isStation = Integer.valueOf(arr[3]);
-                            Log.d(Tag, "车辆" + id + "站点:" + busStation + "是否到站:" + isStation);
+                        int firstBus = 0;
+                        int secondBus = 0;
+                        firstBus = 9999;
+                        secondBus = 9999;
+                        try {
 
-                            //region 更新车辆到站信息
-                            if (isStation == 1) {//到站
-                                busList.getItem(busStation - 1).setArrive(busList.getItem(busStation - 1).getArrive() + 1);
-                            } else {
-                                busList.getItem(busStation - 2).setPass(busList.getItem(busStation - 2).getPass() + 1);
-                            }
-                            //endregion
+                            int selectBus = busList.getSelected();
+                            JSONArray jsonBuses = jsonData.getJSONArray("buses");
+                            for (int i = 0; i < jsonBuses.length(); i++) {
+                                String str = jsonBuses.getString(i);
+                                Log.d(Tag, str);
+                                String[] arr = str.split("\\|");
+                                if (arr.length != 6)
+                                    break;//throw new JSONException("数据错误");   //能够获取到车站信息但无法获取到位置时 显示车站但不显示实时位置 需要验证
+//                                int id = Integer.valueOf(arr[0]);
+                                String id=arr[0];
+                                int busStation = Integer.valueOf(arr[2]);
+                                int isStation = Integer.valueOf(arr[3]);
+                                Log.d(Tag, "车辆" + id + "站点:" + busStation + "是否到站:" + isStation);
 
-                            //region 到站剩余站更新
-                            //region 计算到站站数
-                            if (busStation == selectBus + 1) {
+                                //region 更新车辆到站信息
                                 if (isStation == 1) {//到站
-                                    firstBus = 0;
+                                    busList.getItem(busStation - 1).setArrive(busList.getItem(busStation - 1).getArrive() + 1);
                                 } else {
-                                    firstBus = 1;
+                                    busList.getItem(busStation - 2).setPass(busList.getItem(busStation - 2).getPass() + 1);
                                 }
-                            } else if (busStation < selectBus + 1) {
-                                int temp = selectBus + 1 - busStation;
-                                if (temp < firstBus) {
-                                    secondBus = firstBus;
-                                    firstBus = temp;
-                                } else if (temp < selectBus) secondBus = temp;
+                                //endregion
+
+                                //region 到站剩余站更新
+                                //region 计算到站站数
+                                if (busStation == selectBus + 1) {
+                                    if (isStation == 1) {//到站
+                                        firstBus = 0;
+                                    } else {
+                                        firstBus = 1;
+                                    }
+                                } else if (busStation < selectBus + 1) {
+                                    int temp = selectBus + 1 - busStation;
+                                    if (temp < firstBus) {
+                                        secondBus = firstBus;
+                                        firstBus = temp;
+                                    } else if (temp < selectBus) secondBus = temp;
+                                }
+                                //endregion
+                                //endregion
                             }
-                            //endregion
-                            //endregion
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            firstBus = 9999;
+                            secondBus = 9999;
+                        } catch (NumberFormatException e) {
+                            e.printStackTrace();
+                            firstBus = 9999;
+                            secondBus = 9999;
                         }
+
+
                         //region 第1辆车到站提示
                         if (firstBus == 0) {
                             tvFirstBus.setText("到站");

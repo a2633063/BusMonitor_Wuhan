@@ -1,6 +1,7 @@
 package com.zyc.busmonitor;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -13,12 +14,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.zyc.busmonitor.addbus.AddBusActivity;
 import com.zyc.busmonitor.mainrecycler.MainRecyclerAdapter;
-import com.zyc.busmonitor.mainrecycler.MainRecyclerItemTouchHelper;
 import com.zyc.busmonitor.mainrecycler.SideRecyclerAdapter;
 import com.zyc.busmonitor.mainrecycler.SideRecyclerItemTouchHelper;
 import com.zyc.busmonitor.mainrecycler.SpacesRecyclerViewItemDecoration;
@@ -33,7 +35,9 @@ public class MainActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     DrawerLayout drawerLayout;
+    RecyclerView mainRecyclerView;
 
+    List<BusLine> mData = new ArrayList<>();
     private MainRecyclerAdapter adapter;
     private SideRecyclerAdapter sideAdapter;
 
@@ -68,47 +72,38 @@ public class MainActivity extends AppCompatActivity {
 
         //endregion
 
+        mData.add(new BusLine("907", "907", 1));
+        mData.add(new BusLine("333", "333", 0));
+        mData.add(new BusLine("234", "234", 0));
 
-        List<BusLine> mData = new ArrayList<>();
-        mData.add(new BusLine("907", "907",  1));
-        mData.add(new BusLine("333", "333",  0));
-        mData.add(new BusLine("234", "234",  0));
-        mData.add(new BusLine("777", "777",  0));
-        mData.add(new BusLine("785", "785",  0));
-        mData.add(new BusLine("789", "789",  0));
-        mData.add(new BusLine("901", "901",  0));
-        mData.add(new BusLine("902", "902",  0));
-        mData.add(new BusLine("903", "903",  0));
-        mData.add(new BusLine("785", "785",  0));
-        mData.add(new BusLine("2", "2", 0));
 
 
         //region RecyclerView初始化
-        RecyclerView rv = findViewById(R.id.recyclerView);
+        mainRecyclerView = findViewById(R.id.recyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
 //      GridLayoutManager layoutManager=new GridLayoutManager(this,3,GridLayoutManager.VERTICAL,false);
         adapter = new MainRecyclerAdapter(mData);
-        rv.setLayoutManager(layoutManager);
-        rv.setAdapter(adapter);
+        mainRecyclerView.setLayoutManager(layoutManager);
+        mainRecyclerView.setAdapter(adapter);
 
 //        //设置长按拖动排序
 //        ItemTouchHelper helper = new ItemTouchHelper(new MainRecyclerItemTouchHelper(adapter));
-//        helper.attachToRecyclerView(rv);
+//        helper.attachToRecyclerView(mainRecyclerView);
 
         // 设置RecyclerView Item边距
-        rv.addItemDecoration(new SpacesRecyclerViewItemDecoration(10, 10, 10, 20));
+        mainRecyclerView.addItemDecoration(new SpacesRecyclerViewItemDecoration(10, 10, 10, 20));
 
         //endregion
         //region 侧边RecyclerView初始化
         RecyclerView sideRecyclerView = findViewById(R.id.side_recyclerView);
         LinearLayoutManager sideLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
 //      GridLayoutManager layoutManager=new GridLayoutManager(this,3,GridLayoutManager.VERTICAL,false);
-        sideAdapter = new SideRecyclerAdapter(mData,adapter);
+        sideAdapter = new SideRecyclerAdapter(mData, adapter);
         sideRecyclerView.setLayoutManager(sideLayoutManager);
         sideRecyclerView.setAdapter(sideAdapter);
 
         //设置长按拖动排序
-        ItemTouchHelper sideHelper = new ItemTouchHelper(new SideRecyclerItemTouchHelper(sideAdapter,adapter));
+        ItemTouchHelper sideHelper = new ItemTouchHelper(new SideRecyclerItemTouchHelper(sideAdapter, adapter));
         sideHelper.attachToRecyclerView(sideRecyclerView);
 
         // 设置RecyclerView Item边距
@@ -144,12 +139,40 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_device_settings) {
+        if (id == R.id.menu_add) {
+//            Intent intent = new Intent(MainActivity.this, AddBusActivity.class);
+//            startActivity(intent);
+            startActivityForResult(new Intent(MainActivity.this, AddBusActivity.class), 1);
 
-adapter.notifyDataSetChanged();
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+    //endregion
+
+    //region 新增线路,接受AddBusActivity反馈的数据
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+
+        if (resultCode != RESULT_OK) return;
+        //region 新增设备返回
+        if (requestCode == 1) {
+            BusLine b =  (BusLine)intent.getSerializableExtra("busline");
+            Log.d(Tag,b.getLineName());
+            mData.add(0,b);
+            adapter.notifyItemInserted(0);
+//            sideAdapter.notifyItemInserted(0);
+            mainRecyclerView.scrollToPosition(0);
+//            adapter.notifyDataSetChanged();
+            sideAdapter.notifyDataSetChanged();
+        }
+        //endregion
+    }
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if (intent.hasExtra("mac") && intent.getStringExtra("mac") != null)
+            setIntent(intent);// must store the new intent unless getIntent() will return the old one
     }
     //endregion
 

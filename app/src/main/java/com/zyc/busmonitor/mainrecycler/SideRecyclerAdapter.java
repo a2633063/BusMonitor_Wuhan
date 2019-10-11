@@ -31,7 +31,7 @@ public class SideRecyclerAdapter extends RecyclerView.Adapter<SideRecyclerAdapte
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater
                 .from(parent.getContext())
-                .inflate(R.layout.item_side_recycler, null);
+                .inflate(R.layout.item_side_recycler, parent,false);
         return new ViewHolder(view);
     }
 
