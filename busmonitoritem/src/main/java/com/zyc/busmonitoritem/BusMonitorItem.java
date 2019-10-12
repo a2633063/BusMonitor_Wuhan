@@ -105,7 +105,7 @@ public class BusMonitorItem extends LinearLayout {
 
                         if (!jsonObject.has("resultCode")
                                 || !jsonObject.has("data")
-                                || jsonObject.getInt("resultCode") != 1
+                                || !jsonObject.getString("resultCode").equals("1")
                         ) {
                             throw new JSONException("更新数据失败");
                         }
