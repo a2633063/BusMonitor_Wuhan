@@ -2,6 +2,7 @@ package com.zyc.busmonitor;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -27,11 +28,17 @@ import com.zyc.busmonitor.mainrecycler.SideRecyclerItemTouchHelper;
 import com.zyc.busmonitor.mainrecycler.SpacesRecyclerViewItemDecoration;
 import com.zyc.busmonitoritem.BusLine;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     public final static String Tag = "MainActivity";
+    private SharedPreferences mSharedPreferences;
+    private SharedPreferences.Editor mEditor;
     TextView log;
 
     private Toolbar toolbar;
@@ -103,10 +110,29 @@ public class MainActivity extends AppCompatActivity {
         //endregion
         //endregion
 
-        mData.add(new BusLine("907", "907", 1));
-        mData.add(new BusLine("333", "333", 0));
-        mData.add(new BusLine("234", "234", 0));
 
+        mSharedPreferences = getSharedPreferences("setting", 0);
+        mEditor = mSharedPreferences.edit();
+        String busLineStr = mSharedPreferences.getString("busLine", null);
+        if (busLineStr != null) {
+            try {
+                JSONObject jsonObject = new JSONObject(busLineStr);
+                if (jsonObject.has("data")) {
+                    JSONArray jsonArray = jsonObject.getJSONArray("data");
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject j = (JSONObject) jsonArray.get(i);
+                        mData.add(new BusLine(j.getString("LineName"),
+                                j.getString("LineNo"), j.getInt("Direction"), j.getInt("Selected")));
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+                mData.clear();
+            }
+
+        }
+        if (mData.size() == 0)
+            mData.add(new BusLine("907", "907", 1));
 
         //region RecyclerView初始化
         mainRecyclerView = findViewById(R.id.recyclerView);
@@ -153,6 +179,31 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            JSONArray jsonArray = new JSONArray();//实例一个JSON数组
+            for (int i = 0; i < adapter.getItemCount(); i++) {
+                BusLine b = adapter.get(i);
+                JSONObject j = new JSONObject();
+                j.put("LineName", b.getLineName());
+                j.put("LineNo", b.getLineNo());
+                j.put("Selected", b.getSelected());
+                j.put("Direction", b.getDirection());
+                jsonArray.put(j);
+            }
+            jsonObject.put("data", jsonArray);
+            jsonObject.put("count", jsonArray.length());
+            mEditor.putString("busLine", jsonObject.toString());
+            mEditor.commit();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        super.onDestroy();
+    }
+
     //region toolbar 菜单栏
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -174,7 +225,6 @@ public class MainActivity extends AppCompatActivity {
 //            startActivity(intent);
             startActivityForResult(new Intent(MainActivity.this, AddBusActivity.class), 1);
 
-            Log.d(Tag, "selected:" + adapter.get(0).getSelected());
             return true;
         }
         return super.onOptionsItemSelected(item);

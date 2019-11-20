@@ -142,9 +142,12 @@
             android:layout_width="1dp"
             android:layout_height="15dp"
             android:layout_gravity="center_vertical"
-            android:background="#eeeeee" />
+            android:background="#eeeeee"
+            android:visibility="invisible" />
 
-        <LinearLayout style="@style/BusFragmentBottomLinearLayout">
+        <LinearLayout
+            style="@style/BusFragmentBottomLinearLayout"
+            android:visibility="invisible">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -165,9 +168,12 @@
             android:layout_width="1dp"
             android:layout_height="15dp"
             android:layout_gravity="center_vertical"
-            android:background="#eeeeee" />
+            android:background="#eeeeee"
+            android:visibility="invisible" />
 
-        <LinearLayout style="@style/BusFragmentBottomLinearLayout">
+        <LinearLayout
+            style="@style/BusFragmentBottomLinearLayout"
+            android:visibility="invisible">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -187,7 +193,8 @@
             android:layout_width="1dp"
             android:layout_height="15dp"
             android:layout_gravity="center_vertical"
-            android:background="#eeeeee" />
+            android:background="#eeeeee"
+            android:visibility="invisible" />
 
         <LinearLayout
             android:id="@+id/ll_direction"
