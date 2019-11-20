@@ -108,7 +108,6 @@ public class MainActivity extends AppCompatActivity {
         mData.add(new BusLine("234", "234", 0));
 
 
-
         //region RecyclerView初始化
         mainRecyclerView = findViewById(R.id.recyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -175,6 +174,7 @@ public class MainActivity extends AppCompatActivity {
 //            startActivity(intent);
             startActivityForResult(new Intent(MainActivity.this, AddBusActivity.class), 1);
 
+            Log.d(Tag, "selected:" + adapter.get(0).getSelected());
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -188,9 +188,9 @@ public class MainActivity extends AppCompatActivity {
         if (resultCode != RESULT_OK) return;
         //region 新增设备返回
         if (requestCode == 1) {
-            BusLine b =  (BusLine)intent.getSerializableExtra("busline");
-            Log.d(Tag,b.getLineName());
-            mData.add(0,b);
+            BusLine b = (BusLine) intent.getSerializableExtra("busline");
+            Log.d(Tag, b.getLineName());
+            mData.add(0, b);
             adapter.notifyItemInserted(0);
 //            sideAdapter.notifyItemInserted(0);
             mainRecyclerView.scrollToPosition(0);
@@ -199,6 +199,7 @@ public class MainActivity extends AppCompatActivity {
         }
         //endregion
     }
+
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);

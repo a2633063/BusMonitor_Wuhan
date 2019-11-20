@@ -24,6 +24,10 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
     public MainRecyclerAdapter(List<BusLine> mData) {
         this.mData = mData;
     }
+    
+    public BusLine get(int position){
+        return mData.get(position);
+    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -38,6 +42,7 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
 
         ViewHolder mHolder = holder;
         mHolder.BusItem.setBus(mData.get(position));
+
 //        mHolder.itemView.setBackgroundColor(0);
     }
 

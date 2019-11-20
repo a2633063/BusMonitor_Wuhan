@@ -330,8 +330,6 @@ public class BusMonitorItem extends LinearLayout {
         });
         //endregion
 
-        init();
-
         busList = findViewById(R.id.busList);
         busList.setDataList(mDataList);
         busList.notifyDataSetChanged();
@@ -347,7 +345,7 @@ public class BusMonitorItem extends LinearLayout {
 
         tvErr.setVisibility(VISIBLE);
         busList.setVisibility(GONE);
-
+        init();
     }
 
     //region 点击事件
@@ -380,6 +378,12 @@ public class BusMonitorItem extends LinearLayout {
         tvStationTime.setText("XX:XX-XX:XX  票价 XXX元");
         tvFirstBus.setText("无");
         tvSecondBus.setText("无");
+        busList.setOnItemClickListener(new BusList.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position, String data) {
+                bus.setSelected(position);
+            }
+        });
         refresh();
     }
 
@@ -418,6 +422,13 @@ public class BusMonitorItem extends LinearLayout {
         ivAutoRefresh.setImageResource(isAutoRefresh ? R.drawable.ic_auto_refresh_select_24dp : R.drawable.ic_auto_refresh_24dp);
         tvAutoRefresh.setTextColor(getResources().getColor(isAutoRefresh ? R.color.bottom_text_select_color : R.color.bottom_text_color));
 
+    }
+
+    public void setSelected(int pos){
+        busList.setSelected(pos);
+    }
+    public int getSelect(){
+        return busList.getSelected();
     }
 
 }

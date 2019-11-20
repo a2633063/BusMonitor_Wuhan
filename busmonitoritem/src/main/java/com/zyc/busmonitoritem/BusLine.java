@@ -8,6 +8,7 @@ public class BusLine  implements Serializable {
     String lineName;
     String lineNo;
     int direction;
+    int selected=-1;
     String startStopName="起始站";
     String endStopName="终点站";
     String firstTime="XX:XX";
@@ -18,6 +19,13 @@ public class BusLine  implements Serializable {
         this.lineName = lineName;
         this.lineNo = LineNo;
         this.direction = direction;
+    }
+
+    public BusLine(String lineName, String LineNo, int direction,int selected) {
+        this.lineName = lineName;
+        this.lineNo = LineNo;
+        this.direction = direction;
+        this.selected = selected;
     }
 
     public void setDirection(int direction) {
@@ -82,5 +90,13 @@ public class BusLine  implements Serializable {
 
     public String getLastTime() {
         return lastTime;
+    }
+
+    public int getSelected() {
+        return selected;
+    }
+
+    public void setSelected(int selected) {
+        this.selected = selected;
     }
 }
