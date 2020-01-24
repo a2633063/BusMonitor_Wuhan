@@ -21,7 +21,8 @@
             android:name=".addbus.AddBusActivity"
             android:theme="@style/Transparent"
             android:label="实时公交查询"></activity>
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:label="z武汉公交">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

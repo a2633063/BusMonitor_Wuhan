@@ -1,5 +1,8 @@
 package com.zyc;
 
+import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Environment;
 
 import java.io.BufferedReader;
@@ -85,6 +88,20 @@ public class MyFunction {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static String getLocalVersionName(Context ctx) {
+        String localVersion = "获取app版本失败";
+        try {
+            PackageInfo packageInfo = ctx.getApplicationContext()
+                    .getPackageManager()
+                    .getPackageInfo(ctx.getPackageName(), 0);
+            localVersion = packageInfo.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return localVersion;
+
     }
 
 

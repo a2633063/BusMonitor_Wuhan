@@ -79,6 +79,7 @@
                     android:id="@+id/tv_setting"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:visibility="gone"
                     android:layout_weight="1"
                     android:background="@drawable/state_side_nav_bottom_btn"
                     android:clickable="true"

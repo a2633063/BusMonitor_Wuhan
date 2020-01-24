@@ -3,6 +3,9 @@ package com.zyc.busmonitor;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Paint;
+import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -16,10 +19,15 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.zyc.busmonitor.addbus.AddBusActivity;
 import com.zyc.busmonitor.mainrecycler.MainRecyclerAdapter;
@@ -32,8 +40,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+import static com.zyc.MyFunction.getLocalVersionName;
 
 public class MainActivity extends AppCompatActivity {
     public final static String Tag = "MainActivity";
@@ -100,17 +112,29 @@ public class MainActivity extends AppCompatActivity {
         });
         //endregion
         //region 关于按钮
-//        findViewById(R.id.tv_info).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                drawerLayout.closeDrawer(GravityCompat.START);//关闭侧边栏
-////                popupwindowInfo();
-//            }
-//        });
+        findViewById(R.id.tv_info).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawerLayout.closeDrawer(GravityCompat.START);//关闭侧边栏
+                popupwindowInfo();
+            }
+        });
+        //endregion
+
+        //region 打赏
+        navigationView.getHeaderView(0).findViewById(R.id.tv_reward)
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        drawerLayout.closeDrawer(GravityCompat.START);//关闭侧边栏
+                        popupwindowInfo();
+                    }
+                });
         //endregion
         //endregion
 
 
+        //region 获取存储的公交数据
         mSharedPreferences = getSharedPreferences("setting", 0);
         mEditor = mSharedPreferences.edit();
         String busLineStr = mSharedPreferences.getString("busLine", null);
@@ -133,6 +157,7 @@ public class MainActivity extends AppCompatActivity {
         }
         if (mData.size() == 0)
             mData.add(new BusLine("907", "907", 1));
+        //endregion
 
         //region RecyclerView初始化
         mainRecyclerView = findViewById(R.id.recyclerView);
@@ -226,6 +251,8 @@ public class MainActivity extends AppCompatActivity {
             startActivityForResult(new Intent(MainActivity.this, AddBusActivity.class), 1);
 
             return true;
+        }else if(id ==R.id.menu_metro){
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -255,6 +282,83 @@ public class MainActivity extends AppCompatActivity {
         super.onNewIntent(intent);
         if (intent.hasExtra("mac") && intent.getStringExtra("mac") != null)
             setIntent(intent);// must store the new intent unless getIntent() will return the old one
+    }
+    //endregion
+
+
+    //region 弹窗
+    private void popupwindowInfo() {
+
+        final View popupView = getLayoutInflater().inflate(R.layout.popupwindow_main_info, null);
+        final PopupWindow window = new PopupWindow(popupView, MATCH_PARENT, MATCH_PARENT, true);//wrap_content,wrap_content
+
+
+        //region 控件初始化
+
+        TextView tv_version = popupView.findViewById(R.id.tv_version);
+        tv_version.setText("APP当前版本:" + getLocalVersionName(this));
+
+        //region 支付宝跳转
+        ImageView imageView = popupView.findViewById(R.id.alipay);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String intentFullUrl = "intent://platformapi/startapp?saId=10000007&" +
+                        "clientVersion=3.7.0.0718&qrcode=https%3A%2F%2Fqr.alipay.com%2Ffkx06093fjxuqmwbco9oka9%3F_s" +
+                        "%3Dweb-other&_t=1472443966571#Intent;" +
+                        "scheme=alipayqr;package=com.eg.android.AlipayGphone;end";
+                Intent intent = null;
+                try {
+                    intent = Intent.parseUri(intentFullUrl, Intent.URI_INTENT_SCHEME);
+                } catch (URISyntaxException e) {
+//                    e.printStackTrace();
+                    Toast.makeText(MainActivity.this, "失败,支付宝有安装?", Toast.LENGTH_SHORT).show();
+                }
+
+
+                startActivity(intent);
+            }
+        });
+        //endregion
+        //region 作者github跳转
+        TextView tv_author = popupView.findViewById(R.id.tv_author);
+        tv_author.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
+        tv_author.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "跳转作者github...", Toast.LENGTH_SHORT).show();
+                Uri uri = Uri.parse("https://github.com/a2633063");
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+            }
+        });
+        //endregion
+        //region app页面跳转
+        popupView.findViewById(R.id.btn_app).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri uri = Uri.parse("https://github.com/a2633063/BusMonitor_Wuhan");
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+            }
+        });
+        //endregion
+
+        //region window初始化
+        window.setBackgroundDrawable(new ColorDrawable(android.graphics.Color.alpha(0xffff0000)));
+        window.setOutsideTouchable(true);
+        window.getContentView().setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                window.dismiss();
+                return true;
+            }
+        });
+        //endregion
+        //endregion
+        window.update();
+        window.showAtLocation(popupView, Gravity.CENTER, 0, 0);
+
     }
     //endregion
 
