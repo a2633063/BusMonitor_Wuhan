@@ -17,7 +17,7 @@
         android:layout_marginTop="8dp"
         android:background="@android:color/white"
         android:ems="20"
-        android:hint="请输入线路名"
+        android:hint="请输入线路"
         android:maxLines="1"
         android:singleLine="true"
         android:textSize="25dp" />

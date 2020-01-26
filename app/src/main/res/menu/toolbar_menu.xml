@@ -5,6 +5,7 @@
         android:id="@+id/menu_metro"
         android:orderInCategory="100"
         android:title="地铁\n线路"
+        android:visible="false"
         app:showAsAction="always" />
     <item
         android:id="@+id/menu_add"

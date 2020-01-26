@@ -29,4 +29,5 @@ dependencies {
 
     implementation project(':buslist')
     implementation project(':busmonitoritem')
+
 }

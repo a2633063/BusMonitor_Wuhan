@@ -72,7 +72,7 @@ android:background="@android:color/white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="start"
-                android:text="本APP通过抓取武汉智能公交的api获取武汉官方武汉公交的数据显示出来.本app仅为个人学习开发,\n支付宝打赏:(点击图片可直接跳转支付宝)"
+                android:text="\n本APP通过抓取武汉智能公交的api获取武汉官方武汉公交的数据显示出来.本app仅为个人学习开发.\n支付宝打赏:(点击图片可直接跳转支付宝)"
                 android:textSize="18dp" />
 
             <ImageView
