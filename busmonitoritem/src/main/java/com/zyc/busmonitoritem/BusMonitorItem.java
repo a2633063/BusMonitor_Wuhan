@@ -74,7 +74,7 @@ public class BusMonitorItem extends LinearLayout {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            String url = String.format(getResources().getString(R.string.url_bus), bus.getLineNo(), bus.getDirection());
+                            String url = String.format(getResources().getString(R.string.url_bus), bus.getLine(),2 );
                             Log.d(Tag, "URL:" + url);
                             Message msg = new Message();
                             msg.what = 2;
@@ -110,8 +110,15 @@ public class BusMonitorItem extends LinearLayout {
                             throw new JSONException("更新数据失败");
                         }
                         JSONObject jsonData = jsonObject.getJSONObject("data");
+                        JSONArray jsonStops = jsonData.getJSONArray("stops");
 
-                        int stopsNum = jsonData.getInt("stopsNum");
+                        if(bus.getLineId()==null){
+                            bus.setLineId(jsonData.getString("lineId"));
+                        }else if(bus.getLine2Id()==null){
+                            bus.setLine2Id(jsonData.getString("line2Id"));
+                        }
+
+                        int stopsNum =  jsonStops.length();
                         //region 更新车辆信息 站点信息
                         tvBus.setText(jsonData.getString("lineName"));
                         tvStationStartEnd.setText(jsonData.getString("startStopName")
@@ -124,7 +131,6 @@ public class BusMonitorItem extends LinearLayout {
                         //endregion
 
                         //region 更新车站信息
-                        JSONArray jsonStops = jsonData.getJSONArray("stops");
                         busList.clear();
                         for (int i = 0; i < jsonStops.length(); i++) {
                             BusStation b = new BusStation(jsonStops.getJSONObject(i).getString("stopName"));

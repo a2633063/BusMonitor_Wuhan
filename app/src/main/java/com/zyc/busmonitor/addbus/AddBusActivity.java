@@ -97,7 +97,11 @@ public class AddBusActivity extends AppCompatActivity {
                             b.setEndStopName(j.getString("endStopName"));
                             b.setFirstTime(j.getString("firstTime"));
                             b.setLastTime(j.getString("lastTime"));
-                            b.setStopsNum(j.getInt("stopsNum"));
+                            if(b.getDirection()==0)
+                                b.setLine(j.getString("lineId"),null);
+                            else
+                                b.setLine(null,j.getString("lineId"));
+                            //b.setStopsNum(j.getInt("stopsNum"));
                             mData.add(b);
                         }
                         adapter.notifyDataSetChanged();

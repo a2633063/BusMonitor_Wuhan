@@ -4,16 +4,19 @@ import android.support.annotation.NonNull;
 
 import java.io.Serializable;
 
-public class BusLine  implements Serializable {
+public class BusLine implements Serializable {
     String lineName;
     String lineNo;
     int direction;
-    int selected=-1;
-    String startStopName="起始站";
-    String endStopName="终点站";
-    String firstTime="XX:XX";
-    String lastTime="XX:XX";
-    int stopsNum=0;
+    int selected = -1;
+    String startStopName = "起始站";
+    String endStopName = "终点站";
+    String firstTime = "XX:XX";
+    String lastTime = "XX:XX";
+    String line2Id = "Error";
+    String lineId = "Error";
+    int stopsNum = 0;
+
 
     public BusLine(String lineName, String LineNo, int direction) {
         this.lineName = lineName;
@@ -21,7 +24,7 @@ public class BusLine  implements Serializable {
         this.direction = direction;
     }
 
-    public BusLine(String lineName, String LineNo, int direction,int selected) {
+    public BusLine(String lineName, String LineNo, int direction, int selected) {
         this.lineName = lineName;
         this.lineNo = LineNo;
         this.direction = direction;
@@ -98,5 +101,31 @@ public class BusLine  implements Serializable {
 
     public void setSelected(int selected) {
         this.selected = selected;
+    }
+
+    public String getLine2Id() {
+        return line2Id;
+    }
+
+    public void setLine2Id(String line2Id) {
+        this.line2Id = line2Id;
+    }
+
+    public String getLineId() {
+        return lineId;
+    }
+
+    public void setLineId(String lineId) {
+        this.lineId = lineId;
+    }
+
+    public void setLine(String lineId, String line2Id) {
+        this.lineId = lineId;
+        this.line2Id = line2Id;
+    }
+
+    public String getLine() {
+        if (getDirection() == 0) return getLineId();
+        else return getLine2Id();
     }
 }

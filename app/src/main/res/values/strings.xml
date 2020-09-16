@@ -7,6 +7,6 @@
     <string name="nav_header_desc">Navigation header</string>
 
 
-    <string name="url_bus">http://bus.wuhancloud.cn:9087/website/web/420100/line/027-%1$s-%2$d.do</string>
+    <string name="url_bus">http://bus.wuhancloud.cn:9087/website/web/420100/line/%1$s.do</string>
     <string name="url_search_bus">http://bus.wuhancloud.cn:9087/website//web/420100/search.do?keyword=%1$s&amp;type=line</string>
 </resources>

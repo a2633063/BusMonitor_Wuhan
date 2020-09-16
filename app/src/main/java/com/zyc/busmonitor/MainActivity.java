@@ -159,8 +159,8 @@ public class MainActivity extends AppCompatActivity {
             }
 
         }
-        if (mData.size() == 0)
-            mData.add(new BusLine("907", "907", 1));
+//        if (mData.size() == 0)
+//            mData.add(new BusLine("907", "907", 1));
         //endregion
 
         //region RecyclerView初始化
