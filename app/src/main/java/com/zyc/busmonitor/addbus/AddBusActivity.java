@@ -2,14 +2,10 @@ package com.zyc.busmonitor.addbus;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -20,7 +16,6 @@ import android.widget.ListView;
 
 import com.zyc.WebService;
 import com.zyc.busmonitor.R;
-import com.zyc.busmonitor.mainrecycler.MainRecyclerAdapter;
 import com.zyc.busmonitoritem.BusLine;
 
 import org.json.JSONArray;

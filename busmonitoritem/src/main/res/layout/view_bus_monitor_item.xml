@@ -6,7 +6,7 @@
     android:orientation="vertical"
     tools:context=".BusMonitorItem">
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -84,7 +84,7 @@
             app:layout_constraintBottom_toTopOf="@id/tv_second_text"
             app:layout_constraintEnd_toEndOf="@id/tv_second_text"
             app:layout_constraintStart_toStartOf="@id/tv_second_text" />
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.zyc.buslist.BusList
         android:id="@+id/busList"

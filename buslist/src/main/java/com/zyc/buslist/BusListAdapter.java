@@ -1,7 +1,8 @@
 package com.zyc.buslist;
 
 
-import android.support.v7.widget.RecyclerView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -96,7 +97,7 @@ public class BusListAdapter extends RecyclerView.Adapter<BusListAdapter.ViewHold
 
         holder.name.post(new Runnable() {
             public void run() {
-                if (v.getTop() + v.getHeight() > ((android.support.constraint.ConstraintLayout) v.getParent()).getHeight()) {
+                if (v.getTop() + v.getHeight() > ((ConstraintLayout) v.getParent()).getHeight()) {
                     v.setTextSize(TypedValue.COMPLEX_UNIT_PX, v.getTextSize() - 1);
                     v.post(this);
                 } else if (!textSizeHashMap.containsKey(v.getText().length())) {

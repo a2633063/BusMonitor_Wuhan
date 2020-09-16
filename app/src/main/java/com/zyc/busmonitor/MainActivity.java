@@ -1,26 +1,23 @@
 package com.zyc.busmonitor;
 
 import android.annotation.SuppressLint;
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.graphics.Paint;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.support.v7.widget.helper.ItemTouchHelper;
+import com.google.android.material.navigation.NavigationView;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -43,7 +40,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
@@ -149,8 +145,10 @@ public class MainActivity extends AppCompatActivity {
                     JSONArray jsonArray = jsonObject.getJSONArray("data");
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject j = (JSONObject) jsonArray.get(i);
-                        mData.add(new BusLine(j.getString("LineName"),
-                                j.getString("LineNo"), j.getInt("Direction"), j.getInt("Selected")));
+                        BusLine b=new BusLine(j.getString("LineName"),
+                                j.getString("LineNo"), j.getInt("Direction"), j.getInt("Selected"));
+                        b.setLine(j.getString("LineId"),j.getString("Line2Id"));
+                        mData.add(b);
                     }
                 }
             } catch (JSONException e) {
@@ -220,6 +218,8 @@ public class MainActivity extends AppCompatActivity {
                 j.put("LineNo", b.getLineNo());
                 j.put("Selected", b.getSelected());
                 j.put("Direction", b.getDirection());
+                j.put("LineId", b.getLineId());
+                j.put("Line2Id", b.getLine2Id());
                 jsonArray.put(j);
             }
             jsonObject.put("data", jsonArray);
