@@ -3,9 +3,10 @@
     android:translationZ="3dp"
     android:elevation="3dp"
     android:outlineProvider="bounds"
-    android:background="#ffffff"
+
     android:layout_width="match_parent"
     android:layout_height="300dp"
+    android:background="@drawable/fillet"
     android:padding="8dp">
 
     <com.zyc.busmonitoritem.BusMonitorItem
