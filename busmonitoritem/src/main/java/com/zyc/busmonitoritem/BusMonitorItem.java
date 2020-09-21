@@ -74,7 +74,7 @@ public class BusMonitorItem extends LinearLayout {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            String url = String.format(getResources().getString(R.string.url_bus), bus.getLine(),2 );
+                            String url = String.format(getResources().getString(R.string.url_bus), bus.getLine() );
                             Log.d(Tag, "URL:" + url);
                             Message msg = new Message();
                             msg.what = 2;
@@ -126,7 +126,8 @@ public class BusMonitorItem extends LinearLayout {
                                 + "   " + stopsNum + "站");
                         tvStationTime.setText(jsonData.getString("firstTime")
                                 + "-" + jsonData.getString("lastTime")
-                                + "  票价 " + jsonData.getString("price") + "元"
+                                + "  票价 " + jsonData.getString("price")
+                                + (jsonData.getString("price").endsWith("元")?"":"元")
                         );
                         //endregion
 

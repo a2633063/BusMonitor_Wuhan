@@ -273,6 +273,7 @@ public class MainActivity extends AppCompatActivity {
             sideAdapter.notifyDataSetChanged();
         }
         //endregion
+        super.onActivityResult(requestCode, resultCode, intent);
     }
 
     @Override
