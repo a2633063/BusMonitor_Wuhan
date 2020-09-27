@@ -9,7 +9,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+
 import com.google.android.material.navigation.NavigationView;
+
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -18,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.ItemTouchHelper;
+
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -145,9 +148,9 @@ public class MainActivity extends AppCompatActivity {
                     JSONArray jsonArray = jsonObject.getJSONArray("data");
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject j = (JSONObject) jsonArray.get(i);
-                        BusLine b=new BusLine(j.getString("LineName"),
+                        BusLine b = new BusLine(j.getString("LineName"),
                                 j.getString("LineNo"), j.getInt("Direction"), j.getInt("Selected"));
-                        b.setLine(j.getString("LineId"),j.getString("Line2Id"));
+                        b.setLine(j.getString("LineId"), j.getString("Line2Id"));
                         mData.add(b);
                     }
                 }
@@ -247,10 +250,6 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.menu_add) {
             startActivityForResult(new Intent(MainActivity.this, AddBusActivity.class), 1);
             return true;
-        } else if (id == R.id.menu_metro) {
-
-            startActivity(new Intent(MainActivity.this, MetroActivity.class));
-
         }
         return super.onOptionsItemSelected(item);
     }
@@ -302,20 +301,21 @@ public class MainActivity extends AppCompatActivity {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String intentFullUrl = "intent://platformapi/startapp?saId=10000007&" +
-                        "clientVersion=3.7.0.0718&qrcode=https%3A%2F%2Fqr.alipay.com%2Ffkx06093fjxuqmwbco9oka9%3F_s" +
-                        "%3Dweb-other&_t=1472443966571#Intent;" +
-                        "scheme=alipayqr;package=com.eg.android.AlipayGphone;end";
-                Intent intent = null;
                 try {
+                    String intentFullUrl = "intent://platformapi/startapp?saId=10000007&" +
+                            "clientVersion=3.7.0.0718&qrcode=https%3A%2F%2Fqr.alipay.com%2Ffkx06093fjxuqmwbco9oka9%3F_s" +
+                            "%3Dweb-other&_t=1472443966571#Intent;" +
+                            "scheme=alipayqr;package=com.eg.android.AlipayGphone;end";
+                    Intent intent = null;
                     intent = Intent.parseUri(intentFullUrl, Intent.URI_INTENT_SCHEME);
+                    startActivity(intent);
                 } catch (URISyntaxException e) {
 //                    e.printStackTrace();
-                    Toast.makeText(MainActivity.this, "失败,支付宝有安装?", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "失败,支付宝有安装?\n请使用支付宝扫码", Toast.LENGTH_SHORT).show();
+                }catch (Exception e) {
+//                    e.printStackTrace();
+                    Toast.makeText(MainActivity.this, "失败,支付宝有安装?\n请使用支付宝扫码", Toast.LENGTH_SHORT).show();
                 }
-
-
-                startActivity(intent);
             }
         });
         //endregion
