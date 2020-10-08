@@ -29,6 +29,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
+        android:layout_weight="1"
         android:text="@string/nav_header_title"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
@@ -36,9 +37,10 @@
             android:id="@+id/tv_reward"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="end|center_horizontal"
-            android:paddingTop="@dimen/nav_header_vertical_spacing"
+            android:gravity="center"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:background="@drawable/background_red_fill"
             android:text="打赏"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
     </LinearLayout>
