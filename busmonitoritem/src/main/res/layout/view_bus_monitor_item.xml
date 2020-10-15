@@ -18,28 +18,32 @@
             android:text="电907"
             android:textSize="25dp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tv_station"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:ellipsize="marquee"
+            android:gravity="end"
+            android:singleLine="true"
             android:text="起始站 → 终点路  --站"
             android:textSize="10dp"
-
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/barrier"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tv_station_time"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:singleLine="true"
             android:text="XX:XX-XX:XX  票价 XXX元"
             android:textSize="10dp"
-            app:layout_constraintEnd_toEndOf="@id/tv_station"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_station" />
 
 
@@ -49,9 +53,9 @@
             android:layout_height="wrap_content"
             android:text="第一辆"
             android:textSize="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/tv_second_text"
-            app:layout_constraintStart_toEndOf="@id/tv_bus" />
+            app:layout_constraintEnd_toEndOf="@id/tv_first_bus"
+            app:layout_constraintStart_toStartOf="@id/tv_first_bus"
+            app:layout_constraintTop_toBottomOf="@id/tv_first_bus" />
 
         <TextView
             android:id="@+id/tv_second_text"
@@ -59,31 +63,48 @@
             android:layout_height="wrap_content"
             android:text="第二辆"
             android:textSize="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/tv_station"
-            app:layout_constraintStart_toEndOf="@id/tv_first_text" />
+            app:layout_constraintEnd_toEndOf="@id/tv_second_bus"
+            app:layout_constraintStart_toStartOf="@id/tv_second_bus"
+            app:layout_constraintTop_toBottomOf="@id/tv_second_bus" />
 
 
         <TextView
             android:id="@+id/tv_first_bus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:ems="2"
+            android:layout_marginStart="8dp"
+            android:gravity="center"
+            android:minEms="2"
             android:text="无"
             android:textSize="17dp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@id/tv_first_text"
-            app:layout_constraintEnd_toEndOf="@id/tv_first_text"
-            app:layout_constraintStart_toStartOf="@id/tv_first_text" />
+            app:layout_constraintEnd_toStartOf="@id/tv_second_bus"
+            app:layout_constraintStart_toEndOf="@id/tv_bus"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tv_second_bus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:ems="2"
+            android:gravity="center"
+            android:maxLines="1"
+            android:minEms="2"
             android:text="无"
             android:textSize="17dp"
             app:layout_constraintBottom_toTopOf="@id/tv_second_text"
-            app:layout_constraintEnd_toEndOf="@id/tv_second_text"
-            app:layout_constraintStart_toStartOf="@id/tv_second_text" />
+            app:layout_constraintEnd_toStartOf="@id/barrier"
+            app:layout_constraintStart_toEndOf="@id/tv_first_bus"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="end"
+            app:constraint_referenced_ids="tv_bus,tv_first_bus,tv_first_text,tv_second_bus,tv_second_text" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.zyc.buslist.BusList

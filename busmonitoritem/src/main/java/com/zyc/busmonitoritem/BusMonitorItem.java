@@ -9,6 +9,8 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import androidx.annotation.NonNull;
+
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -123,12 +125,17 @@ public class BusMonitorItem extends LinearLayout {
                         tvBus.setText(jsonData.getString("lineName"));
                         tvStationStartEnd.setText(jsonData.getString("startStopName")
                                 + " → " + jsonData.getString("endStopName")
-                                + "   " + stopsNum + "站");
-                        tvStationTime.setText(jsonData.getString("firstTime")
+                                );
+                        tvStationTime.setText(stopsNum + "站  "+jsonData.getString("firstTime")
                                 + "-" + jsonData.getString("lastTime")
-                                + "  票价 " + jsonData.getString("price")
+                                + "  " + jsonData.getString("price")
                                 + (jsonData.getString("price").endsWith("元")?"":"元")
                         );
+                        tvStationStartEnd.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+                        tvStationStartEnd.setSingleLine(true);
+                        tvStationStartEnd.setSelected(true);
+                        tvStationStartEnd.setFocusable(true);
+                        tvStationStartEnd.setFocusableInTouchMode(true);
                         //endregion
 
                         //region 更新车站信息
@@ -381,16 +388,18 @@ public class BusMonitorItem extends LinearLayout {
     void init() {
         if (bus != null)
             tvBus.setText(bus.getLineName());
-        tvStationStartEnd.setText("起始站 → 终点路  --站");
-        tvStationTime.setText("XX:XX-XX:XX  票价 XXX元");
+        tvStationStartEnd.setText("");
+        tvStationTime.setText("");
         tvFirstBus.setText("无");
         tvSecondBus.setText("无");
-        busList.setOnItemClickListener(new BusList.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position, String data) {
-                bus.setSelected(position);
-            }
-        });
+//        busList.setOnItemClickListener(new BusList.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(View view, int position, String data) {
+//                bus.setSelected(position);
+////                refresh();
+////                if (isAutoRefresh) setAutoRefresh(AutoRefresh);
+//            }
+//        });
         refresh();
     }
 
