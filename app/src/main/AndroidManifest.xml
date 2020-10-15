@@ -17,6 +17,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".NewsActivity"
+            android:theme="@style/AppTheme_ActionBar"></activity>
         <activity
             android:name=".addbus.AddBusActivity"
             android:label="实时公交查询"

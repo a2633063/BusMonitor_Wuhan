@@ -36,10 +36,17 @@ public class SideRecyclerAdapter extends RecyclerView.Adapter<SideRecyclerAdapte
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
 
         ViewHolder mHolder = holder;
         mHolder.name.setText(mData.get(position).getLineName());
+        mHolder.name. setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(listener!=null) listener.onClick(position);
+            }
+        });
+
 //        mHolder.itemView.setBackgroundColor(0);
     }
 
@@ -55,5 +62,15 @@ public class SideRecyclerAdapter extends RecyclerView.Adapter<SideRecyclerAdapte
             super(itemView);
             name = itemView.findViewById(R.id.tv_bus);
         }
+    }
+
+    private OnItemClickListener listener;
+
+    public interface OnItemClickListener{
+        void onClick(int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener){
+        this.listener=listener;
     }
 }

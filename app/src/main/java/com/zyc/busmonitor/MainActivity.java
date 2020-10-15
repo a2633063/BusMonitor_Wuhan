@@ -1,7 +1,6 @@
 package com.zyc.busmonitor;
 
 import android.annotation.SuppressLint;
-import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
@@ -10,43 +9,45 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-
-import com.google.android.material.navigation.NavigationView;
-
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.ItemTouchHelper;
-
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.navigation.NavigationView;
+import com.zyc.WebService;
 import com.zyc.busmonitor.addbus.AddBusActivity;
 import com.zyc.busmonitor.mainrecycler.MainRecyclerAdapter;
 import com.zyc.busmonitor.mainrecycler.SideRecyclerAdapter;
 import com.zyc.busmonitor.mainrecycler.SideRecyclerItemTouchHelper;
 import com.zyc.busmonitor.mainrecycler.SpacesRecyclerViewItemDecoration;
+import com.zyc.busmonitor.news.MainNewsListAdapter;
+import com.zyc.busmonitor.news.News;
 import com.zyc.busmonitoritem.BusLine;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static com.zyc.MyFunction.getLocalVersionName;
@@ -58,6 +59,8 @@ public class MainActivity extends AppCompatActivity {
     TextView log;
 
     //region 控件
+    NavigationView nav_view;
+    NavigationView nav_news;
     private Toolbar toolbar;
     DrawerLayout drawerLayout;
     RecyclerView mainRecyclerView;
@@ -65,8 +68,14 @@ public class MainActivity extends AppCompatActivity {
     List<BusLine> mData = new ArrayList<>();
     private MainRecyclerAdapter adapter;
     private SideRecyclerAdapter sideAdapter;
+
+
+    List<News> NewsList = new ArrayList<>();
+    ListView lv_news;
+    MainNewsListAdapter newsAdapter;
     //endregion
 
+    int newsPage = 0;
     boolean updateListFlag = false;
 
     //region Handler
@@ -74,10 +83,70 @@ public class MainActivity extends AppCompatActivity {
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
+            String result;
             switch (msg.what) {
                 //region 列表更新标志位
                 case 0:
                     updateListFlag = true;
+                    break;
+                //endregion
+                //region 更新公告内容
+                case 1:
+                    final int page = msg.arg1;
+                    Log.d(Tag, "获取公告,页码:" + page);
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Message msg = new Message();
+                            msg.what = 2;
+                            msg.obj = WebService.WebConnectPost("http://manage.wuhancloud.cn/notice/queryHasPublish.do", "appId=HvBJ1PkBttbqxeBF46Aa&PageSize=10&PageIndex=" + page + "&areaCode=420100");
+                            handler.sendMessageDelayed(msg, 0);// 执行耗时的方法之后发送消给handler
+                        }
+                    }).start();
+                    break;
+                //endregion
+                //region 获取公告内容
+                case 2:
+                    result = (String) msg.obj;
+                    Log.d(Tag, "result:" + result);
+                    try {
+                        //region 登录返回空数据
+                        if (result == null) {
+                            throw new JSONException("无数据返回");
+                        }
+                        //endregion
+
+                        JSONObject jsonObject = new JSONObject(result);
+
+                        if (jsonObject.has("resultCode") && jsonObject.getInt("resultCode") != 1) {
+                            String resultDes = jsonObject.getString("resultDes");
+                            throw new JSONException("返回码错误:" + resultDes);
+                        }
+
+                        JSONArray jsonArray = jsonObject.getJSONObject("data").getJSONArray("rows");
+//                        if (msg.arg1 == 0)
+//                            NewsList.clear();
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject j = jsonArray.getJSONObject(i);
+                            News n = new News(j.getInt("serialNo"), j.getString("topic"), j.getString("simpleText"),
+                                    j.getString("publishDate"), j.getString("publishName"), j.getString("contentUrl"));
+                            NewsList.add(n);
+                        }
+                        newsAdapter.notifyDataSetChanged();
+                        newsPage++;
+//                        new Thread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                Message msg = new Message();
+//                                msg.what = 2;
+//                                msg.obj = WebService.WebConnectPost("http://manage.wuhancloud.cn/notice/queryHasPublish.do", "appId=HvBJ1PkBttbqxeBF46Aa&PageSize=10&PageIndex=1&areaCode=420100");
+//                                handler.sendMessageDelayed(msg, 0);// 执行耗时的方法之后发送消给handler
+//                            }
+//                        }).start();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+
+                    }
                     break;
                 //endregion
             }
@@ -101,10 +170,39 @@ public class MainActivity extends AppCompatActivity {
                 this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+        //drawerLayout.removeDrawerListener();
+        drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
 
+            }
 
-        NavigationView navigationView = findViewById(R.id.nav_view);
+            @Override
+            public void onDrawerOpened(@NonNull View drawerView) {
 
+                if (drawerView.getId() == nav_news.getId()) {
+                    if (NewsList.size() < 20) {
+                        Message msg = new Message();
+                        msg.what = 1;
+                        msg.arg1 = newsPage;
+                        handler.sendMessageDelayed(msg, 0);// 执行耗时的方法之后发送消给handler
+
+                    }
+                }
+            }
+
+            @Override
+            public void onDrawerClosed(@NonNull View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });
+        nav_view = findViewById(R.id.nav_view);
+        nav_news = findViewById(R.id.nav_news);
         //endregion
 
         //region 设置/关于/退出按钮
@@ -137,7 +235,7 @@ public class MainActivity extends AppCompatActivity {
         //endregion
 
         //region 打赏
-        navigationView.getHeaderView(0).findViewById(R.id.tv_reward)
+        nav_view.getHeaderView(0).findViewById(R.id.tv_reward)
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -207,19 +305,54 @@ public class MainActivity extends AppCompatActivity {
         // 设置RecyclerView Item边距
         sideRecyclerView.addItemDecoration(new SpacesRecyclerViewItemDecoration(10, 10, 10, 20));
 
+        sideAdapter.setOnItemClickListener(new SideRecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onClick(int position) {
+                mainRecyclerView.smoothScrollToPosition(position);
+            }
+        });
         //endregion
+
+
+        lv_news = findViewById(R.id.lv_news);
+        newsAdapter = new MainNewsListAdapter(this, NewsList);
+        lv_news.setAdapter(newsAdapter);
+
+        TextView t = new TextView(this);
+        t.setTextColor(0xffcccccc);
+        t.setText("更多公告内容请到官方查看");
+        //t.setTextSize(t.getTextSize()/2);
+        t.setGravity(Gravity.CENTER);
+        lv_news.addFooterView(t);
+        lv_news.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(MainActivity.this, NewsActivity.class);
+                intent.putExtra("url", NewsList.get(position).getContentUrl());
+                startActivity(intent);
+            }
+        });
+
+
+        Message msg = new Message();
+        msg.what = 1;
+        msg.arg1 = newsPage;
+        handler.sendMessageDelayed(msg, 0);// 执行耗时的方法之后发送消给handler
 
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
+            drawerLayout.closeDrawer(GravityCompat.END);
         } else {
             super.onBackPressed();
         }
+
     }
+
     @Override
     protected void onPause() {
         Log.d(Tag, "onPause");
@@ -243,7 +376,7 @@ public class MainActivity extends AppCompatActivity {
                 jsonObject.put("count", jsonArray.length());
                 mEditor.putString("busLine", jsonObject.toString());
                 mEditor.commit();
-                updateListFlag=false;
+                updateListFlag = false;
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -265,6 +398,9 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
         if (id == R.id.menu_add) {
             startActivityForResult(new Intent(MainActivity.this, AddBusActivity.class), 1);
+            return true;
+        }else if (id == R.id.menu_news) {
+            drawerLayout.openDrawer(GravityCompat.END);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -314,27 +450,27 @@ public class MainActivity extends AppCompatActivity {
         tv_version.setText("APP当前版本:" + getLocalVersionName(this));
 
         //region 支付宝跳转
-        ImageView imageView = popupView.findViewById(R.id.alipay);
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    String intentFullUrl = "intent://platformapi/startapp?saId=10000007&" +
-                            "clientVersion=3.7.0.0718&qrcode=https%3A%2F%2Fqr.alipay.com%2Ffkx06093fjxuqmwbco9oka9%3F_s" +
-                            "%3Dweb-other&_t=1472443966571#Intent;" +
-                            "scheme=alipayqr;package=com.eg.android.AlipayGphone;end";
-                    Intent intent = null;
-                    intent = Intent.parseUri(intentFullUrl, Intent.URI_INTENT_SCHEME);
-                    startActivity(intent);
-                } catch (URISyntaxException e) {
-//                    e.printStackTrace();
-                    Toast.makeText(MainActivity.this, "失败,支付宝有安装?\n请使用支付宝扫码", Toast.LENGTH_SHORT).show();
-                } catch (Exception e) {
-//                    e.printStackTrace();
-                    Toast.makeText(MainActivity.this, "失败,支付宝有安装?\n请使用支付宝扫码", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+//        ImageView imageView = popupView.findViewById(R.id.alipay);
+//        imageView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                try {
+//                    String intentFullUrl = "intent://platformapi/startapp?saId=10000007&" +
+//                            "clientVersion=3.7.0.0718&qrcode=https%3A%2F%2Fqr.alipay.com%2Ffkx06093fjxuqmwbco9oka9%3F_s" +
+//                            "%3Dweb-other&_t=1472443966571#Intent;" +
+//                            "scheme=alipayqr;package=com.eg.android.AlipayGphone;end";
+//                    Intent intent = null;
+//                    intent = Intent.parseUri(intentFullUrl, Intent.URI_INTENT_SCHEME);
+//                    startActivity(intent);
+//                } catch (URISyntaxException e) {
+////                    e.printStackTrace();
+//                    Toast.makeText(MainActivity.this, "失败,支付宝有安装?\n请使用支付宝扫码", Toast.LENGTH_SHORT).show();
+//                } catch (Exception e) {
+////                    e.printStackTrace();
+//                    Toast.makeText(MainActivity.this, "失败,支付宝有安装?\n请使用支付宝扫码", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        });
         //endregion
         //region 作者github跳转
         TextView tv_author = popupView.findViewById(R.id.tv_author);
@@ -374,7 +510,6 @@ public class MainActivity extends AppCompatActivity {
         //endregion
         window.update();
         window.showAtLocation(popupView, Gravity.CENTER, 0, 0);
-
     }
     //endregion
 

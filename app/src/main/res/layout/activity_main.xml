@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:openDrawer="start"
+    tools:openDrawer="end"
     tools:context=".MainActivity">
 
     <LinearLayout
@@ -114,6 +114,34 @@
                     android:padding="5dp"
                     android:text="退出" />
             </LinearLayout>
+        </LinearLayout>
+    </com.google.android.material.navigation.NavigationView>
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_news"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        android:fitsSystemWindows="false">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="2dp"
+            android:paddingStart="2dp">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#ededed" />
+            <ListView
+                android:id="@+id/lv_news"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                tools:listfooter="@layout/item_main_recycler"
+                android:layout_weight="1" />
         </LinearLayout>
     </com.google.android.material.navigation.NavigationView>
 

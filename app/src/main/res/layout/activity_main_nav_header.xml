@@ -42,6 +42,7 @@
             android:paddingEnd="8dp"
             android:background="@drawable/background_red_fill"
             android:text="打赏"
+            android:visibility="invisible"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
     </LinearLayout>
     <TextView

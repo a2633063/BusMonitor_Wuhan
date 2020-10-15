@@ -70,21 +70,21 @@ android:background="@android:color/white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="start"
-                android:text="\n本APP通过抓取武汉智能公交的api获取武汉官方武汉公交的数据显示出来.本app仅为个人学习开发.\n支付宝打赏:(点击图片可直接跳转支付宝)"
+                android:text="\n本APP通过抓取武汉智能公交的api获取武汉官方武汉公交的数据显示出来.本app仅为个人学习开发."
                 android:textSize="18dp" />
 
-            <ImageView
-                android:id="@+id/alipay"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                android:scaleType="centerInside"
-                app:srcCompat="@drawable/alipay" />
+<!--            <ImageView-->
+<!--                android:id="@+id/alipay"-->
+<!--                android:layout_width="150dp"-->
+<!--                android:layout_height="150dp"-->
+<!--                android:scaleType="centerInside"-->
+<!--                app:srcCompat="@drawable/alipay" />-->
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="打赏与否不影响任何功能,仅表达对开发者的支持.感谢您的打赏!"
-                android:textSize="15dp" />
+<!--            <TextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="打赏与否不影响任何功能,仅表达对开发者的支持.感谢您的打赏!"-->
+<!--                android:textSize="15dp" />-->
 
             <TextView
                 android:layout_width="match_parent"

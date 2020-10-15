@@ -7,13 +7,14 @@
     android:background="#ffffff"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp">
+    >
 
     <TextView
         android:id="@+id/tv_bus"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
+        android:padding="8dp"
         android:text="电907"
         android:textSize="20sp"
         android:textStyle="bold" />
