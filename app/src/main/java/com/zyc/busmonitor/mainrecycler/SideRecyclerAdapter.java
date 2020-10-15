@@ -50,17 +50,10 @@ public class SideRecyclerAdapter extends RecyclerView.Adapter<SideRecyclerAdapte
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView name;
+
         public ViewHolder(View itemView) {
             super(itemView);
-            name =  itemView.findViewById(R.id.tv_bus);
+            name = itemView.findViewById(R.id.tv_bus);
         }
     }
-
-    public void onItemDissmiss(int position) {
-        //移除数据
-        mData.remove(position);
-        notifyItemRemoved(position);
-        adapter.notifyItemRemoved(position);
-    }
-
 }

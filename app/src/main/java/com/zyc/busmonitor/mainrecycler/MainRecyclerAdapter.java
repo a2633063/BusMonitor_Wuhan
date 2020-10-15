@@ -59,10 +59,4 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
         }
     }
 
-    public void onItemDissmiss(int position) {
-        //移除数据
-        mData.remove(position);
-        notifyItemRemoved(position);
-    }
-
 }

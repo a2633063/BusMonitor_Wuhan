@@ -1,6 +1,8 @@
 package com.zyc.busmonitor.mainrecycler;
 
 
+import android.os.Handler;
+
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -11,10 +13,12 @@ import java.util.Collections;
 public class SideRecyclerItemTouchHelper extends ItemTouchHelper.Callback {
     private SideRecyclerAdapter adapter;
     MainRecyclerAdapter otherAdapter;
+    Handler handler=null;
 
-    public SideRecyclerItemTouchHelper(SideRecyclerAdapter adapter, MainRecyclerAdapter otherAdapter) {
+    public SideRecyclerItemTouchHelper(SideRecyclerAdapter adapter, MainRecyclerAdapter otherAdapter,Handler handler) {
         this.adapter = adapter;
         this.otherAdapter = otherAdapter;
+        this.handler=handler;
     }
 
     /**
@@ -28,19 +32,8 @@ public class SideRecyclerItemTouchHelper extends ItemTouchHelper.Callback {
     public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
         int dragFlag;
         int swipeFlag;
-        RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
-        if (layoutManager instanceof GridLayoutManager) {
-            //允许上下左右的拖动
-            dragFlag = ItemTouchHelper.DOWN
-                    | ItemTouchHelper.UP
-                    | ItemTouchHelper.RIGHT
-                    | ItemTouchHelper.LEFT;
-
-            swipeFlag = 0;
-        } else {
-            dragFlag = ItemTouchHelper.DOWN | ItemTouchHelper.UP;
-            swipeFlag = ItemTouchHelper.RIGHT;//只允许从右到左的侧滑
-        }
+        dragFlag = ItemTouchHelper.DOWN | ItemTouchHelper.UP;
+        swipeFlag = ItemTouchHelper.RIGHT;//只允许从右到左的侧滑
         return makeMovementFlags(dragFlag, swipeFlag);
     }
 
@@ -68,12 +61,10 @@ public class SideRecyclerItemTouchHelper extends ItemTouchHelper.Callback {
 //                Collections.swap(otherAdapter.getDataList(), i, i - 1);
             }
         }
-
-
-
-        recyclerView.getAdapter().notifyItemMoved(fromPosition, toPosition);
+        adapter.notifyItemMoved(fromPosition, toPosition);
         otherAdapter.notifyItemMoved(fromPosition, toPosition);
 //        otherAdapter.notifyDataSetChanged();
+        handler.sendEmptyMessage(0);
         return true;
     }
 
@@ -87,11 +78,12 @@ public class SideRecyclerItemTouchHelper extends ItemTouchHelper.Callback {
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
         int position = viewHolder.getAdapterPosition();
-        if (direction == ItemTouchHelper.END) {
+        if (direction == ItemTouchHelper.RIGHT) {
             adapter.getDataList().remove(position);
             adapter.notifyItemRemoved(position);
+            otherAdapter.notifyItemRemoved(position);
+            handler.sendEmptyMessage(0);
         }
-        adapter.onItemDissmiss(position);
     }
 
     /**
@@ -104,8 +96,6 @@ public class SideRecyclerItemTouchHelper extends ItemTouchHelper.Callback {
     public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
         super.onSelectedChanged(viewHolder, actionState);
         if (actionState == ItemTouchHelper.ACTION_STATE_DRAG) {
-//            viewHolder.itemView.setBackgroundColor(Color.GRAY);
-
             viewHolder.itemView.setAlpha(0.5f);
         }
     }
@@ -119,7 +109,6 @@ public class SideRecyclerItemTouchHelper extends ItemTouchHelper.Callback {
     @Override
     public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
         super.clearView(recyclerView, viewHolder);
-//        viewHolder.itemView.setBackgroundColor(0);
         viewHolder.itemView.setAlpha(1.0f);
     }
 

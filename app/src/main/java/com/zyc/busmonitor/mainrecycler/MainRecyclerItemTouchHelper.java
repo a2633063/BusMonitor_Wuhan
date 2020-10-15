@@ -26,19 +26,8 @@ public class MainRecyclerItemTouchHelper extends ItemTouchHelper.Callback {
     public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
         int dragFlag;
         int swipeFlag;
-        RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
-        if (layoutManager instanceof GridLayoutManager) {
-            //允许上下左右的拖动
-            dragFlag = ItemTouchHelper.DOWN
-                    | ItemTouchHelper.UP
-                    | ItemTouchHelper.RIGHT
-                    | ItemTouchHelper.LEFT;
-
-            swipeFlag = 0;
-        } else {
-            dragFlag = ItemTouchHelper.DOWN | ItemTouchHelper.UP;
-            swipeFlag = 0;//ItemTouchHelper.LEFT;//只允许从右到左的侧滑
-        }
+        dragFlag = ItemTouchHelper.DOWN | ItemTouchHelper.UP;
+        swipeFlag = 0;//ItemTouchHelper.LEFT;//只允许从右到左的侧滑
         return makeMovementFlags(dragFlag, swipeFlag);
     }
 
@@ -129,6 +118,7 @@ public class MainRecyclerItemTouchHelper extends ItemTouchHelper.Callback {
      * 是否支持侧滑删除
      * 默认返回true
      * 不支持侧滑删除返回false
+     *
      * @return
      */
     @Override

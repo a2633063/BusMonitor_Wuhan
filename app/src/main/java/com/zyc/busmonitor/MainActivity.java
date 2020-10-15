@@ -1,6 +1,7 @@
 package com.zyc.busmonitor;
 
 import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
@@ -56,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences.Editor mEditor;
     TextView log;
 
+    //region 控件
     private Toolbar toolbar;
     DrawerLayout drawerLayout;
     RecyclerView mainRecyclerView;
@@ -63,12 +65,22 @@ public class MainActivity extends AppCompatActivity {
     List<BusLine> mData = new ArrayList<>();
     private MainRecyclerAdapter adapter;
     private SideRecyclerAdapter sideAdapter;
+    //endregion
+
+    boolean updateListFlag = false;
 
     //region Handler
     @SuppressLint("HandlerLeak")
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
+            switch (msg.what) {
+                //region 列表更新标志位
+                case 0:
+                    updateListFlag = true;
+                    break;
+                //endregion
+            }
 
         }
     };
@@ -189,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
         sideRecyclerView.setAdapter(sideAdapter);
 
         //设置长按拖动排序
-        ItemTouchHelper sideHelper = new ItemTouchHelper(new SideRecyclerItemTouchHelper(sideAdapter, adapter));
+        ItemTouchHelper sideHelper = new ItemTouchHelper(new SideRecyclerItemTouchHelper(sideAdapter, adapter, handler));
         sideHelper.attachToRecyclerView(sideRecyclerView);
 
         // 设置RecyclerView Item边距
@@ -208,32 +220,36 @@ public class MainActivity extends AppCompatActivity {
             super.onBackPressed();
         }
     }
-
     @Override
-    protected void onDestroy() {
-        JSONObject jsonObject = new JSONObject();
-        try {
-            JSONArray jsonArray = new JSONArray();//实例一个JSON数组
-            for (int i = 0; i < adapter.getItemCount(); i++) {
-                BusLine b = adapter.get(i);
-                JSONObject j = new JSONObject();
-                j.put("LineName", b.getLineName());
-                j.put("LineNo", b.getLineNo());
-                j.put("Selected", b.getSelected());
-                j.put("Direction", b.getDirection());
-                j.put("LineId", b.getLineId());
-                j.put("Line2Id", b.getLine2Id());
-                jsonArray.put(j);
+    protected void onPause() {
+        Log.d(Tag, "onPause");
+        //region 需要时更新列表
+        if (updateListFlag) {
+            JSONObject jsonObject = new JSONObject();
+            try {
+                JSONArray jsonArray = new JSONArray();//实例一个JSON数组
+                for (int i = 0; i < adapter.getItemCount(); i++) {
+                    BusLine b = adapter.get(i);
+                    JSONObject j = new JSONObject();
+                    j.put("LineName", b.getLineName());
+                    j.put("LineNo", b.getLineNo());
+                    j.put("Selected", b.getSelected());
+                    j.put("Direction", b.getDirection());
+                    j.put("LineId", b.getLineId());
+                    j.put("Line2Id", b.getLine2Id());
+                    jsonArray.put(j);
+                }
+                jsonObject.put("data", jsonArray);
+                jsonObject.put("count", jsonArray.length());
+                mEditor.putString("busLine", jsonObject.toString());
+                mEditor.commit();
+                updateListFlag=false;
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-            jsonObject.put("data", jsonArray);
-            jsonObject.put("count", jsonArray.length());
-            mEditor.putString("busLine", jsonObject.toString());
-            mEditor.commit();
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
-
-        super.onDestroy();
+        //endregion
+        super.onPause();
     }
 
     //region toolbar 菜单栏
@@ -270,6 +286,7 @@ public class MainActivity extends AppCompatActivity {
             mainRecyclerView.scrollToPosition(0);
 //            adapter.notifyDataSetChanged();
             sideAdapter.notifyDataSetChanged();
+            handler.sendEmptyMessage(0);
         }
         //endregion
         super.onActivityResult(requestCode, resultCode, intent);
@@ -312,7 +329,7 @@ public class MainActivity extends AppCompatActivity {
                 } catch (URISyntaxException e) {
 //                    e.printStackTrace();
                     Toast.makeText(MainActivity.this, "失败,支付宝有安装?\n请使用支付宝扫码", Toast.LENGTH_SHORT).show();
-                }catch (Exception e) {
+                } catch (Exception e) {
 //                    e.printStackTrace();
                     Toast.makeText(MainActivity.this, "失败,支付宝有安装?\n请使用支付宝扫码", Toast.LENGTH_SHORT).show();
                 }
