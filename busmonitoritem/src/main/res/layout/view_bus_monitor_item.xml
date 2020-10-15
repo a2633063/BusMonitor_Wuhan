@@ -38,12 +38,14 @@
             android:id="@+id/tv_station_time"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:gravity="end"
             android:maxLines="1"
             android:singleLine="true"
             android:text="XX:XX-XX:XX  票价 XXX元"
             android:textSize="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/barrier"
             app:layout_constraintTop_toBottomOf="@id/tv_station" />
 
 
@@ -72,8 +74,8 @@
             android:id="@+id/tv_first_bus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ems="2"
             android:layout_marginStart="8dp"
+            android:ems="2"
             android:gravity="center"
             android:minEms="2"
             android:text="无"
