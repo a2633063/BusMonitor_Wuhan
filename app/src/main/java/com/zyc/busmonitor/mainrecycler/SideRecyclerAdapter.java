@@ -37,7 +37,7 @@ public class SideRecyclerAdapter extends RecyclerView.Adapter<SideRecyclerAdapte
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
 
         ViewHolder mHolder = holder;
         mHolder.name.setText(mData.get(position).getLineName());
