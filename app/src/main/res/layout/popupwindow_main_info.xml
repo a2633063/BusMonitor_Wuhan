@@ -70,7 +70,7 @@ android:background="@android:color/white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="start"
-                android:text="\n本APP通过抓取武汉智能公交的api获取武汉官方武汉公交的数据显示出来.本app仅为个人学习开发."
+                android:text="\n本app仅为个人学习开发,欢迎您联系我讨论帮助我继续学习android开发.依然建议用户使用武汉的智能公交app"
                 android:textSize="18dp" />
 
 <!--            <ImageView-->
