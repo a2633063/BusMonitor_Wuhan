@@ -1,7 +1,6 @@
 package com.zyc.busmonitor.mainrecycler;
 
 
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +10,8 @@ import com.zyc.busmonitor.R;
 import com.zyc.busmonitoritem.BusLine;
 
 import java.util.List;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 
 public class SideRecyclerAdapter extends RecyclerView.Adapter<SideRecyclerAdapter.ViewHolder> {
@@ -22,7 +23,7 @@ public class SideRecyclerAdapter extends RecyclerView.Adapter<SideRecyclerAdapte
         return mData;
     }
 
-    public SideRecyclerAdapter(List<BusLine> mData,MainRecyclerAdapter adapter) {
+    public SideRecyclerAdapter(List<BusLine> mData, MainRecyclerAdapter adapter) {
         this.mData = mData;
         this.adapter = adapter;
     }
@@ -31,19 +32,20 @@ public class SideRecyclerAdapter extends RecyclerView.Adapter<SideRecyclerAdapte
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater
                 .from(parent.getContext())
-                .inflate(R.layout.item_side_recycler, parent,false);
+                .inflate(R.layout.item_side_recycler, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
+    public void onBindViewHolder(ViewHolder holder, int position) {
 
         ViewHolder mHolder = holder;
         mHolder.name.setText(mData.get(position).getLineName());
-        mHolder.name. setOnClickListener(new View.OnClickListener() {
+
+        mHolder.name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(listener!=null) listener.onClick(position);
+                if (listener != null) listener.onClick(holder.getAdapterPosition());
             }
         });
 
@@ -66,11 +68,11 @@ public class SideRecyclerAdapter extends RecyclerView.Adapter<SideRecyclerAdapte
 
     private OnItemClickListener listener;
 
-    public interface OnItemClickListener{
+    public interface OnItemClickListener {
         void onClick(int position);
     }
 
-    public void setOnItemClickListener(OnItemClickListener listener){
-        this.listener=listener;
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
     }
 }
