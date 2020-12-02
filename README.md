@@ -63,6 +63,8 @@ apk文件下载: https://github.com/a2633063/BusMonitor_Wuhan/releases/latest
 
 ### 实际运行效果截图
 
+图片打不开点这里:   [截图](https://cdn.jsdelivr.net/gh/a2633063/Image/BusMonitor_Wuhan/app.png)   [GIF动图效果](https://cdn.jsdelivr.net/gh/a2633063/Image/BusMonitor_Wuhan/BusMonitor_Wuhan.gif)
+
 ![](https://cdn.jsdelivr.net/gh/a2633063/Image/BusMonitor_Wuhan/app.png)
 
 
