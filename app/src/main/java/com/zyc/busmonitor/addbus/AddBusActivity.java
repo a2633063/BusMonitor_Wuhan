@@ -4,7 +4,9 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -63,7 +65,7 @@ public class AddBusActivity extends AppCompatActivity {
                     String result = (String) msg.obj;
                     Log.d(Tag, "result:" + result);
                     try {
-                        //region 登录返回空数据
+                        //region 返回空数据
                         if (result == null) {
                             throw new JSONException("无数据返回");
                         }
@@ -81,21 +83,19 @@ public class AddBusActivity extends AppCompatActivity {
                         JSONObject jsonData = jsonObject.getJSONObject("data");
                         JSONArray jsonArray = jsonData.getJSONArray("lines");
 
-                        if (jsonArray == null ||
-                                jsonArray.length() == 0) throw new JSONException("搜索无数据");
+                        if (jsonArray == null || jsonArray.length() == 0)
+                            throw new JSONException("搜索无数据");
                         lv.setVisibility(View.VISIBLE);
                         mData.clear();
                         for (int i = 0; i < jsonArray.length() && i < 20; i++) {
                             JSONObject j = jsonArray.getJSONObject(i);
-                            BusLine b = new BusLine(j.getString("lineName"), j.getString("lineNo"), j.getInt("direction"));
+                            BusLine b = new BusLine(j.getString("lineName"), j.getString("lineNo"),-1);
                             b.setStartStopName(j.getString("startStopName"));
                             b.setEndStopName(j.getString("endStopName"));
                             b.setFirstTime(j.getString("firstTime"));
                             b.setLastTime(j.getString("lastTime"));
-                            if(b.getDirection()==0)
-                                b.setLine(j.getString("lineId"),null);
-                            else
-                                b.setLine(null,j.getString("lineId"));
+                            b.setLineId(j.getString("lineId"));
+                            b.setLine2Id(null);
                             //b.setStopsNum(j.getInt("stopsNum"));
                             mData.add(b);
                         }
@@ -134,7 +134,8 @@ public class AddBusActivity extends AppCompatActivity {
         //region listview
         lv = findViewById(R.id.listview);
         adapter = new AddBusAdapter(this, mData);
-        lv.setAdapter(adapter);lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        lv.setAdapter(adapter);
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //返回数据

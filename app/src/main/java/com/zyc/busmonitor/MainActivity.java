@@ -259,8 +259,9 @@ public class MainActivity extends AppCompatActivity {
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject j = (JSONObject) jsonArray.get(i);
                         BusLine b = new BusLine(j.getString("LineName"),
-                                j.getString("LineNo"), j.getInt("Direction"), j.getInt("Selected"));
-                        b.setLine(j.getString("LineId"), j.getString("Line2Id"));
+                                j.getString("LineNo"), j.getInt("Selected"));
+                        b.setLineId(j.getString("LineId"));
+                        b.setLine2Id(j.getString("Line2Id"));
                         mData.add(b);
                     }
                 }
@@ -281,7 +282,12 @@ public class MainActivity extends AppCompatActivity {
         adapter = new MainRecyclerAdapter(mData);
         mainRecyclerView.setLayoutManager(layoutManager);
         mainRecyclerView.setAdapter(adapter);
-
+        adapter.setOnItemBusStationClickListener(new MainRecyclerAdapter.OnItemBusStationClickListener() {
+            @Override
+            public void onItemBusStationClick(BusLine bus, int position, String data) {
+                handler.sendEmptyMessage(0);
+            }
+        });
 //        //设置长按拖动排序
 //        ItemTouchHelper helper = new ItemTouchHelper(new MainRecyclerItemTouchHelper(adapter));
 //        helper.attachToRecyclerView(mainRecyclerView);
@@ -367,7 +373,6 @@ public class MainActivity extends AppCompatActivity {
                     j.put("LineName", b.getLineName());
                     j.put("LineNo", b.getLineNo());
                     j.put("Selected", b.getSelected());
-                    j.put("Direction", b.getDirection());
                     j.put("LineId", b.getLineId());
                     j.put("Line2Id", b.getLine2Id());
                     jsonArray.put(j);
@@ -399,7 +404,7 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.menu_add) {
             startActivityForResult(new Intent(MainActivity.this, AddBusActivity.class), 1);
             return true;
-        }else if (id == R.id.menu_news) {
+        } else if (id == R.id.menu_news) {
             drawerLayout.openDrawer(GravityCompat.END);
             return true;
         }

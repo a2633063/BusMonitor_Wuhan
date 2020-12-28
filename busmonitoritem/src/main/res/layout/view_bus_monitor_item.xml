@@ -221,6 +221,7 @@
 
         <LinearLayout
             android:id="@+id/ll_direction"
+            android:visibility="invisible"
             style="@style/BusFragmentBottomLinearLayout">
 
             <ImageView

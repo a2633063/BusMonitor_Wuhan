@@ -66,9 +66,9 @@ public class BusList extends LinearLayout {
          *
          * @param view     点击item的视图
          * @param position 在adapter中的位置
-         * @param data     点击得到的数据
+         * @param stationName     点击得到的站名
          */
-        void onItemClick(View view, int position, String data);
+        void onItemClick(View view, int position, String stationName);
     }
 
     private OnItemClickListener onItemClickListener;
@@ -132,8 +132,17 @@ public class BusList extends LinearLayout {
         adapter.notifyDataSetChanged();
     }
 
+    public void scrollToSelected(){
+        recyclerView.post(new Runnable() {
+            @Override
+            public void run() {
+                ((LinearLayoutManager)recyclerView.getLayoutManager()).scrollToPositionWithOffset(getSelected(),recyclerView.getWidth()/2);
+            }
+        });
+//        recyclerView.smoothScrollToPosition(getSelected());
+    }
     public void setOpposite() {
-        setSelected(getCount()-getSelected()-1);
+//        setSelected(getCount()-getSelected()-1);
 //        int movingDistance=   recyclerView.computeHorizontalScrollOffset();//当前移动距离
 //        int maxDistance=   recyclerView.computeHorizontalScrollRange();//总距离
 //        int recycleViewWidth=   recyclerView.computeHorizontalScrollExtent();//控件宽度
@@ -142,7 +151,7 @@ public class BusList extends LinearLayout {
 //        Log.d(Tag,"控件宽度:"+recycleViewWidth);//
 
 //        recyclerView.scrollToPosition(0);
-        recyclerView.scrollToPosition(getSelected());
+        scrollToSelected();
 //        View selectedItem = recyclerView.getChildAt(getSelected());
 //        int firstItemBottom =selectedItem.getLeft();
 //

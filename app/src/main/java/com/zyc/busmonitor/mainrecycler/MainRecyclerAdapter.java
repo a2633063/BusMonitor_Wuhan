@@ -38,12 +38,19 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
 
-        ViewHolder mHolder = holder;
+        final ViewHolder mHolder = holder;
         mHolder.BusItem.setBus(mData.get(position));
 
 //        mHolder.itemView.setBackgroundColor(0);
+
+        mHolder.BusItem.setOnBusStationClickListener(new BusMonitorItem.OnBusStationClickListener() {
+            @Override
+            public void onBusStationClick(View view, int position, String stationName) {
+                if(onItemBusStationClickListener!=null)onItemBusStationClickListener.onItemBusStationClick(mHolder.BusItem.getBus(),  position,  stationName);
+            }
+        });
     }
 
     @Override
@@ -58,5 +65,18 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
             BusItem =  itemView.findViewById(R.id.BusMonitorItem);
         }
     }
+
+
+    //region 单击回调事件
+    private OnItemBusStationClickListener onItemBusStationClickListener;
+
+    public interface OnItemBusStationClickListener {
+        void onItemBusStationClick(BusLine bus, int position, String data);
+    }
+
+    public void setOnItemBusStationClickListener(OnItemBusStationClickListener onItemBusStationClickListener) {
+        this.onItemBusStationClickListener = onItemBusStationClickListener;
+    }
+    //endregion
 
 }

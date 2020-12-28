@@ -8,6 +8,7 @@ import android.content.Context;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
+
 import androidx.annotation.NonNull;
 
 import android.text.TextUtils;
@@ -34,7 +35,6 @@ public class BusMonitorItem extends LinearLayout {
     public final static String Tag = "BusFragment";
 
     //region 控件
-    BusList busList;
     TextView tvBus;
     TextView tvStationStartEnd;
     TextView tvStationTime;
@@ -57,10 +57,11 @@ public class BusMonitorItem extends LinearLayout {
     private int AutoRefresh = 15;
 
 
+    private BusList busList;
     private BusLine bus = null;
     private List<BusStation> mDataList = new ArrayList<>();
 
-
+    private boolean scrollToSelectedFlag=true;
     //region Handler
     @SuppressLint("HandlerLeak")
     private Handler handler = new Handler() {
@@ -68,7 +69,7 @@ public class BusMonitorItem extends LinearLayout {
         public void handleMessage(Message msg) {
 
             switch (msg.what) {
-                //region 获取公交数据
+                //region 请求获取公交数据
                 case 1:
                     if (!objectAnimator.isStarted()) objectAnimator.start();
                     isRefresh = true;
@@ -76,7 +77,7 @@ public class BusMonitorItem extends LinearLayout {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            String url = String.format(getResources().getString(R.string.url_bus), bus.getLine() );
+                            String url = String.format(getResources().getString(R.string.url_bus), bus.getLineId());
                             Log.d(Tag, "URL:" + url);
                             Message msg = new Message();
                             msg.what = 2;
@@ -105,31 +106,47 @@ public class BusMonitorItem extends LinearLayout {
 
                         JSONObject jsonObject = new JSONObject(result);
 
+                        //region 返回无效数据!
                         if (!jsonObject.has("resultCode")
                                 || !jsonObject.has("data")
                                 || !jsonObject.getString("resultCode").equals("1")
                         ) {
                             throw new JSONException("更新数据失败");
                         }
+                        //endregion
                         JSONObject jsonData = jsonObject.getJSONObject("data");
                         JSONArray jsonStops = jsonData.getJSONArray("stops");
 
-                        if(bus.getLineId()==null){
-                            bus.setLineId(jsonData.getString("lineId"));
-                        }else if(bus.getLine2Id()==null){
-                            bus.setLine2Id(jsonData.getString("line2Id"));
+                        //region 更新车辆信息
+                        bus.setLineName(jsonData.getString("lineName"));
+                        bus.setLineId(jsonData.getString("lineId"));
+                        bus.setLineNo(jsonData.getString("lineNo"));
+//                        bus.setDirection(jsonData.getInt("direction"));
+                        bus.setStartStopName(jsonData.getString("startStopName"));
+                        bus.setEndStopName(jsonData.getString("endStopName"));
+                        bus.setFirstTime(jsonData.getString("firstTime"));
+                        bus.setLastTime(jsonData.getString("lastTime"));
+                        bus.setPrice(jsonData.getString("price"));
+                        bus.setLine2Id(jsonData.getString("line2Id"));
+                        bus.setStopsNum(jsonStops.length());
+
+                        if (bus.getSelected() >= bus.getStopsNum()) {
+                            bus.setSelected(bus.getStopsNum() - 1);
+                        }
+                        //endregion
+
+                        if (bus.getLine2Id() != null && bus.getLine2Id().length() > 0) {
+                            llDirection.setVisibility(VISIBLE);
+                        } else {
+                            llDirection.setVisibility(INVISIBLE);
                         }
 
-                        int stopsNum =  jsonStops.length();
-                        //region 更新车辆信息 站点信息
-                        tvBus.setText(jsonData.getString("lineName"));
-                        tvStationStartEnd.setText(jsonData.getString("startStopName")
-                                + " → " + jsonData.getString("endStopName")
-                                );
-                        tvStationTime.setText(stopsNum + "站  "+jsonData.getString("firstTime")
-                                + "-" + jsonData.getString("lastTime")
-                                + "  " + jsonData.getString("price")
-                                + (jsonData.getString("price").endsWith("元")?"":"元")
+                        //region UI更新车辆信息 站点信息
+                        tvBus.setText(bus.getLineName());
+                        tvStationStartEnd.setText(bus.getStartStopName() + " → " + bus.getEndStopName());
+                        tvStationTime.setText(bus.getStopsNum() + "站  "
+                                + bus.getFirstTime() + "-" + bus.getLastTime()
+                                + "  " + bus.getPrice() + (bus.getPrice().endsWith("元") ? "" : "元")
                         );
                         tvStationStartEnd.setEllipsize(TextUtils.TruncateAt.MARQUEE);
                         tvStationStartEnd.setSingleLine(true);
@@ -144,9 +161,7 @@ public class BusMonitorItem extends LinearLayout {
                             BusStation b = new BusStation(jsonStops.getJSONObject(i).getString("stopName"));
                             busList.addBusStation(b);
                         }
-
-                        if (busList.getSelected() >= busList.getCount())
-                            busList.setSelected(busList.getCount() - 1);
+                        busList.setSelected(bus.getSelected());
                         //endregion
 
                         //region 更新车辆所有实时信息
@@ -156,7 +171,7 @@ public class BusMonitorItem extends LinearLayout {
                         secondBus = 9999;
                         try {
 
-                            int selectBus = busList.getSelected();
+                            int selectBus = bus.getSelected();
 
                             Log.d(Tag, "selectBus:" + selectBus);
                             JSONArray jsonBuses = jsonData.getJSONArray("buses");
@@ -243,6 +258,11 @@ public class BusMonitorItem extends LinearLayout {
 
                         busList.notifyDataSetChanged();
 
+                        if(scrollToSelectedFlag){
+                            busList.scrollToSelected();
+                            scrollToSelectedFlag=false;
+                        }
+
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -262,7 +282,9 @@ public class BusMonitorItem extends LinearLayout {
         bus = b;
         init();
     }
-
+    public BusLine getBus() {
+        return bus;
+    }
     public BusMonitorItem(@NonNull Context context) {
         super(context);
     }
@@ -350,9 +372,12 @@ public class BusMonitorItem extends LinearLayout {
         busList.setSelected(-1);
         busList.setOnItemClickListener(new BusList.OnItemClickListener() {
             @Override
-            public void onItemClick(View view, int position, String data) {
+            public void onItemClick(View view, int position, String stationName) {
+                bus.setSelected(position);
                 refresh();
                 if (isAutoRefresh) setAutoRefresh(AutoRefresh);
+                if (onBusStationClickListener != null)
+                    onBusStationClickListener.onBusStationClick(view, position, stationName);
             }
         });
         //endregion
@@ -368,13 +393,22 @@ public class BusMonitorItem extends LinearLayout {
         public void onClick(View v) {
             int id = v.getId();
             if (id == R.id.ll_direction) {
-                bus.setDirection(bus.getDirection() == 0 ? 1 : 0);
-//                    busList.setSelected(busList.getCount()-busList.getSelected()-1);
-                busList.setOpposite();
-//                    break;
 
-                refresh();
-                if (isAutoRefresh) setAutoRefresh(AutoRefresh);
+                if (bus.getLine2Id() != null && bus.getLine2Id().length() > 0) {
+//                    bus.setDirection(bus.getDirection() == 0 ? 1 : 0);
+//                    busList.setSelected(busList.getCount()-busList.getSelected()-1);
+                    String temp = bus.getLineId();
+                    bus.setLineId(bus.getLine2Id());
+                    bus.setLine2Id(temp);
+                    bus.setSelected(bus.getStopsNum()-bus.getSelected()-1);
+                    busList.setOpposite();
+//                    break;
+                    scrollToSelectedFlag=true;
+                    refresh();
+                    if (isAutoRefresh) setAutoRefresh(AutoRefresh);
+                } else {
+
+                }
             } else if (id == R.id.ll_refresh) {
                 refresh();
                 if (isAutoRefresh) setAutoRefresh(AutoRefresh);
@@ -402,6 +436,26 @@ public class BusMonitorItem extends LinearLayout {
 //        });
         refresh();
     }
+
+    //region 单击回调事件
+    //点击 RecyclerView 某条的监听
+    public interface OnBusStationClickListener {
+        /**
+         * 当RecyclerView某个被点击的时候回调
+         *
+         * @param view     点击item的视图
+         * @param position 车站序号
+         * @param stationName     点击得到的数据
+         */
+        void onBusStationClick(View view, int position, String stationName);
+    }
+
+    private OnBusStationClickListener onBusStationClickListener;
+
+    public void setOnBusStationClickListener(OnBusStationClickListener onBusStationClickListener) {
+        this.onBusStationClickListener = onBusStationClickListener;
+    }
+    //endregion
 
     public void refresh() {
         handler.sendEmptyMessage(1);
@@ -438,13 +492,6 @@ public class BusMonitorItem extends LinearLayout {
         ivAutoRefresh.setImageResource(isAutoRefresh ? R.drawable.ic_auto_refresh_select_24dp : R.drawable.ic_auto_refresh_24dp);
         tvAutoRefresh.setTextColor(getResources().getColor(isAutoRefresh ? R.color.bottom_text_select_color : R.color.bottom_text_color));
 
-    }
-
-    public void setSelected(int pos){
-        busList.setSelected(pos);
-    }
-    public int getSelect(){
-        return busList.getSelected();
     }
 
 }
