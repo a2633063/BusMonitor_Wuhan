@@ -1,6 +1,7 @@
 package com.zyc.busmonitor;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
@@ -9,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.Html;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -22,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.zyc.WebService;
 import com.zyc.busmonitor.addbus.AddBusActivity;
 import com.zyc.busmonitor.mainrecycler.MainRecyclerAdapter;
@@ -41,6 +44,7 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -149,6 +153,74 @@ public class MainActivity extends AppCompatActivity {
                     }
                     break;
                 //endregion
+
+                //region 获取app最新版本
+                case 100:
+                    try {
+                        if (msg.obj == null) throw new JSONException("获取版本信息失败,请重试");
+                        JSONObject obj = new JSONObject((String) msg.obj);
+                        if (!obj.has("tag_name")
+                                || !obj.has("name")
+                                || !obj.has("body")
+                                || !obj.has("created_at")) throw new JSONException("获取最新版本信息失败");
+
+                        final String body = obj.getString("body");
+                        final String name = obj.getString("name");
+                        final String tag_name = obj.getString("tag_name");
+                        final String created_at = obj.getString("created_at");
+
+                        String tag_name_old = getLocalVersionName(MainActivity.this);
+                        if (tag_name.equals(tag_name_old)) {
+                            Log.d(Tag, "已是最新版本");
+                        } else {
+                            Log.d(Tag, "当前版本:" + tag_name_old + ",发布版本:" + tag_name);
+                            boolean show_ota = true;
+                            String[] version_new = tag_name.replaceAll("[^.1234567890]", "").split("\\.");
+                            String[] version_old = tag_name_old.replaceAll("[^.1234567890]", "").split("\\.");
+
+                            for (int i = 0; i < version_new.length && i < version_old.length; i++) {
+                                try {
+                                    int a = Integer.parseInt(version_new[i]);
+                                    int b = Integer.parseInt(version_old[i]);
+                                    if (b < a) break;
+                                    else if (b > a) {
+                                        show_ota = false;
+                                        break;
+                                    }
+                                } catch (NumberFormatException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
+                            if (!show_ota) {
+                                Toast.makeText(MainActivity.this, "当前版本暂时未发布，测试中\n当前版本:" + tag_name_old + "\n发布版本:" + tag_name, Toast.LENGTH_LONG).show();
+                                break;
+                            }
+
+                            String version_no_ask = mSharedPreferences.getString("version_no_ask", "");
+
+                            if (version_no_ask.equals(tag_name)) {
+                                Snackbar.make(findViewById(R.id.recyclerView), "APP有更新版本:" + tag_name + "\r\n请更新", Snackbar.LENGTH_LONG)
+
+                                        .setAction("更新", new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                updateApp(tag_name, name, body, created_at);
+                                            }
+                                        }).show();
+                            } else {
+                                updateApp(tag_name, name, body, created_at);
+                            }
+
+                        }
+
+                    } catch (JSONException e) {
+//                        e.printStackTrace();
+                        Toast.makeText(MainActivity.this, "获取最新版本失败,请在酷安搜索zConrotl更新最新版本", Toast.LENGTH_LONG).show();
+                    }
+                    break;
+                //endregion
+
             }
 
         }
@@ -162,6 +234,7 @@ public class MainActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        //region 控件初始化
         log = findViewById(R.id.log);
 
         //region 侧边栏 初始化
@@ -338,13 +411,28 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        //endregion
 
-
+        //region 获取公告内容
         Message msg = new Message();
         msg.what = 1;
         msg.arg1 = newsPage;
         handler.sendMessageDelayed(msg, 0);// 执行耗时的方法之后发送消给handler
+        //endregion
 
+
+        //region 获取最新版本
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Message msg = new Message();
+                msg.what = 100;
+                String res = WebService.WebConnect("https://gitee.com/api/v5/repos/a2633063/BusMonitor_Wuhan/releases/latest");
+                msg.obj = res;
+                handler.sendMessageDelayed(msg, 0);// 执行耗时的方法之后发送消给handler
+            }
+        }).start();
+        //endregion
     }
 
     @Override
@@ -499,6 +587,14 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        popupView.findViewById(R.id.btn_app2).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri uri = Uri.parse("https://gitee.com/a2633063/BusMonitor_Wuhan");
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+            }
+        });
         //endregion
 
         //region window初始化
@@ -515,6 +611,45 @@ public class MainActivity extends AppCompatActivity {
         //endregion
         window.update();
         window.showAtLocation(popupView, Gravity.CENTER, 0, 0);
+    }
+
+    private void updateApp(final String tag_name, final String name, final String body, final String created_at) {
+
+        //region 显示APP更新弹窗
+        AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this)
+                .setTitle("请更新版本:" + tag_name)
+                .setMessage(name + "\r\n" + body + "\r\n更新日期:" + created_at)
+                .setPositiveButton("更新", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Uri uri = Uri.parse("https://github.com/a2633063/BusMonitor_Wuhan/releases/latest");
+                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton("取消", null)
+                .create();
+        alertDialog.setButton(DialogInterface.BUTTON_NEUTRAL, "不再提示此版本", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                mEditor = getSharedPreferences("setting", 0).edit();
+                mEditor.putString("version_no_ask", tag_name);
+                mEditor.commit();
+            }
+        });
+        alertDialog.show();
+
+        // 在dialog执行show之后才能来设置
+        TextView tvMsg = (TextView) alertDialog.findViewById(android.R.id.message);
+        String HtmlStr = String.format(getResources().getString(R.string.app_ota_message), name, body, created_at).replace("\n", "<br />");
+        Log.d(Tag, HtmlStr);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            tvMsg.setText(Html.fromHtml(HtmlStr, Html.FROM_HTML_MODE_COMPACT));
+        } else {
+            tvMsg.setText(Html.fromHtml(HtmlStr));
+        }
+        //endregion
+
     }
     //endregion
 

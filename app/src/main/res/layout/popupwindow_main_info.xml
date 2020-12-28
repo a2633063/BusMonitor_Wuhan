@@ -63,7 +63,7 @@ android:background="@android:color/white"
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="https://github.com/a2633063/BusMonitor_Wuhan"
+                android:text="https://github.com/a2633063/BusMonitor_Wuhan\nhttps://gitee.com/a2633063/BusMonitor_Wuhan"
                 android:textSize="13dp" />
 
             <TextView
@@ -99,6 +99,12 @@ android:background="@android:color/white"
                 android:layout_gravity="bottom"
                 android:text="app文档/源码" />
 
+            <Button
+                android:id="@+id/btn_app2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:text="app文档/源码-备用链接" />
 
         </LinearLayout>
     </ScrollView>
