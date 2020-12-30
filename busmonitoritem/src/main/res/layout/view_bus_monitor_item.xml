@@ -14,8 +14,12 @@
             android:id="@+id/tv_bus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/background"
             android:gravity="center"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
             android:text="电907"
+            android:textColor="@android:color/white"
             android:textSize="25dp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
@@ -248,7 +252,7 @@
         <LinearLayout
             android:id="@+id/ll_refresh"
             style="@style/BusFragmentBottomLinearLayout"
-            android:background="@android:color/holo_red_light">
+            android:background="#fffd823e">
 
             <ImageView
                 android:id="@+id/iv_refresh"

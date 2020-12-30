@@ -61,7 +61,7 @@ public class BusMonitorItem extends LinearLayout {
     private BusLine bus = null;
     private List<BusStation> mDataList = new ArrayList<>();
 
-    private boolean scrollToSelectedFlag=true;
+    private boolean scrollToSelectedFlag = true;
     //region Handler
     @SuppressLint("HandlerLeak")
     private Handler handler = new Handler() {
@@ -161,7 +161,11 @@ public class BusMonitorItem extends LinearLayout {
                             BusStation b = new BusStation(jsonStops.getJSONObject(i).getString("stopName"));
                             busList.addBusStation(b);
                         }
+                        if (bus.getSelected() < 0 || bus.getSelected() >= busList.getCount()) {
+                            bus.setSelected(busList.getCount() - 1);
+                        }
                         busList.setSelected(bus.getSelected());
+
                         //endregion
 
                         //region 更新车辆所有实时信息
@@ -202,12 +206,15 @@ public class BusMonitorItem extends LinearLayout {
                                 //region 计算到站站数
                                 if (busStation == selectBus) {
                                     if (isStation == 1) {//到站
+                                        secondBus = firstBus;
                                         firstBus = 0;
                                     }
                                 } else if (busStation == selectBus - 1) {
                                     if (isStation == 0) {//wei到站
+                                        secondBus = firstBus;
                                         firstBus = 1;
                                     } else if (firstBus > 1) {
+                                        secondBus = firstBus;
                                         firstBus = 2;
                                     }
                                 } else if (busStation < selectBus) {
@@ -215,7 +222,8 @@ public class BusMonitorItem extends LinearLayout {
                                     if (temp < firstBus) {
                                         secondBus = firstBus;
                                         firstBus = temp;
-                                    } else if (temp < selectBus) secondBus = temp;
+                                    } else if (temp < selectBus)
+                                        secondBus = temp;
                                 }
                                 //endregion
                                 //endregion
@@ -258,9 +266,9 @@ public class BusMonitorItem extends LinearLayout {
 
                         busList.notifyDataSetChanged();
 
-                        if(scrollToSelectedFlag){
+                        if (scrollToSelectedFlag) {
                             busList.scrollToSelected();
-                            scrollToSelectedFlag=false;
+                            scrollToSelectedFlag = false;
                         }
 
 
@@ -282,9 +290,11 @@ public class BusMonitorItem extends LinearLayout {
         bus = b;
         init();
     }
+
     public BusLine getBus() {
         return bus;
     }
+
     public BusMonitorItem(@NonNull Context context) {
         super(context);
     }
@@ -400,10 +410,10 @@ public class BusMonitorItem extends LinearLayout {
                     String temp = bus.getLineId();
                     bus.setLineId(bus.getLine2Id());
                     bus.setLine2Id(temp);
-                    bus.setSelected(bus.getStopsNum()-bus.getSelected()-1);
+                    bus.setSelected(bus.getStopsNum() - bus.getSelected() - 1);
                     busList.setOpposite();
 //                    break;
-                    scrollToSelectedFlag=true;
+                    scrollToSelectedFlag = true;
                     refresh();
                     if (isAutoRefresh) setAutoRefresh(AutoRefresh);
                 } else {
@@ -443,9 +453,9 @@ public class BusMonitorItem extends LinearLayout {
         /**
          * 当RecyclerView某个被点击的时候回调
          *
-         * @param view     点击item的视图
-         * @param position 车站序号
-         * @param stationName     点击得到的数据
+         * @param view        点击item的视图
+         * @param position    车站序号
+         * @param stationName 点击得到的数据
          */
         void onBusStationClick(View view, int position, String stationName);
     }

@@ -86,7 +86,7 @@ public class BusListAdapter extends RecyclerView.Adapter<BusListAdapter.ViewHold
     public void onBindViewHolder(final ViewHolder holder, int position) {
         BusStation busStation = mList.get(position);
 
-        if (mCurrentSelected < 0) mCurrentSelected = getItemCount();
+        if (mCurrentSelected < 0) mCurrentSelected = getItemCount()-1;
 
         //region 显示站名,并自动跳转字体大小
         holder.name.setText(busStation.getName());
