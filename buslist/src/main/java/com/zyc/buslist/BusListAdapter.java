@@ -3,6 +3,7 @@ package com.zyc.buslist;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -86,9 +87,9 @@ public class BusListAdapter extends RecyclerView.Adapter<BusListAdapter.ViewHold
     public void onBindViewHolder(final ViewHolder holder, int position) {
         BusStation busStation = mList.get(position);
 
-        if (mCurrentSelected < 0) mCurrentSelected = getItemCount()-1;
+        if (mCurrentSelected < 0) mCurrentSelected = getItemCount() - 1;
 
-        //region 显示站名,并自动跳转字体大小
+        //region 显示站名,并自动调整字体大小
         holder.name.setText(busStation.getName());
         final TextView v = holder.name;
         if (textSizeHashMap.get(v.getText().length()) != null)
@@ -145,20 +146,36 @@ public class BusListAdapter extends RecyclerView.Adapter<BusListAdapter.ViewHold
         holder.tvArrive.setVisibility(busStation.getArrive() == 0 ? View.INVISIBLE : View.VISIBLE);
         holder.tvPass.setVisibility(busStation.getPass() == 0 ? View.INVISIBLE : View.VISIBLE);
 
-        if (busStation.getArrive() > 1) {
-            holder.tvArrive.setText(String.valueOf(busStation.getArrive()));
-            holder.tvArrive.setBackgroundResource(position > mCurrentSelected ? R.drawable.ic_bus_unselected_24dp : R.drawable.ic_bus_station_selected_24dp);
-        } else {
-            holder.tvArrive.setText("");
-            holder.tvArrive.setBackgroundResource(position > mCurrentSelected ? R.drawable.ic_bus_unselected_24dp : R.drawable.ic_bus_station_selected_24dp);
-        }
+//        if (busStation.getArrive() > 1) {
+            holder.tvArrive.setText((busStation.getArrive() > 1)?String.valueOf(busStation.getArrive()):"");
+            if (busStation.getArriveDoubleDeck() < busStation.getArrive()) {
+                holder.tvArrive.setBackgroundResource(position > mCurrentSelected ? R.drawable.ic_bus_unselected_24dp : R.drawable.ic_bus_station_selected_24dp);
+            } else {
+                holder.tvArrive.setBackgroundResource(position > mCurrentSelected ? R.drawable.ic_bus_double_unselected_24dp : R.drawable.ic_bus_double_station_selected_24dp);
+            }
+//        } else {
+//            holder.tvArrive.setText("");
+//            if (busStation.getArriveDoubleDeck() < 1 || busStation.getArriveDoubleDeck() < busStation.getArrive()) {
+//
+//            } else {
+//                holder.tvArrive.setBackgroundResource(position > mCurrentSelected ? R.drawable.ic_bus_unselected_24dp : R.drawable.ic_bus_station_selected_24dp);
+//            }
+//        }
 
         if (busStation.getPass() > 1) {
             holder.tvPass.setText(String.valueOf(busStation.getPass()));
-            holder.tvPass.setBackgroundResource(position >= mCurrentSelected ? R.drawable.ic_bus_num_unseclected_24dp : R.drawable.ic_bus_num_seclected_24dp);
+            if (busStation.getPassDoubleDeck() < busStation.getPass()) {
+                holder.tvPass.setBackgroundResource(position >= mCurrentSelected ? R.drawable.ic_bus_num_unselected_24dp : R.drawable.ic_bus_num_selected_24dp);
+            } else {
+                holder.tvPass.setBackgroundResource(position >= mCurrentSelected ? R.drawable.ic_bus_double_num_unselected_24dp : R.drawable.ic_bus_double_num_selected_24dp);
+            }
         } else {
             holder.tvPass.setText("");
-            holder.tvPass.setBackgroundResource(position >= mCurrentSelected ? R.drawable.ic_bus_unselected_24dp : R.drawable.ic_bus_selected_24dp);
+            if (busStation.getPassDoubleDeck() > 0) {
+                holder.tvPass.setBackgroundResource(position >= mCurrentSelected ? R.drawable.ic_bus_double_unselected_24dp : R.drawable.ic_bus_double_selected_24dp);
+            } else {
+                holder.tvPass.setBackgroundResource(position >= mCurrentSelected ? R.drawable.ic_bus_unselected_24dp : R.drawable.ic_bus_selected_24dp);
+            }
         }
         //endregion
 

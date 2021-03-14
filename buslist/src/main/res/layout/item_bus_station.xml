@@ -50,15 +50,19 @@
         app:layout_constraintStart_toStartOf="@id/tv_arrive"
         app:layout_constraintTop_toBottomOf="@id/tv_arrive"
         app:layout_constraintBottom_toTopOf="@id/name"/>
+
     <TextView
         android:id="@+id/tv_arrive"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:background="@drawable/ic_bus_selected_24dp"
+        android:gravity="center"
         android:text=""
+        android:textColor="#ffffff"
+        android:textSize="8dp"
+        app:layout_constraintBottom_toTopOf="@id/tv_dot"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/tv_dot"
 
         />
 

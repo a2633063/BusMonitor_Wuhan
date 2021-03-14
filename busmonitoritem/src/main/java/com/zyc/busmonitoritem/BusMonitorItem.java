@@ -155,8 +155,8 @@ public class BusMonitorItem extends LinearLayout {
                         tvStationStartEnd.setFocusableInTouchMode(true);
                         //endregion
 
-                        //region 更新车站信息
                         busList.clear();
+                        //region 更新车站信息
                         for (int i = 0; i < jsonStops.length(); i++) {
                             BusStation b = new BusStation(jsonStops.getJSONObject(i).getString("stopName"));
                             busList.addBusStation(b);
@@ -187,8 +187,10 @@ public class BusMonitorItem extends LinearLayout {
                                     break;//throw new JSONException("数据错误");   //能够获取到车站信息但无法获取到位置时 显示车站但不显示实时位置 需要验证
 //                                int id = Integer.valueOf(arr[0]);
                                 String id = arr[0];
+
                                 int busStation = Integer.valueOf(arr[2]);
                                 int isStation = Integer.valueOf(arr[3]);
+                                int air_double = Integer.valueOf(arr[1]);
                                 Log.d(Tag, "车辆" + id + "站点:" + busStation + "是否到站:" + isStation);
 
                                 busStation = busStation - 1;
@@ -196,10 +198,23 @@ public class BusMonitorItem extends LinearLayout {
                                 //region 更新车辆到站信息
                                 if (isStation == 1) {//到站
                                     busList.getItem(busStation).setArrive(busList.getItem(busStation).getArrive() + 1);
+                                    if (air_double / 10 == 2) {//是否为双层车
+                                        busList.getItem(busStation).setArriveDoubleDeck(busList.getItem(busStation).getArriveDoubleDeck() + 1);
+                                    }
+                                    if (air_double % 10 == 2) {//是否为空调车
+                                        busList.getItem(busStation).setArriveAirConditioner(busList.getItem(busStation).getArriveAirConditioner() + 1); //是否为空调车
+                                    }
                                 } else {//未到站
                                     busStation = busStation - 1;
                                     busList.getItem(busStation).setPass(busList.getItem(busStation).getPass() + 1);
+                                    if (air_double / 10 == 2) {//是否为双层车
+                                        busList.getItem(busStation).setPassDoubleDeck(busList.getItem(busStation).getPassDoubleDeck() + 1);
+                                    }
+                                    if (air_double % 10 == 2) {//是否为空调车
+                                        busList.getItem(busStation).setPassAirConditioner(busList.getItem(busStation).getPassAirConditioner() + 1); //是否为空调车
+                                    }
                                 }
+
                                 //endregion
                                 Log.d(Tag, "busStation:" + busStation);
                                 //region 到站剩余站更新

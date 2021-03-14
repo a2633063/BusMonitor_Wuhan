@@ -8,13 +8,49 @@ public class BusStation {
     int arrive=0;
     int pass=0;
 
+    int arrive_double_deck=0;
+    int pass_double_deck=0;
+    int arrive_air_conditioner=0;
+    int pass_air_conditioner=0;
+
+    public int getArriveDoubleDeck() {
+        return arrive_double_deck;
+    }
+
+    public void setArriveDoubleDeck(int arrive_double_deck) {
+        this.arrive_double_deck = arrive_double_deck;
+    }
+
+    public int getPassDoubleDeck() {
+        return pass_double_deck;
+    }
+
+    public void setPassDoubleDeck(int pass_double_deck) {
+        this.pass_double_deck = pass_double_deck;
+    }
+
+    public int getArriveAirConditioner() {
+        return arrive_air_conditioner;
+    }
+
+    public void setArriveAirConditioner(int arrive_air_conditioner) {
+        this.arrive_air_conditioner = arrive_air_conditioner;
+    }
+
+    public int getPassAirConditioner() {
+        return pass_air_conditioner;
+    }
+
+    public void setPassAirConditioner(int pass_air_conditioner) {
+        this.pass_air_conditioner = pass_air_conditioner;
+    }
+
     public BusStation(String s){
         name=s;
     }
     public void setArrive(int arrive) {
         this.arrive = arrive;
     }
-
     public void setName(String name) {
         this.name = name;
     }
