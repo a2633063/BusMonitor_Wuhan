@@ -216,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
 
                     } catch (JSONException e) {
 //                        e.printStackTrace();
-                        Toast.makeText(MainActivity.this, "获取最新版本失败,请在酷安搜索zConrotl更新最新版本", Toast.LENGTH_LONG).show();
+                        Toast.makeText(MainActivity.this, "获取最新版本失败", Toast.LENGTH_LONG).show();
                     }
                     break;
                 //endregion
