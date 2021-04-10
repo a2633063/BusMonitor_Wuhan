@@ -39,6 +39,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -494,6 +495,20 @@ public class MainActivity extends AppCompatActivity {
             return true;
         } else if (id == R.id.menu_news) {
             drawerLayout.openDrawer(GravityCompat.END);
+            return true;
+        }else if (id == R.id.menu_alipay) {
+
+            String intentFullUrl = "intent://platformapi/startapp?appId=60000098&url=/www/offline_qrcode.html?source=WH_BUS_APP#Intent;scheme=alipays;package=com.eg.android.AlipayGphone;end";
+            Intent intent = null;
+            try {
+                intent = Intent.parseUri(intentFullUrl, Intent.URI_INTENT_SCHEME);
+                startActivity(intent);
+            } catch (URISyntaxException e) {
+//                    e.printStackTrace();
+                Toast.makeText(MainActivity.this, "失败,支付宝有安装?", Toast.LENGTH_SHORT).show();
+            }
+
+
             return true;
         }
         return super.onOptionsItemSelected(item);

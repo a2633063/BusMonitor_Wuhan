@@ -2,6 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/menu_alipay"
+        android:orderInCategory="100"
+        android:title="支付宝\n公交卡"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/menu_add"
         android:orderInCategory="100"
         android:title="增加\n线路"
