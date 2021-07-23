@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <!--重要meta, 必须!-->
+    <meta name="viewport" content="width=320, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0,shrink-to-fit=no" />
+    <title>SUBWAY</title>
+</head>
+<body>
+    <div id="mybox"></div>
+    <script src="https://webapi.amap.com/subway?v=1.0&key=123333&callback=cbk"></script>
+    <script type="text/javascript">
+    window.cbk = function() {
+        var mySubway = subway("mybox", {
+            adcode: 4201,
+            theme: "colorful",
+            client: 0,
+            easy: 1,
+            doubleclick: {
+                switch: true
+            }
+        });
+
+        //地铁加载完成，执行complete事件
+        mySubway.event.on("subway.complete", function(ev, info) {
+            var id = info.id;
+			mySubway.scale(0.6);
+			//mySubway.setCenter("4号线");
+        });
+
+        //点击站点，显示此站点的信息窗体
+        mySubway.event.on("station.touch", function(ev, info) {
+            var id = info.id;
+            mySubway.stopAnimation();
+            mySubway.addInfoWindow(id, {});
+            var center = mySubway.getStCenter(id);
+            mySubway.setCenter(center);
+        });
+
+
+
+        //点击空白, 关闭infowindow
+        mySubway.event.on("subway.touch", function() {
+            mySubway.clearInfoWindow();
+        });
+
+        //设置起点
+        mySubway.event.on("startStation.touch", function(ev, info) {
+            mySubway.stopAnimation();
+            mySubway.clearInfoWindow();
+            mySubway.setStart(info.id, {});
+            startInfo = info;
+            route();
+        });
+
+        //设置终点
+        mySubway.event.on("endStation.touch", function(ev, info) {
+            mySubway.stopAnimation();
+            mySubway.clearInfoWindow();
+            mySubway.setEnd(info.id, {});
+            endInfo = info;
+            route();
+        });
+
+        //路线规划
+        var startInfo = {},
+            endInfo = {};
+        function route() {
+            if (startInfo.id && endInfo.id) {
+                mySubway.route(startInfo.id, endInfo.id, {});
+                startInfo = {};
+                endInfo = {};
+            }
+        }
+    };
+    </script>
+</body>
+</html>

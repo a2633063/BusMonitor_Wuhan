@@ -7,6 +7,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Toast;
 
@@ -25,11 +26,16 @@ public class NewsActivity extends AppCompatActivity {
         }
 
         webView=findViewById(R.id.webView);
+        WebSettings webSettings = webView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
         //region 设备
         Intent intent = this.getIntent();
         try {
             String url=intent.getStringExtra("url");
             webView.loadUrl(url);
+            if(url.startsWith("file")) {
+                this.setTitle("地铁线路图");
+            }
         } catch (Exception e) {
             e.printStackTrace();
 

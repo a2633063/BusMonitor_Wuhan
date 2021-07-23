@@ -510,6 +510,11 @@ public class MainActivity extends AppCompatActivity {
 
 
             return true;
+        } else if (id == R.id.menu_subway) {
+            Intent intent = new Intent(MainActivity.this, NewsActivity.class);
+            intent.putExtra("url", "file:///android_asset/subway.html");
+            startActivity(intent);
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
