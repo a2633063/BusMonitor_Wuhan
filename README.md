@@ -7,6 +7,8 @@
 如果有认为问题请及时联系我: [**zip_zhang@foxmail.com**](mailto:zip_zhang@foxmail.com)
 
 
+没什么讨论的地方 建立了个QQ群  [745958041  点击直接加群](https://jq.qq.com/?_wv=1027&k=FM8XD620)  加群答案为  `zbus`  (全部小写)
+
 
 apk文件下载: https://github.com/a2633063/BusMonitor_Wuhan/releases/latest
 
