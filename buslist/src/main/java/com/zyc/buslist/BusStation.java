@@ -3,7 +3,7 @@ package com.zyc.buslist;
 public class BusStation {
 //    String stopId;      //车站编号
 //    int stopOrder=0;    //车站在此线路序号
-//    String metro;       //地铁信息
+    String metro;       //地铁信息
     String name;
     int arrive=0;
     int pass=0;
@@ -87,11 +87,11 @@ public class BusStation {
 //        this.stopOrder = stopOrder;
 //    }
 //
-//    public String getMetro() {
-//        return metro;
-//    }
-//
-//    public void setMetro(String metro) {
-//        this.metro = metro;
-//    }
+    public String getMetro() {
+        return metro;
+    }
+
+    public void setMetro(String metro) {
+        this.metro = metro;
+    }
 }

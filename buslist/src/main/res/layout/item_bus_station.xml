@@ -15,6 +15,7 @@
         app:layout_constraintEnd_toStartOf="@id/line_right"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/tv_dot" />
+
     <View
         android:id="@+id/line_right"
         android:layout_width="0dp"
@@ -25,31 +26,32 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/tv_dot" />
+
     <TextView
         android:id="@+id/tv_pass"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:background="@drawable/ic_bus_selected_24dp"
-        android:gravity="center"
+        android:gravity="center|top"
         android:text=""
         android:textColor="#ffffff"
         android:textSize="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/tv_arrive"
         app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/tv_dot"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/ic_dot_unselected_24dp"
-        android:gravity="center"
+        android:gravity="center|top"
         android:text="15"
         android:textColor="@android:color/white"
         android:textSize="10dp"
         app:layout_constraintEnd_toEndOf="@id/tv_arrive"
         app:layout_constraintStart_toStartOf="@id/tv_arrive"
-        app:layout_constraintTop_toBottomOf="@id/tv_arrive"
-        app:layout_constraintBottom_toTopOf="@id/name"/>
+        app:layout_constraintTop_toBottomOf="@id/tv_arrive" />
 
     <TextView
         android:id="@+id/tv_arrive"
@@ -60,29 +62,34 @@
         android:text=""
         android:textColor="#ffffff"
         android:textSize="8dp"
-        app:layout_constraintBottom_toTopOf="@id/tv_dot"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
 
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:ems="1"
+        android:gravity="center|top"
+        android:maxEms="1"
+        android:text="这是一个测试代码段"
+        android:textSize="15dp"
+        app:layout_constraintEnd_toEndOf="@id/tv_dot"
+        app:layout_constraintStart_toStartOf="@id/tv_dot"
+        app:layout_constraintTop_toBottomOf="@id/tv_dot" />
 
-        <TextView
-            android:id="@+id/name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/tv_dot"
-            app:layout_constraintStart_toStartOf="@id/tv_dot"
-            app:layout_constraintTop_toBottomOf="@id/tv_dot"
-            android:layout_gravity="center_horizontal"
-            android:ems="1"
-            android:gravity="center"
-            android:maxEms="1"
-            android:text="这是一个测试代码段"
-            android:textSize="15dp" />
+    <LinearLayout
+        android:id="@+id/ll_metor"
+        android:layout_marginStart="2dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintStart_toEndOf="@+id/name"
+        app:layout_constraintTop_toBottomOf="@+id/tv_dot">
 
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

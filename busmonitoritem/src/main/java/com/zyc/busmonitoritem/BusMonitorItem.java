@@ -159,6 +159,7 @@ public class BusMonitorItem extends LinearLayout {
                         //region 更新车站信息
                         for (int i = 0; i < jsonStops.length(); i++) {
                             BusStation b = new BusStation(jsonStops.getJSONObject(i).getString("stopName"));
+                            b.setMetro(jsonStops.getJSONObject(i).getString("metro"));
                             busList.addBusStation(b);
                         }
                         if (bus.getSelected() < 0 || bus.getSelected() >= busList.getCount()) {
@@ -290,6 +291,7 @@ public class BusMonitorItem extends LinearLayout {
                     } catch (JSONException e) {
                         e.printStackTrace();
                         tvErr.setVisibility(VISIBLE);
+                        tvErr.setText("获取数据失败\r\n请刷新重试");
                         busList.setVisibility(GONE);
                     }
 

@@ -1,13 +1,18 @@
 package com.zyc.buslist;
 
 
+import androidx.annotation.ColorInt;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.HashMap;
@@ -50,6 +55,7 @@ public class BusListAdapter extends RecyclerView.Adapter<BusListAdapter.ViewHold
         TextView dot;
         View lineRight;
         View lineleft;
+        LinearLayout ll_metor;
 
         public ViewHolder(View view) {
             super(view);
@@ -59,6 +65,7 @@ public class BusListAdapter extends RecyclerView.Adapter<BusListAdapter.ViewHold
             dot = view.findViewById(R.id.tv_dot);
             lineRight = view.findViewById(R.id.line_right);
             lineleft = view.findViewById(R.id.line_left);
+            ll_metor = view.findViewById(R.id.ll_metor);
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -94,7 +101,7 @@ public class BusListAdapter extends RecyclerView.Adapter<BusListAdapter.ViewHold
         final TextView v = holder.name;
         if (textSizeHashMap.get(v.getText().length()) != null)
             v.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSizeHashMap.get(v.getText().length()));
-        else v.setTextSize(TypedValue.COMPLEX_UNIT_PX, 40);
+        else v.setTextSize(TypedValue.COMPLEX_UNIT_PX, 50);
 
         holder.name.post(new Runnable() {
             public void run() {
@@ -179,6 +186,72 @@ public class BusListAdapter extends RecyclerView.Adapter<BusListAdapter.ViewHold
         }
         //endregion
 
+
+        //region 显示地铁相关信息
+        try {
+            @ColorInt int motor_color[] ={
+                    0xff000000,
+                    0xff3080B7,  //1号线
+                    0xffEB81B9,  //2号线
+                    0xffDAC17D,  //3号线
+                    0xff86B81C,  //4号线
+                    0xffB85A4E,  //5号线
+                    0xff018237,  //6号线
+                    0xffEE782E,  //7号线
+                    0xff99ADAC,  //8号线
+                    0xff000000,  //9号线 无
+                    0xff000000,  //10号线 无
+                    0xffFCD600,  //11号线
+                    0xff000000,  //12号线 无
+                    0xff000000,  //13号线 无
+                    0xff000000,  //14号线 无
+                    0xff000000,  //15号线 无
+                    0xffD10195,  //16号线
+                    0xff000000,  //17号线 无
+                    0xff000000,  //18号线 无
+                    0xff000000,  //19号线 无
+                    0xff000000,  //20号线 无
+                    0xffD10195,  //21号线(阳逻线)
+            };
+
+            for (int i = 0; holder.ll_metor.getChildCount()>0; i++) {
+                holder.ll_metor.removeViewAt(0);
+            }
+
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            params.setMargins(0,0,0,3);
+
+            String metor[] = busStation.getMetro().split(",");
+            for (String s : metor) {
+                if (s.length()<1) continue;
+                int metor_line=0;
+                try {
+                    metor_line=Integer.parseInt(s.replaceAll("\\D",""));
+                } catch (NumberFormatException e) {
+                    metor_line=0;
+                }
+                TextView t=new TextView(holder.name.getContext());
+                t.setText(s);
+                t.setEms(1);
+                t.setMaxEms(1);
+                t.setMinEms(1);
+                t.setGravity(Gravity.CENTER);
+                t.setBackgroundColor(0xff3080B7);
+                t.setTextColor(0xffffffff);
+                t.setLineSpacing(-10,1);
+                t.setTextSize(TypedValue.COMPLEX_UNIT_PX, 40);
+                t.setLayoutParams(params);
+                t.setPadding(4,1,4,1);
+                GradientDrawable gradientDrawable=(GradientDrawable)(t.getContext().getResources().getDrawable(R.drawable.fillet));
+                gradientDrawable.setColor(motor_color[metor_line]);
+                t.setBackground(gradientDrawable);
+                holder.ll_metor.addView(t);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //endregion
     }
 
     @Override

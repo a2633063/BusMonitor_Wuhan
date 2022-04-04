@@ -50,4 +50,9 @@
         android:layout_height="wrap_content"
         android:text="@string/nav_header_subtitle" />
 
+    <TextView
+        android:id="@+id/tv_joinQQGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="QQ群:745958041  点击加群" />
 </LinearLayout>

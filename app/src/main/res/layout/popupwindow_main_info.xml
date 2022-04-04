@@ -65,7 +65,12 @@ android:background="@android:color/white"
                 android:layout_height="wrap_content"
                 android:text="https://github.com/a2633063/BusMonitor_Wuhan\nhttps://gitee.com/a2633063/BusMonitor_Wuhan"
                 android:textSize="13dp" />
-
+            <TextView
+                android:id="@+id/tv_qq_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="\n建立了个QQ群,欢迎各位入群讨论:745958041 点此直接入群 入群答案:zbus"
+                android:textSize="15dp" />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

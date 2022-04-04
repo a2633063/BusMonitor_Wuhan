@@ -1,6 +1,8 @@
 package com.zyc.busmonitor;
 
 import android.annotation.SuppressLint;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -69,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     DrawerLayout drawerLayout;
     RecyclerView mainRecyclerView;
+    TextView tv_joinQQGroup;
 
     List<BusLine> mData = new ArrayList<>();
     private MainRecyclerAdapter adapter;
@@ -394,6 +397,15 @@ public class MainActivity extends AppCompatActivity {
         //endregion
 
 
+        nav_view.getHeaderView(0).findViewById(R.id.tv_joinQQGroup)
+        .setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                joinQQGroup();
+            }
+        });
+
+        //region 公告
         lv_news = findViewById(R.id.lv_news);
         newsAdapter = new MainNewsListAdapter(this, NewsList);
         lv_news.setAdapter(newsAdapter);
@@ -412,6 +424,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        //endregion
         //endregion
 
         //region 获取公告内容
@@ -598,6 +611,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         //endregion
+
+        //region 作者github跳转
+        TextView tv_qq_group = popupView.findViewById(R.id.tv_qq_group);
+        tv_qq_group.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                joinQQGroup();
+            }
+        });
+        //endregion
+
         //region app页面跳转
         popupView.findViewById(R.id.btn_app).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -673,4 +697,25 @@ public class MainActivity extends AppCompatActivity {
     }
     //endregion
 
+    //region 加QQ群
+    private void joinQQGroup()
+    {
+        Intent intent = new Intent();
+        intent.setData(Uri.parse("mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq.com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26jump_from%3Dwebapi%26k%3D" + "orZMb-cWCbpV2qEcfSINdUkUj4CR-beT"));
+        // 此Flag可根据具体产品需要自定义，如设置，则在加群界面按返回，返回手Q主界面，不设置，按返回会返回到呼起产品界面    //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        try {
+            startActivity(intent);
+            try {
+                ClipData myClip = ClipData.newPlainText("text", "zbus");
+                ((ClipboardManager)getSystemService(CLIPBOARD_SERVICE)).setPrimaryClip(myClip);
+                Toast.makeText(MainActivity.this, "已将加群密码复制到剪贴板!", Toast.LENGTH_SHORT).show();
+            } catch (Exception e) {
+                //e.printStackTrace();
+            }
+        } catch (Exception e) {
+            // 未安装手Q或安装的版本不支持
+            Toast.makeText(MainActivity.this, "未安装手Q!", Toast.LENGTH_SHORT).show();
+        }
+    }
+    //endregion
 }

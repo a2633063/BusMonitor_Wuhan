@@ -20,6 +20,7 @@ public class WebService {
 
         result = httpGet(uri);
         if (result == null) result = httpGet(uri);
+        if (result == null) result = httpGet(uri);
         return result;
     }
 
