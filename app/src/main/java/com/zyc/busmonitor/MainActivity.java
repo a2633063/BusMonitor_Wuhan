@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.Html;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -98,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
                     updateListFlag = true;
                     break;
                 //endregion
-                //region 更新公告内容
+                //region 更新公交公告内容
                 case 1:
                     final int page = msg.arg1;
                     Log.d(Tag, "获取公告,页码:" + page);
@@ -107,13 +108,13 @@ public class MainActivity extends AppCompatActivity {
                         public void run() {
                             Message msg = new Message();
                             msg.what = 2;
-                            msg.obj = WebService.WebConnectPost("http://manage.wuhancloud.cn/notice/queryHasPublish.do", "appId=HvBJ1PkBttbqxeBF46Aa&PageSize=10&PageIndex=" + page + "&areaCode=420100");
+                            msg.obj = WebService.WebConnectPost("http://advertisement.whgjzt.com/notice/queryHasPublish.do", "appId=HvBJ1PkBttbqxeBF46Aa&PageSize=10&PageIndex=" + page + "&areaCode=420100");
                             handler.sendMessageDelayed(msg, 0);// 执行耗时的方法之后发送消给handler
                         }
                     }).start();
                     break;
                 //endregion
-                //region 获取公告内容
+                //region 获取公交公告内容
                 case 2:
                     result = (String) msg.obj;
                     Log.d(Tag, "result:" + result);
@@ -160,6 +161,18 @@ public class MainActivity extends AppCompatActivity {
 
                 //region 获取app最新版本
                 case 100:
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Message msg = new Message();
+                            msg.what = 101;
+                            String res = WebService.WebConnect("https://gitee.com/api/v5/repos/a2633063/BusMonitor_Wuhan/releases/latest");
+                            msg.obj = res;
+                            handler.sendMessageDelayed(msg, 0);// 执行耗时的方法之后发送消给handler
+                        }
+                    }).start();
+                    break;
+                case 101:
                     try {
                         if (msg.obj == null) throw new JSONException("获取版本信息失败,请重试");
                         JSONObject obj = new JSONObject((String) msg.obj);
@@ -225,6 +238,78 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 //endregion
 
+
+                //region 获取app公告
+                case 200:
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            String owner = "a2633063";
+                            String repo = "Release";
+                            String path = "/notice";
+                            String ref = "master";
+                            Message msg = new Message();
+                            msg.what = 201;
+                            String res = WebService.WebConnect("https://gitee.com/api/v5/repos/" + owner + "/" + repo + "/contents" + path);
+                            msg.obj = res;
+                            handler.sendMessageDelayed(msg, 0);// 执行耗时的方法之后发送消给handler
+                        }
+                    }).start();
+                    break;
+                case 201:
+                    try {
+                        if (msg.obj == null) throw new JSONException("获取公告路径信息失败,请重试");
+
+                        JSONArray obj = new JSONArray((String) msg.obj);
+
+                        String file_name = "BusMonitor_Wuhan.txt";
+                        String sha = null;
+                        String notice_content_url = null;
+                        for (int i = 0; i < obj.length(); i++) {
+                            JSONObject jsonFile = obj.getJSONObject(i);
+                            if (!jsonFile.getString("type").equals("file")) continue;
+                            if (jsonFile.getString("name").equals(file_name)) {
+                                sha = jsonFile.getString("sha");
+                                notice_content_url = jsonFile.getString("url");
+                            }
+                        }
+                        if (sha == null || notice_content_url == null) break;
+
+                        String notice_no_ask = mSharedPreferences.getString("notice_no_ask", "");
+                        if (!notice_no_ask.equals(sha)) {
+                            String finalNotice_content_url = notice_content_url;
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Message msg = new Message();
+                                    msg.what = 202;
+                                    String res = WebService.WebConnect(finalNotice_content_url);
+                                    msg.obj = res;
+                                    handler.sendMessageDelayed(msg, 0);// 执行耗时的方法之后发送消给handler
+                                }
+                            }).start();
+                        }
+
+
+                    } catch (JSONException e) {
+//                        e.printStackTrace();
+                        Log.e(Tag, "获取APP公告文件路径失败");
+                    }
+                    break;
+                case 202:
+                    try {
+                        if (msg.obj == null) throw new JSONException("获取APP公告內容失败,请重试");
+
+                        JSONObject obj = new JSONObject((String) msg.obj);
+                        String content=obj.getString("content");
+                        content=new String(Base64.decode(content.getBytes(), Base64.DEFAULT));
+                        noticeShow(content,obj.getString("sha"));
+                    } catch (JSONException e) {
+//                        e.printStackTrace();
+                        Log.e(Tag, "获取APP公告內容失败");
+                    }
+                    break;
+                //endregion
             }
 
         }
@@ -262,7 +347,7 @@ public class MainActivity extends AppCompatActivity {
                         Message msg = new Message();
                         msg.what = 1;
                         msg.arg1 = newsPage;
-                        handler.sendMessageDelayed(msg, 0);// 执行耗时的方法之后发送消给handler
+                        //handler.sendMessageDelayed(msg, 0);// 执行耗时的方法之后发送消给handler
 
                     }
                 }
@@ -398,12 +483,12 @@ public class MainActivity extends AppCompatActivity {
 
 
         nav_view.getHeaderView(0).findViewById(R.id.tv_joinQQGroup)
-        .setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                joinQQGroup();
-            }
-        });
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        joinQQGroup();
+                    }
+                });
 
         //region 公告
         lv_news = findViewById(R.id.lv_news);
@@ -431,21 +516,15 @@ public class MainActivity extends AppCompatActivity {
         Message msg = new Message();
         msg.what = 1;
         msg.arg1 = newsPage;
-        handler.sendMessageDelayed(msg, 0);// 执行耗时的方法之后发送消给handler
+        //handler.sendMessageDelayed(msg, 0);// 执行耗时的方法之后发送消给handler
         //endregion
 
 
         //region 获取最新版本
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Message msg = new Message();
-                msg.what = 100;
-                String res = WebService.WebConnect("https://gitee.com/api/v5/repos/a2633063/BusMonitor_Wuhan/releases/latest");
-                msg.obj = res;
-                handler.sendMessageDelayed(msg, 0);// 执行耗时的方法之后发送消给handler
-            }
-        }).start();
+        handler.sendEmptyMessage(100);
+        //endregion
+        //region 获取公告
+        handler.sendEmptyMessage(200);
         //endregion
     }
 
@@ -509,7 +588,7 @@ public class MainActivity extends AppCompatActivity {
         } else if (id == R.id.menu_news) {
             drawerLayout.openDrawer(GravityCompat.END);
             return true;
-        }else if (id == R.id.menu_alipay) {
+        } else if (id == R.id.menu_alipay) {
 
             String intentFullUrl = "intent://platformapi/startapp?appId=60000098&url=/www/offline_qrcode.html?source=WH_BUS_APP#Intent;scheme=alipays;package=com.eg.android.AlipayGphone;end";
             Intent intent = null;
@@ -669,6 +748,27 @@ public class MainActivity extends AppCompatActivity {
                         Uri uri = Uri.parse("https://github.com/a2633063/BusMonitor_Wuhan/releases/latest");
                         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                         startActivity(intent);
+                        new AlertDialog.Builder(MainActivity.this)
+                                .setTitle("网站打不开使用备用地址?")
+                                .setPositiveButton("备用地址1", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Uri uri = Uri.parse("https://gitee.com/a2633063/BusMonitor_Wuhan/releases");
+                                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                                        startActivity(intent);
+                                    }
+                                })
+                                .setNegativeButton("取消", null)
+                                .setNeutralButton("直接下载", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Uri uri = Uri.parse("http://zipzhang.top/BusMonitor_Wuhan/zBus_" + tag_name + ".apk");
+                                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                                        startActivity(intent);
+                                    }
+                                })
+                                .create()
+                                .show();
                     }
                 })
                 .setNegativeButton("取消", null)
@@ -695,11 +795,41 @@ public class MainActivity extends AppCompatActivity {
         //endregion
 
     }
+
+    private void noticeShow(final String content, final String sha) {
+
+        //region 显示APP公告弹窗
+        AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this)
+                .setTitle("公告")
+                .setMessage(content)
+                .setPositiveButton("确定", null)
+                .setNeutralButton("不再显示", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mEditor = getSharedPreferences("setting", 0).edit();
+                        mEditor.putString("notice_no_ask", sha);
+                        mEditor.commit();
+                    }
+                })
+                .create();
+        alertDialog.show();
+
+        // 在dialog执行show之后才能来设置
+        TextView tvMsg = (TextView) alertDialog.findViewById(android.R.id.message);
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            tvMsg.setText(Html.fromHtml(content.replace("\n", "<br />"), Html.FROM_HTML_MODE_COMPACT));
+        } else {
+            tvMsg.setText(Html.fromHtml(content.replace("\n", "<br />")));
+        }
+        //endregion
+
+    }
+
     //endregion
 
     //region 加QQ群
-    private void joinQQGroup()
-    {
+    private void joinQQGroup() {
         Intent intent = new Intent();
         intent.setData(Uri.parse("mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq.com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26jump_from%3Dwebapi%26k%3D" + "orZMb-cWCbpV2qEcfSINdUkUj4CR-beT"));
         // 此Flag可根据具体产品需要自定义，如设置，则在加群界面按返回，返回手Q主界面，不设置，按返回会返回到呼起产品界面    //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -707,7 +837,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             try {
                 ClipData myClip = ClipData.newPlainText("text", "zbus");
-                ((ClipboardManager)getSystemService(CLIPBOARD_SERVICE)).setPrimaryClip(myClip);
+                ((ClipboardManager) getSystemService(CLIPBOARD_SERVICE)).setPrimaryClip(myClip);
                 Toast.makeText(MainActivity.this, "已将加群密码复制到剪贴板!", Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
                 //e.printStackTrace();
