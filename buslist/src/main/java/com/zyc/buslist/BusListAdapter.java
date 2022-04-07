@@ -6,6 +6,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.drawable.GradientDrawable;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -233,17 +234,17 @@ public class BusListAdapter extends RecyclerView.Adapter<BusListAdapter.ViewHold
                     metor_line = 0;
                 }
                 TextView t = new TextView(holder.name.getContext());
+                s=s.replaceAll("(\\D)","$1\n").replaceAll("(\\d+)","$1\n");
+                s=s.replaceAll("\n$","");
+                t.setMinWidth((int)t.getPaint().measureText("12"));
                 t.setText(s);
-                t.setEms(1);
-                t.setMaxEms(1);
-                t.setMinEms(1);
                 t.setGravity(Gravity.CENTER);
                 t.setBackgroundColor(0xff3080B7);
                 t.setTextColor(0xffffffff);
                 t.setLineSpacing(-10, 1);
                 t.setTextSize(TypedValue.COMPLEX_UNIT_PX, 40);
                 t.setLayoutParams(params);
-                t.setPadding(4, 1, 4, 1);
+                t.setPadding(0, 2, 0, 2);
                 GradientDrawable gradientDrawable = (GradientDrawable) (t.getContext().getResources().getDrawable(R.drawable.metor_fillet));
                 gradientDrawable.setColor(motor_color[metor_line]);
                 t.setBackground(gradientDrawable);
