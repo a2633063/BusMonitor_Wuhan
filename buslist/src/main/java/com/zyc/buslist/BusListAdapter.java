@@ -154,12 +154,12 @@ public class BusListAdapter extends RecyclerView.Adapter<BusListAdapter.ViewHold
         holder.tvPass.setVisibility(busStation.getPass() == 0 ? View.INVISIBLE : View.VISIBLE);
 
 //        if (busStation.getArrive() > 1) {
-            holder.tvArrive.setText((busStation.getArrive() > 1)?String.valueOf(busStation.getArrive()):"");
-            if (busStation.getArriveDoubleDeck() < busStation.getArrive()) {
-                holder.tvArrive.setBackgroundResource(position > mCurrentSelected ? R.drawable.ic_bus_unselected_24dp : R.drawable.ic_bus_station_selected_24dp);
-            } else {
-                holder.tvArrive.setBackgroundResource(position > mCurrentSelected ? R.drawable.ic_bus_double_unselected_24dp : R.drawable.ic_bus_double_station_selected_24dp);
-            }
+        holder.tvArrive.setText((busStation.getArrive() > 1) ? String.valueOf(busStation.getArrive()) : "");
+        if (busStation.getArriveDoubleDeck() < busStation.getArrive()) {
+            holder.tvArrive.setBackgroundResource(position > mCurrentSelected ? R.drawable.ic_bus_unselected_24dp : R.drawable.ic_bus_station_selected_24dp);
+        } else {
+            holder.tvArrive.setBackgroundResource(position > mCurrentSelected ? R.drawable.ic_bus_double_unselected_24dp : R.drawable.ic_bus_double_station_selected_24dp);
+        }
 //        } else {
 //            holder.tvArrive.setText("");
 //            if (busStation.getArriveDoubleDeck() < 1 || busStation.getArriveDoubleDeck() < busStation.getArrive()) {
@@ -189,7 +189,7 @@ public class BusListAdapter extends RecyclerView.Adapter<BusListAdapter.ViewHold
 
         //region 显示地铁相关信息
         try {
-            @ColorInt int motor_color[] ={
+            @ColorInt int motor_color[] = {
                     0xff000000,
                     0xff3080B7,  //1号线
                     0xffEB81B9,  //2号线
@@ -214,24 +214,25 @@ public class BusListAdapter extends RecyclerView.Adapter<BusListAdapter.ViewHold
                     0xffD10195,  //21号线(阳逻线)
             };
 
-            for (int i = 0; holder.ll_metor.getChildCount()>0; i++) {
+            for (int i = 0; holder.ll_metor.getChildCount() > 0; i++) {
                 holder.ll_metor.removeViewAt(0);
             }
 
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            params.setMargins(0,0,0,3);
+            params.setMargins(0, 0, 0, 3);
 
             String metor[] = busStation.getMetro().split(",");
             for (String s : metor) {
-                if (s.length()<1) continue;
-                int metor_line=0;
+                if (s.length() < 1) continue;
+                int metor_line = 0;
                 try {
-                    metor_line=Integer.parseInt(s.replaceAll("\\D",""));
+                    metor_line = Integer.parseInt(s.replaceAll("\\D", ""));
+                    if (metor_line >= motor_color.length) metor_line = 0;
                 } catch (NumberFormatException e) {
-                    metor_line=0;
+                    metor_line = 0;
                 }
-                TextView t=new TextView(holder.name.getContext());
+                TextView t = new TextView(holder.name.getContext());
                 t.setText(s);
                 t.setEms(1);
                 t.setMaxEms(1);
@@ -239,11 +240,11 @@ public class BusListAdapter extends RecyclerView.Adapter<BusListAdapter.ViewHold
                 t.setGravity(Gravity.CENTER);
                 t.setBackgroundColor(0xff3080B7);
                 t.setTextColor(0xffffffff);
-                t.setLineSpacing(-10,1);
+                t.setLineSpacing(-10, 1);
                 t.setTextSize(TypedValue.COMPLEX_UNIT_PX, 40);
                 t.setLayoutParams(params);
-                t.setPadding(4,1,4,1);
-                GradientDrawable gradientDrawable=(GradientDrawable)(t.getContext().getResources().getDrawable(R.drawable.fillet));
+                t.setPadding(4, 1, 4, 1);
+                GradientDrawable gradientDrawable = (GradientDrawable) (t.getContext().getResources().getDrawable(R.drawable.metor_fillet));
                 gradientDrawable.setColor(motor_color[metor_line]);
                 t.setBackground(gradientDrawable);
                 holder.ll_metor.addView(t);
