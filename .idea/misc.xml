@@ -32,8 +32,24 @@
         <entry key="..\:/Program/Android-AS/BusMonitor_Wuhan/busmonitoritem/src/main/res/drawable/ic_auto_refresh_24dp.xml" value="0.36" />
         <entry key="..\:/Program/Android-AS/BusMonitor_Wuhan/busmonitoritem/src/main/res/drawable/ic_auto_refresh_select_24dp.xml" value="0.36" />
         <entry key="..\:/Program/Android-AS/BusMonitor_Wuhan/busmonitoritem/src/main/res/drawable/ic_collect_24dp.xml" value="0.36" />
+        <entry key="..\:/Program/Android/BusMonitor_Wuhan/app/src/main/res/drawable/background_red_fill.xml" value="0.20625" />
+        <entry key="..\:/Program/Android/BusMonitor_Wuhan/app/src/main/res/drawable/background_white_fill.xml" value="0.20625" />
+        <entry key="..\:/Program/Android/BusMonitor_Wuhan/app/src/main/res/drawable/ic_baseline_arrow_back_24.xml" value="0.24322916666666666" />
+        <entry key="..\:/Program/Android/BusMonitor_Wuhan/app/src/main/res/drawable/ic_baseline_email_24.xml" value="0.20625" />
+        <entry key="..\:/Program/Android/BusMonitor_Wuhan/app/src/main/res/drawable/ic_info_black_24dp.xml" value="0.20625" />
+        <entry key="..\:/Program/Android/BusMonitor_Wuhan/app/src/main/res/drawable/ic_launcher_background.xml" value="0.20625" />
+        <entry key="..\:/Program/Android/BusMonitor_Wuhan/app/src/main/res/drawable/ic_power_settings_new_black_24dp.xml" value="0.20625" />
+        <entry key="..\:/Program/Android/BusMonitor_Wuhan/app/src/main/res/drawable/ic_settings_black_24dp.xml" value="0.20625" />
+        <entry key="..\:/Program/Android/BusMonitor_Wuhan/app/src/main/res/drawable/side_nav_bar.xml" value="0.20625" />
+        <entry key="..\:/Program/Android/BusMonitor_Wuhan/app/src/main/res/drawable/state_side_nav_bottom_btn.xml" value="0.20625" />
+        <entry key="..\:/Program/Android/BusMonitor_Wuhan/app/src/main/res/layout-v21/item_side_recycler.xml" value="0.19010416666666666" />
+        <entry key="..\:/Program/Android/BusMonitor_Wuhan/app/src/main/res/layout/activity_add_bus.xml" value="0.335" />
+        <entry key="..\:/Program/Android/BusMonitor_Wuhan/app/src/main/res/layout/item_main_recycler.xml" value="0.19010416666666666" />
+        <entry key="..\:/Program/Android/BusMonitor_Wuhan/app/src/main/res/layout/item_side_recycler.xml" value="0.19010416666666666" />
+        <entry key="..\:/Program/Android/BusMonitor_Wuhan/app/src/main/res/layout/list_item_main_news_list.xml" value="0.19010416666666666" />
         <entry key="..\:/Program/Android/BusMonitor_Wuhan/buslist/src/main/res/drawable/fillet.xml" value="0.1515625" />
         <entry key="..\:/Program/Android/BusMonitor_Wuhan/buslist/src/main/res/drawable/metor_fillet.xml" value="0.1515625" />
+        <entry key="..\:/Program/Android/BusMonitor_Wuhan/busmonitoritem/src/main/res/layout/view_bus_monitor_item.xml" value="0.19010416666666666" />
       </map>
     </option>
   </component>

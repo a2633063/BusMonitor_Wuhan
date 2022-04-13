@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.zyc.WebService;
@@ -35,6 +36,7 @@ public class AddBusActivity extends AppCompatActivity {
     private ListView lv;
 
     private EditText editText;
+    private ImageButton imgbtn_return;
 
     //region Handler
     @SuppressLint("HandlerLeak")
@@ -149,7 +151,13 @@ public class AddBusActivity extends AppCompatActivity {
         });
         //endregion
 
-
+        imgbtn_return = findViewById(R.id.imgbtn_return);
+        imgbtn_return.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         editText = findViewById(R.id.editText);
         editText.addTextChangedListener(new TextWatcher() {
             @Override
