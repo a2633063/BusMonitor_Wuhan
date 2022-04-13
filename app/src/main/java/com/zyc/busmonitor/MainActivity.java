@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
     RecyclerView mainRecyclerView;
     TextView tv_joinQQGroup;
-
+    TextView tv_tip;
     List<BusLine> mData = new ArrayList<>();
     private MainRecyclerAdapter adapter;
     private SideRecyclerAdapter sideAdapter;
@@ -97,6 +97,14 @@ public class MainActivity extends AppCompatActivity {
                 //region 列表更新标志位
                 case 0:
                     updateListFlag = true;
+
+                    if (adapter.getItemCount() < 1) {
+                        tv_tip.setVisibility(View.VISIBLE);
+                        mainRecyclerView.setVisibility(View.GONE);
+                    } else {
+                        tv_tip.setVisibility(View.GONE);
+                        mainRecyclerView.setVisibility(View.VISIBLE);
+                    }
                     break;
                 //endregion
                 //region 更新公交公告内容
@@ -301,9 +309,9 @@ public class MainActivity extends AppCompatActivity {
                         if (msg.obj == null) throw new JSONException("获取APP公告內容失败,请重试");
 
                         JSONObject obj = new JSONObject((String) msg.obj);
-                        String content=obj.getString("content");
-                        content=new String(Base64.decode(content.getBytes(), Base64.DEFAULT));
-                        noticeShow(content,obj.getString("sha"));
+                        String content = obj.getString("content");
+                        content = new String(Base64.decode(content.getBytes(), Base64.DEFAULT));
+                        noticeShow(content, obj.getString("sha"));
                     } catch (JSONException e) {
 //                        e.printStackTrace();
                         Log.e(Tag, "获取APP公告內容失败");
@@ -325,6 +333,7 @@ public class MainActivity extends AppCompatActivity {
 
         //region 控件初始化
         log = findViewById(R.id.log);
+        tv_tip = findViewById(R.id.tv_tip);
 
         //region 侧边栏 初始化
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -433,8 +442,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
         }
-//        if (mData.size() == 0)
-//            mData.add(new BusLine("907", "907", 1));
+
         //endregion
 
         //region RecyclerView初始化
@@ -511,6 +519,15 @@ public class MainActivity extends AppCompatActivity {
         });
         //endregion
         //endregion
+
+        if (mData.size() == 0) {
+            //mData.add(new BusLine("907", "907", 1));
+            tv_tip.setVisibility(View.VISIBLE);
+            mainRecyclerView.setVisibility(View.GONE);
+        } else {
+            tv_tip.setVisibility(View.GONE);
+            mainRecyclerView.setVisibility(View.VISIBLE);
+        }
 
         //region 获取公告内容
         Message msg = new Message();
