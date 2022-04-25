@@ -1,8 +1,8 @@
 package com.zyc.buslist;
 
 public class BusStation {
-//    String stopId;      //车站编号
-//    int stopOrder=0;    //车站在此线路序号
+    String stopId;      //车站编号
+    int stopOrder=0;    //车站在此线路序号
     String metro;       //地铁信息
     String name;
     int arrive=0;
@@ -71,22 +71,22 @@ public class BusStation {
         return name;
     }
 
-//    public String getStopId() {
-//        return stopId;
-//    }
-//
-//    public void setStopId(String stopId) {
-//        this.stopId = stopId;
-//    }
-//
-//    public int getStopOrder() {
-//        return stopOrder;
-//    }
-//
-//    public void setStopOrder(int stopOrder) {
-//        this.stopOrder = stopOrder;
-//    }
-//
+    public String getStopId() {
+        return stopId;
+    }
+
+    public void setStopId(String stopId) {
+        this.stopId = stopId;
+    }
+
+    public int getStopOrder() {
+        return stopOrder;
+    }
+
+    public void setStopOrder(int stopOrder) {
+        this.stopOrder = stopOrder;
+    }
+
     public String getMetro() {
         return metro;
     }

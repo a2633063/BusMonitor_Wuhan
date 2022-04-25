@@ -93,7 +93,9 @@ public class BusList extends LinearLayout {
     public int getSelected() {
         return adapter.getSelected();
     }
-
+    public BusStation getSelectedBusStation() {
+        return mDataList.get(adapter.getSelected());
+    }
     public void clearArrive() {
         for (int i = 0; i < mDataList.size(); i++) {
             mDataList.get(i).setArrive(0);

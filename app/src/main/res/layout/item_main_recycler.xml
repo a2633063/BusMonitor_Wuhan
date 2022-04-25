@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="300dp"
     android:background="@drawable/fillet"
-    android:padding="8dp">
+    android:padding="6dp">
 
     <com.zyc.busmonitoritem.BusMonitorItem
         android:id="@+id/BusMonitorItem"

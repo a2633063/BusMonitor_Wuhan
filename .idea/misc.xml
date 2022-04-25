@@ -49,8 +49,11 @@
         <entry key="..\:/Program/Android/BusMonitor_Wuhan/app/src/main/res/layout/item_side_recycler.xml" value="0.19010416666666666" />
         <entry key="..\:/Program/Android/BusMonitor_Wuhan/app/src/main/res/layout/list_item_main_news_list.xml" value="0.19010416666666666" />
         <entry key="..\:/Program/Android/BusMonitor_Wuhan/buslist/src/main/res/drawable/fillet.xml" value="0.1515625" />
+        <entry key="..\:/Program/Android/BusMonitor_Wuhan/buslist/src/main/res/drawable/ic_bus_selected_24dp.xml" value="0.2786458333333333" />
         <entry key="..\:/Program/Android/BusMonitor_Wuhan/buslist/src/main/res/drawable/metor_fillet.xml" value="0.1515625" />
-        <entry key="..\:/Program/Android/BusMonitor_Wuhan/busmonitoritem/src/main/res/layout/view_bus_monitor_item.xml" value="0.19010416666666666" />
+        <entry key="..\:/Program/Android/BusMonitor_Wuhan/buslist/src/main/res/layout/item_bus_station.xml" value="2.0" />
+        <entry key="..\:/Program/Android/BusMonitor_Wuhan/buslist/src/main/res/layout/view_bus_list.xml" value="0.2625" />
+        <entry key="..\:/Program/Android/BusMonitor_Wuhan/busmonitoritem/src/main/res/layout/view_bus_monitor_item.xml" value="0.5" />
       </map>
     </option>
   </component>

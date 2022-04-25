@@ -28,7 +28,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class BusMonitorItem extends LinearLayout {
@@ -40,6 +43,8 @@ public class BusMonitorItem extends LinearLayout {
     TextView tvStationTime;
     TextView tvFirstBus;
     TextView tvSecondBus;
+    TextView tvFirstBusText;
+    TextView tvSecondBusText;
     TextView tvErr;
 
     LinearLayout llAutoRefresh;
@@ -160,6 +165,8 @@ public class BusMonitorItem extends LinearLayout {
                         for (int i = 0; i < jsonStops.length(); i++) {
                             BusStation b = new BusStation(jsonStops.getJSONObject(i).getString("stopName"));
                             b.setMetro(jsonStops.getJSONObject(i).getString("metro"));
+                            b.setStopId(jsonStops.getJSONObject(i).getString("stopId"));
+                            b.setStopOrder(jsonStops.getJSONObject(i).getInt("stopOrder"));
                             busList.addBusStation(b);
                         }
                         if (bus.getSelected() < 0 || bus.getSelected() >= busList.getCount()) {
@@ -288,6 +295,7 @@ public class BusMonitorItem extends LinearLayout {
                         }
 
 
+                        handler.sendEmptyMessage(3);    //查询预计到站时间
                     } catch (JSONException e) {
                         e.printStackTrace();
                         tvErr.setVisibility(VISIBLE);
@@ -295,9 +303,137 @@ public class BusMonitorItem extends LinearLayout {
                         busList.setVisibility(GONE);
                     }
 
+//                    tvFirstBusText.setText("第一辆");
+//                    tvSecondBusText.setText("第二辆");
                     break;
                 //endregion
 
+                //region 获取公交数据后查询预计到站时间
+                case 3:
+                    /* 开启一个新线程，在新线程里执行耗时的方法 */
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            String url = String.format(getResources().getString(R.string.url_arrive_time),
+                                    bus.getLineId(),
+                                    busList.getSelectedBusStation().getStopId(),
+                                    String.valueOf(busList.getSelectedBusStation().getStopOrder()));
+                            Log.d(Tag, "URL:" + url);
+                            String result = WebService.WebConnect(url);
+                            try {
+                                if (result == null) {
+                                    throw new JSONException("无数据返回");
+                                }
+
+                                JSONObject jsonObject = new JSONObject(result);
+                                url = String.format(getResources().getString(R.string.url_departure_time),
+                                        bus.getLineId());
+                                Log.d(Tag, "URL:" + url);
+                                result = WebService.WebConnect(url);
+                                if(result==null) throw new JSONException("无发车时间数据返回");
+                                jsonObject.put("departure_time", new JSONObject(result));
+                                result = jsonObject.toString();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            Message msg = new Message();
+                            msg.what = 4;
+                            msg.obj = result;
+
+                            handler.sendMessageDelayed(msg, 0);// 执行耗时的方法之后发送消给handler
+                        }
+
+                    }).start();
+                    break;
+                //endregion
+
+                //region 返回数据
+                case 4:
+                    //注意:此处将到站时间及发车时间2个api获取到的结果合并成1个json字符串来进行处理
+                    Log.d(Tag, "result:" + (String) msg.obj);
+                    try {
+                        //region 登录返回空数据
+                        if (msg.obj == null) {
+                            throw new JSONException("无数据返回");
+                        }
+                        //endregion
+
+                        JSONObject jsonObject = new JSONObject((String) msg.obj);
+
+                        //region 返回无效数据!
+                        if (!jsonObject.has("resultCode")
+                                || !jsonObject.has("data")
+                                || !jsonObject.getString("resultCode").equals("1")
+                        ) {
+                            throw new JSONException("获取到站时间失败");
+                        }
+                        //endregion
+                        JSONArray jsonData = jsonObject.getJSONArray("data");
+                        if (jsonData.length() < 2) {
+                            throw new JSONException("获取到站时间失败");
+                        }
+
+                        String departure_time_str = "暂无数据";
+                        while (jsonData.getInt(0) < 0 || jsonData.getInt(1) < 0) {
+                            //为方便跳出此判断,此处直接用while替代if
+                            //需要计算发车时间
+                            if (!jsonObject.has("departure_time")
+                                    || jsonObject.optJSONObject("departure_time") == null) {
+                                break;
+                            }
+                            JSONObject jsonDeparture = jsonObject.getJSONObject("departure_time");
+                            if (!jsonDeparture.optString("resultCode", "0").equals("1")) break;
+                            if (!jsonDeparture.has("data")) break;
+                            if (!jsonDeparture.has("data")) break;
+                            String departure_time = jsonDeparture.getString("data");
+                            if(departure_time.length()<10) break;
+                            try {
+                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                Date date = sdf.parse(departure_time);
+
+
+                                long diff = date.getTime() - new Date(System.currentTimeMillis()).getTime();
+                                //getTime() 得到的是以毫秒为单位的long数据
+                                //除以1000*60转化为以分钟为单位
+                                diff = diff / 1000;
+                                Log.d(Tag, diff + "秒后发车");
+                                diff = (diff + 30) / 60;  //加30是为了四舍五入
+                                if (diff < 120)
+                                    departure_time_str = diff + "分钟后发车";
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                                break;
+                            }
+
+                            break;
+                        }
+
+                        if (jsonData.getInt(0) > 0)
+                            tvFirstBusText.setText(jsonData.getInt(0) + "分钟");
+                        else if (jsonData.getInt(0) == 0) {
+                            tvFirstBusText.setText("第一辆抵达");
+                        } else if (jsonData.getInt(0) < 0) {
+                            //tvFirstBus.setText("无");
+                            tvFirstBusText.setText(departure_time_str);
+                            tvSecondBusText.setText("暂无数据");
+                            break;
+                        }
+                        if (jsonData.getInt(1) > 0)
+                            tvSecondBusText.setText(jsonData.getInt(1) + "分钟");
+                        else if (jsonData.getInt(1) == 0) {
+                            tvSecondBusText.setText("第二辆抵达");
+                        } else if (jsonData.getInt(1) < 0) {
+                            //tvFirstBus.setText("无");
+                            tvSecondBusText.setText(departure_time_str);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+
+                        tvFirstBusText.setText("第一辆");
+                        tvSecondBusText.setText("第二辆");
+                    }
+                    break;
+                //endregion
             }
         }
     };
@@ -306,6 +442,8 @@ public class BusMonitorItem extends LinearLayout {
     public void setBus(BusLine b) {
         bus = b;
         init();
+
+        refresh();
     }
 
     public BusLine getBus() {
@@ -329,6 +467,8 @@ public class BusMonitorItem extends LinearLayout {
         tvStationTime = findViewById(R.id.tv_station_time);
         tvFirstBus = findViewById(R.id.tv_first_bus);
         tvSecondBus = findViewById(R.id.tv_second_bus);
+        tvFirstBusText = findViewById(R.id.tv_first_text);
+        tvSecondBusText = findViewById(R.id.tv_second_text);
 
         //region 底部按钮
         tvAutoRefresh = findViewById(R.id.tv_auto_refresh);
@@ -461,7 +601,6 @@ public class BusMonitorItem extends LinearLayout {
 ////                if (isAutoRefresh) setAutoRefresh(AutoRefresh);
 //            }
 //        });
-        refresh();
     }
 
     //region 单击回调事件
