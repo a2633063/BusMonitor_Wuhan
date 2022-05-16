@@ -512,6 +512,7 @@ public class MainActivity extends AppCompatActivity {
         lv_news.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (position >= NewsList.size()) return;
                 Intent intent = new Intent(MainActivity.this, NewsActivity.class);
                 intent.putExtra("url", NewsList.get(position).getContentUrl());
                 startActivity(intent);
