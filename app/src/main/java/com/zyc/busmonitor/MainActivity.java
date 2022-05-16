@@ -352,11 +352,11 @@ public class MainActivity extends AppCompatActivity {
             public void onDrawerOpened(@NonNull View drawerView) {
 
                 if (drawerView.getId() == nav_news.getId()) {
-                    if (NewsList.size() < 20) {
+                    if (NewsList.size() < 10) {
                         Message msg = new Message();
                         msg.what = 1;
                         msg.arg1 = newsPage;
-                        //handler.sendMessageDelayed(msg, 0);// 执行耗时的方法之后发送消给handler
+                        handler.sendMessageDelayed(msg, 0);// 执行耗时的方法之后发送消给handler
 
                     }
                 }
@@ -530,9 +530,9 @@ public class MainActivity extends AppCompatActivity {
         }
 
         //region 获取公告内容
-        Message msg = new Message();
-        msg.what = 1;
-        msg.arg1 = newsPage;
+        //Message msg = new Message();
+        //msg.what = 1;
+        //msg.arg1 = newsPage;
         //handler.sendMessageDelayed(msg, 0);// 执行耗时的方法之后发送消给handler
         //endregion
 

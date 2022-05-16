@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">BusMonitorItem</string>
-    <string name="url_bus">http://bus.wuhancloud.cn:9087/website//web/420100/line/%1$s.do?Type=LineDetail</string>
-    <string name="url_search_bus">http://bus.wuhancloud.cn:9087/website//web/420100/search.do?keyword=%1$s&amp;type=line</string>
     <string name="url_arrive_time">http://real-time-bus.whgjzt.com:9087/app/v5/420100/busArriveTime/%1$s/%2$s/%3$s</string>
     <string name="url_departure_time">http://real-time-bus.whgjzt.com:9087/app/v5/420100/departureTime/%1$s.do</string>
     <string name="app_ota_message"><Data><![CDATA[<big><big>%1$s</big></big>\n%2$s\n<small><small>更新时间:%3$s</small>\n</small><small><font color="#ff0000">请务必仔细阅读升级文档后再升级</font></small>]]></Data></string>
+    <string name="url_bus">http://real-time-bus.whgjzt.com:9087/website//web/420100/line/%1$s.do?Type=LineDetail</string>
+    <string name="url_search_bus">http://real-time-bus.whgjzt.com:9087/website//web/420100/search.do?keyword=%1$s&amp;type=line</string>
 
 </resources>
