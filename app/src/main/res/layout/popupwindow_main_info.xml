@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
-android:background="@android:color/white"
+    android:background="@android:color/white"
     android:gravity="center"
     android:padding="0dp">
 
@@ -28,6 +28,7 @@ android:background="@android:color/white"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="关于"
+                android:textColor="#757575"
                 android:textSize="30dp"
                 android:textStyle="bold" />
 
@@ -43,6 +44,7 @@ android:background="@android:color/white"
                     android:layout_weight="1"
                     android:gravity="start"
                     android:text="APP当前版本:"
+                    android:textColor="#757575"
                     android:textSize="18dp" />
 
                 <TextView
@@ -51,6 +53,7 @@ android:background="@android:color/white"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end|bottom"
                     android:text="作者:Zip_zhang"
+                    android:textColor="#757575"
                     android:textSize="15dp" />
             </LinearLayout>
 
@@ -58,38 +61,44 @@ android:background="@android:color/white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="\n本app开源地址:"
+                android:textColor="#757575"
                 android:textSize="18dp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="https://github.com/a2633063/BusMonitor_Wuhan\nhttps://gitee.com/a2633063/BusMonitor_Wuhan"
+                android:textColor="#757575"
                 android:textSize="13dp" />
+
             <TextView
                 android:id="@+id/tv_qq_group"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="\n建立了个QQ群,欢迎各位入群讨论:745958041 点此直接入群 入群答案:zbus"
+                android:textColor="#757575"
                 android:textSize="15dp" />
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:text="\n本app仅为个人学习开发,欢迎您联系我讨论帮助我继续学习android开发.依然建议用户使用武汉的智能公交app"
+                android:textColor="#757575"
                 android:textSize="18dp" />
 
-<!--            <ImageView-->
-<!--                android:id="@+id/alipay"-->
-<!--                android:layout_width="150dp"-->
-<!--                android:layout_height="150dp"-->
-<!--                android:scaleType="centerInside"-->
-<!--                app:srcCompat="@drawable/alipay" />-->
+            <!--            <ImageView-->
+            <!--                android:id="@+id/alipay"-->
+            <!--                android:layout_width="150dp"-->
+            <!--                android:layout_height="150dp"-->
+            <!--                android:scaleType="centerInside"-->
+            <!--                app:srcCompat="@drawable/alipay" />-->
 
-<!--            <TextView-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="打赏与否不影响任何功能,仅表达对开发者的支持.感谢您的打赏!"-->
-<!--                android:textSize="15dp" />-->
+            <!--            <TextView-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:text="打赏与否不影响任何功能,仅表达对开发者的支持.感谢您的打赏!"-->
+            <!--                android:textSize="15dp" />-->
 
             <TextView
                 android:layout_width="match_parent"

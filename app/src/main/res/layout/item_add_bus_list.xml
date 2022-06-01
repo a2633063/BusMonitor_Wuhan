@@ -13,6 +13,7 @@
         android:background="@android:color/white"
         android:gravity="center_vertical"
         android:text=""
+        android:textColor="#757575"
         android:textSize="20sp"
         android:textStyle="bold" />
 
@@ -25,5 +26,6 @@
         android:ellipsize="middle"
         android:gravity="bottom"
         android:singleLine="true"
-        android:text=""/>
+        android:text=""
+        android:textColor="#757575" />
 </LinearLayout>

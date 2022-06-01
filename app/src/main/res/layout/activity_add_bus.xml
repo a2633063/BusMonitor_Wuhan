@@ -10,10 +10,11 @@
     android:paddingStart="16dp"
     android:paddingEnd="16dp"
     tools:context=".addbus.AddBusActivity">
+
     <LinearLayout
-        android:layout_marginTop="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:background="@drawable/background_white_fill"
         android:orientation="horizontal">
 
@@ -21,25 +22,28 @@
             android:id="@+id/imgbtn_return"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:background="#00000000"
             android:paddingStart="12dp"
             android:paddingEnd="12dp"
-            android:background="#00000000"
             app:srcCompat="@drawable/ic_baseline_arrow_back_24" />
 
         <EditText
-        android:id="@+id/editText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+            android:id="@+id/editText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-        android:background="@android:color/white"
-        android:ems="20"
-        android:hint="请输入线路"
-        android:maxLines="1"
-        android:singleLine="true"
-        android:textSize="25dp" />
+            android:background="@android:color/white"
+            android:ems="20"
+            android:textColor="#000000"
+            android:hint="请输入线路"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textSize="25dp" />
+
         <requestFocus />
     </LinearLayout>
+
     <ListView
         android:id="@+id/listview"
         android:layout_width="match_parent"
