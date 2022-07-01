@@ -36,6 +36,7 @@ import com.zyc.busmonitor.mainrecycler.SideRecyclerItemTouchHelper;
 import com.zyc.busmonitor.mainrecycler.SpacesRecyclerViewItemDecoration;
 import com.zyc.busmonitor.news.MainNewsListAdapter;
 import com.zyc.busmonitor.news.News;
+import com.zyc.busmonitor.utils.CheckUtil;
 import com.zyc.busmonitoritem.BusLine;
 
 import org.json.JSONArray;
@@ -607,15 +608,20 @@ public class MainActivity extends AppCompatActivity {
             drawerLayout.openDrawer(GravityCompat.END);
             return true;
         } else if (id == R.id.menu_alipay) {
-
+            // TODO 检查支付宝是否安装
+            boolean appInstalled = CheckUtil.checkAppInstalled(this, "com.eg.android.AlipayGphone");
+            if (!appInstalled) {
+                Toast.makeText(MainActivity.this, "未检测到支付宝", Toast.LENGTH_SHORT).show();
+                return false;
+            }
             String intentFullUrl = "intent://platformapi/startapp?appId=60000098&url=/www/offline_qrcode.html?source=WH_BUS_APP#Intent;scheme=alipays;package=com.eg.android.AlipayGphone;end";
             Intent intent = null;
             try {
                 intent = Intent.parseUri(intentFullUrl, Intent.URI_INTENT_SCHEME);
                 startActivity(intent);
             } catch (URISyntaxException e) {
-//                    e.printStackTrace();
-                Toast.makeText(MainActivity.this, "失败,支付宝有安装?", Toast.LENGTH_SHORT).show();
+                Log.e("URISyntaxException", "打开支付宝乘车码失败",e);
+                Toast.makeText(MainActivity.this, "打开支付宝乘车码失败", Toast.LENGTH_SHORT).show();
             }
 
 
