@@ -20,9 +20,11 @@ import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.zyc.buslist.BusList;
 import com.zyc.buslist.BusStation;
+import com.zyc.busmonitoritem.utils.CheckUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -577,6 +579,11 @@ public class BusMonitorItem extends LinearLayout {
 
                 }
             } else if (id == R.id.ll_refresh) {
+                // TODO 避免短时间内重复点击 发起过多请求 限制时间 10s
+                boolean fastClick = CheckUtil.isFastClick();
+                if (fastClick) {
+                    return;
+                }
                 refresh();
                 if (isAutoRefresh) setAutoRefresh(AutoRefresh);
             } else if (id == R.id.ll_auto_refresh) {

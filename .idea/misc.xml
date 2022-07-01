@@ -8,6 +8,21 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Android/WorkSpaces/BusMonitor_Wuhan/BusMonitor_Wuhan/app/src/main/res/layout/activity_add_bus.xml" value="0.21197916666666666" />
+        <entry key="..\:/Android/WorkSpaces/BusMonitor_Wuhan/BusMonitor_Wuhan/app/src/main/res/layout/activity_main.xml" value="0.21197916666666666" />
+        <entry key="..\:/Android/WorkSpaces/BusMonitor_Wuhan/BusMonitor_Wuhan/app/src/main/res/layout/activity_main_nav_header.xml" value="0.21197916666666666" />
+        <entry key="..\:/Android/WorkSpaces/BusMonitor_Wuhan/BusMonitor_Wuhan/app/src/main/res/layout/activity_news.xml" value="0.21197916666666666" />
+        <entry key="..\:/Android/WorkSpaces/BusMonitor_Wuhan/BusMonitor_Wuhan/app/src/main/res/layout/item_add_bus_list.xml" value="0.21197916666666666" />
+        <entry key="..\:/Android/WorkSpaces/BusMonitor_Wuhan/BusMonitor_Wuhan/app/src/main/res/layout/item_main_recycler.xml" value="0.21197916666666666" />
+        <entry key="..\:/Android/WorkSpaces/BusMonitor_Wuhan/BusMonitor_Wuhan/app/src/main/res/layout/item_side_recycler.xml" value="0.21197916666666666" />
+        <entry key="..\:/Android/WorkSpaces/BusMonitor_Wuhan/BusMonitor_Wuhan/app/src/main/res/layout/list_item_main_news_list.xml" value="0.21197916666666666" />
+        <entry key="..\:/Android/WorkSpaces/BusMonitor_Wuhan/BusMonitor_Wuhan/app/src/main/res/layout/popupwindow_main_info.xml" value="0.21197916666666666" />
+        <entry key="..\:/Android/WorkSpaces/BusMonitor_Wuhan/BusMonitor_Wuhan/app/src/main/res/menu/toolbar_menu.xml" value="0.36614583333333334" />
+        <entry key="..\:/Android/WorkSpaces/BusMonitor_Wuhan/BusMonitor_Wuhan/buslist/src/main/res/layout/item_bus_station.xml" value="0.245018115942029" />
+        <entry key="..\:/Android/WorkSpaces/BusMonitor_Wuhan/BusMonitor_Wuhan/buslist/src/main/res/layout/view_bus_list.xml" value="0.245018115942029" />
+        <entry key="..\:/Android/WorkSpaces/BusMonitor_Wuhan/BusMonitor_Wuhan/busmonitoritem/src/main/res/drawable/ic_refresh_black_24dp.xml" value="0.1" />
+        <entry key="..\:/Android/WorkSpaces/BusMonitor_Wuhan/BusMonitor_Wuhan/busmonitoritem/src/main/res/drawable/ic_swap_vert_black_24dp.xml" value="0.1" />
+        <entry key="..\:/Android/WorkSpaces/BusMonitor_Wuhan/BusMonitor_Wuhan/busmonitoritem/src/main/res/layout/view_bus_monitor_item.xml" value="0.245018115942029" />
         <entry key="..\:/Program/Android-AS/BusMonitor_Wuhan/app/src/main/res/layout/activity_main_nav_header.xml" value="0.25" />
         <entry key="..\:/Program/Android-AS/BusMonitor_Wuhan/app/src/main/res/layout/popupwindow_main_info.xml" value="0.25" />
         <entry key="..\:/Program/Android-AS/BusMonitor_Wuhan/app/src/main/res/menu/toolbar_menu.xml" value="0.2740740740740741" />
@@ -61,7 +76,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">
