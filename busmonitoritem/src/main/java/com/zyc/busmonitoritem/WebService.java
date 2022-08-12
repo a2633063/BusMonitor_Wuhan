@@ -32,10 +32,14 @@ public class WebService {
         try {
             URL url = new URL(str);
             connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");// 设置请求方式
-            connection.setRequestProperty("Charset", "UTF-8");// 设置编码格式
             connection.setConnectTimeout(1000);// 连接超时时间
             connection.setReadTimeout(1000);// 读取超时时间
+            connection.setRequestMethod("GET");// 设置请求方式
+            connection.setRequestProperty("Accept", "application/json, text/javascript, */*; q=0.01");
+            connection.setRequestProperty("User-agent","Mozilla/5.0 (Linux; Android 10; NOH-AN00 Build/HUAWEINOH-AN00; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/88.0.4324.93 Mobile Safari/537.36"); //设置"User-Agent
+            connection.setRequestProperty("Accept-Language", "zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7");
+            connection.setRequestProperty("Referer","http://wbus.wuhancloud.cn/myAround.jsp");
+            connection.setRequestProperty("Charset", "UTF-8");// 设置编码格式
             InputStream in = connection.getInputStream();
             //下面对获取到的输入流进行读取
             BufferedReader reader = new BufferedReader(new InputStreamReader(in));

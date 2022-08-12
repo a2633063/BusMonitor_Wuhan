@@ -54,7 +54,7 @@ public class AddBusActivity extends AppCompatActivity {
                             Log.d(Tag, "URL:" + url);
                             Message msg = new Message();
                             msg.what = 2;
-                            msg.obj = WebService.WebConnect(url);
+                            msg.obj = WebService.WebConnect_bus(url);
                             handler.sendMessageDelayed(msg, 0);// 执行耗时的方法之后发送消给handler
                         }
 
