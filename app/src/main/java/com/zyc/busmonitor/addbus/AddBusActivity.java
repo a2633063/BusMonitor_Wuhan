@@ -90,7 +90,7 @@ public class AddBusActivity extends AppCompatActivity {
                         lv.setVisibility(View.VISIBLE);
                         mData.clear();
                         Log.d(Tag, "bus num:" + jsonArray.length());
-                        for (int i = 0; i < jsonArray.length() && i < 50; i++) {
+                        for (int i = 0; i < jsonArray.length() && i < 100; i++) {
                             JSONObject j = jsonArray.getJSONObject(i);
                             BusLine b = new BusLine(j.getString("lineName"), j.getString("lineNo"), -1);
                             b.setStartStopName(j.getString("startStopName"));

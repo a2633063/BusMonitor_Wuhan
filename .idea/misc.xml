@@ -53,11 +53,17 @@
         <entry key="..\:/Program/Android/BusMonitor_Wuhan/app/src/main/res/layout/list_item_main_news_list.xml" value="0.19010416666666666" />
         <entry key="..\:/Program/Android/BusMonitor_Wuhan/app/src/main/res/layout/popupwindow_main_info.xml" value="0.19021739130434784" />
         <entry key="..\:/Program/Android/BusMonitor_Wuhan/buslist/src/main/res/drawable/fillet.xml" value="0.1515625" />
+        <entry key="..\:/Program/Android/BusMonitor_Wuhan/buslist/src/main/res/drawable/ic_bus_double_num_selected_24dp.xml" value="0.119" />
+        <entry key="..\:/Program/Android/BusMonitor_Wuhan/buslist/src/main/res/drawable/ic_bus_double_num_unselected_24dp.xml" value="0.119" />
+        <entry key="..\:/Program/Android/BusMonitor_Wuhan/buslist/src/main/res/drawable/ic_bus_double_selected_24dp.xml" value="0.119" />
+        <entry key="..\:/Program/Android/BusMonitor_Wuhan/buslist/src/main/res/drawable/ic_bus_double_station_selected_24dp.xml" value="0.119" />
+        <entry key="..\:/Program/Android/BusMonitor_Wuhan/buslist/src/main/res/drawable/ic_bus_num_selected_24dp.xml" value="0.119" />
+        <entry key="..\:/Program/Android/BusMonitor_Wuhan/buslist/src/main/res/drawable/ic_bus_num_unselected_24dp.xml" value="0.119" />
         <entry key="..\:/Program/Android/BusMonitor_Wuhan/buslist/src/main/res/drawable/ic_bus_selected_24dp.xml" value="0.2786458333333333" />
         <entry key="..\:/Program/Android/BusMonitor_Wuhan/buslist/src/main/res/drawable/metor_fillet.xml" value="0.1515625" />
-        <entry key="..\:/Program/Android/BusMonitor_Wuhan/buslist/src/main/res/layout/item_bus_station.xml" value="2.0" />
+        <entry key="..\:/Program/Android/BusMonitor_Wuhan/buslist/src/main/res/layout/item_bus_station.xml" value="0.31636726546906185" />
         <entry key="..\:/Program/Android/BusMonitor_Wuhan/buslist/src/main/res/layout/view_bus_list.xml" value="0.2625" />
-        <entry key="..\:/Program/Android/BusMonitor_Wuhan/busmonitoritem/src/main/res/layout/view_bus_monitor_item.xml" value="0.5" />
+        <entry key="..\:/Program/Android/BusMonitor_Wuhan/busmonitoritem/src/main/res/layout/view_bus_monitor_item.xml" value="0.31990521327014215" />
       </map>
     </option>
   </component>

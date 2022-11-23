@@ -46,6 +46,7 @@ public class BusMonitorItem extends LinearLayout {
     TextView tvFirstBusText;
     TextView tvSecondBusText;
     TextView tvErr;
+    TextView tvBusId;
 
     LinearLayout llAutoRefresh;
     LinearLayout llRefresh;
@@ -99,6 +100,7 @@ public class BusMonitorItem extends LinearLayout {
                     isRefresh = false;
                     String result = (String) msg.obj;
                     Log.d(Tag, "result:" + result);
+                    tvBusId.setText("");
                     try {
                         tvErr.setVisibility(GONE);
                         busList.setVisibility(VISIBLE);
@@ -181,10 +183,8 @@ public class BusMonitorItem extends LinearLayout {
                         int secondBus = 0;
                         firstBus = 9999;
                         secondBus = 9999;
+                        int selectBus = bus.getSelected();
                         try {
-
-                            int selectBus = bus.getSelected();
-
                             Log.d(Tag, "selectBus:" + selectBus);
                             JSONArray jsonBuses = jsonData.getJSONArray("buses");
                             for (int i = 0; i < jsonBuses.length(); i++) {
@@ -223,6 +223,9 @@ public class BusMonitorItem extends LinearLayout {
                                     }
                                 }
 
+                                BusStation b=busList.getItem(busStation);
+                                b.busId.add(id);
+
                                 //endregion
                                 Log.d(Tag, "busStation:" + busStation);
                                 //region 到站剩余站更新
@@ -231,20 +234,24 @@ public class BusMonitorItem extends LinearLayout {
                                     if (isStation == 1) {//到站
                                         secondBus = firstBus;
                                         firstBus = 0;
+                                        showBusId(b);
                                     }
                                 } else if (busStation == selectBus - 1) {
-                                    if (isStation == 0) {//wei到站
+                                    if (isStation == 0) {//未到站
                                         secondBus = firstBus;
                                         firstBus = 1;
+                                        showBusId(b);
                                     } else if (firstBus > 1) {
                                         secondBus = firstBus;
                                         firstBus = 2;
+                                        showBusId(b);
                                     }
                                 } else if (busStation < selectBus) {
                                     int temp = selectBus - busStation;
                                     if (temp < firstBus) {
                                         secondBus = firstBus;
                                         firstBus = temp;
+                                        showBusId(b);
                                     } else if (temp < selectBus)
                                         secondBus = temp;
                                 }
@@ -284,6 +291,7 @@ public class BusMonitorItem extends LinearLayout {
                             tvSecondBus.setText(secondBus + "站");
                         }
                         //endregion
+
 
                         //endregion
 
@@ -461,7 +469,7 @@ public class BusMonitorItem extends LinearLayout {
 
         //region 控件初始化
         tvErr = findViewById(R.id.tv_err);
-
+        tvBusId = findViewById(R.id.tv_bus_id);
         tvBus = findViewById(R.id.tv_bus);
         tvStationStartEnd = findViewById(R.id.tv_station);
         tvStationTime = findViewById(R.id.tv_station_time);
@@ -593,6 +601,7 @@ public class BusMonitorItem extends LinearLayout {
         tvStationTime.setText("");
         tvFirstBus.setText("无");
         tvSecondBus.setText("无");
+        tvBusId.setText("");
 //        busList.setOnItemClickListener(new BusList.OnItemClickListener() {
 //            @Override
 //            public void onItemClick(View view, int position, String data) {
@@ -658,6 +667,21 @@ public class BusMonitorItem extends LinearLayout {
         ivAutoRefresh.setImageResource(isAutoRefresh ? R.drawable.ic_auto_refresh_select_24dp : R.drawable.ic_auto_refresh_24dp);
         tvAutoRefresh.setTextColor(getResources().getColor(isAutoRefresh ? R.color.bottom_text_select_color : R.color.bottom_text_color));
 
+    }
+
+
+    void showBusId(BusStation b)
+    {
+        if(b==null) return;
+        //region 车辆ID显示
+            String str="";
+            for(int i=0;i<b.busId.size()&&i<2;i++)
+            {
+                str+=b.busId.get(i)+"\n";
+            }
+            tvBusId.setText(str.replaceAll("\\n$",""));
+
+        //endregion
     }
 
 }

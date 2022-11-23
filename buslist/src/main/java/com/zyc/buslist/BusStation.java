@@ -1,5 +1,8 @@
 package com.zyc.buslist;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class BusStation {
     String stopId;      //车站编号
     int stopOrder=0;    //车站在此线路序号
@@ -7,6 +10,7 @@ public class BusStation {
     String name;
     int arrive=0;
     int pass=0;
+    public List<String> busId= new ArrayList<>();//车站编号
 
     int arrive_double_deck=0;
     int pass_double_deck=0;
