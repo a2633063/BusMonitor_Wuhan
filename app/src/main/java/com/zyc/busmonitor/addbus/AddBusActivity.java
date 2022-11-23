@@ -89,9 +89,10 @@ public class AddBusActivity extends AppCompatActivity {
                             throw new JSONException("搜索无数据");
                         lv.setVisibility(View.VISIBLE);
                         mData.clear();
-                        for (int i = 0; i < jsonArray.length() && i < 20; i++) {
+                        Log.d(Tag, "bus num:" + jsonArray.length());
+                        for (int i = 0; i < jsonArray.length() && i < 50; i++) {
                             JSONObject j = jsonArray.getJSONObject(i);
-                            BusLine b = new BusLine(j.getString("lineName"), j.getString("lineNo"),-1);
+                            BusLine b = new BusLine(j.getString("lineName"), j.getString("lineNo"), -1);
                             b.setStartStopName(j.getString("startStopName"));
                             b.setEndStopName(j.getString("endStopName"));
                             b.setFirstTime(j.getString("firstTime"));

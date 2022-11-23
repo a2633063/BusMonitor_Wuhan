@@ -32,7 +32,7 @@
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:background="@drawable/ic_bus_selected_24dp"
-        android:gravity="center|top"
+        android:gravity="center"
         android:text=""
         android:textColor="#ffffff"
         android:textSize="8dp"
